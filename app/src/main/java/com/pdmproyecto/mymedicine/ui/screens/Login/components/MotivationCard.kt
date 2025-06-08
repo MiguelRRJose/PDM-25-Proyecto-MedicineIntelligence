@@ -1,4 +1,4 @@
-package com.pdmproyecto.mymedicine.ui.screens.Login
+package com.pdmproyecto.mymedicine.ui.screens.Login.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -6,9 +6,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,8 +33,8 @@ fun MotivationCard(
             .fillMaxWidth()
             .height(80.dp),
         shape = MaterialTheme.shapes.medium,
-        elevation = androidx.compose.material3.CardDefaults.cardElevation(4.dp),
-        colors = androidx.compose.material3.CardDefaults.cardColors(containerColor = Color.White)
+        elevation = CardDefaults.cardElevation(4.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Row(
             modifier = Modifier
@@ -51,12 +53,12 @@ fun MotivationCard(
                     contentScale = ContentScale.Fit
                 )
                 Column {
-                    androidx.compose.material3.Text(
+                    Text(
                         text = messageTop,
                         fontSize = 14.sp,
                         color = Color(0xFF18515A)
                     )
-                    androidx.compose.material3.Text(
+                    Text(
                         text = messageBottom,
                         fontSize = 12.sp,
                         color = Color.Gray
