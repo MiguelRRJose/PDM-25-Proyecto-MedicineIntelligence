@@ -1,7 +1,7 @@
-package com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.components
+package com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.components.motivation
 
 import androidx.compose.runtime.Composable
-import com.pdmproyecto.mymedicine.ui.screens.Login.MotivationCard
+import com.pdmproyecto.mymedicine.ui.screens.Login.components.MotivationCard
 
 @Composable
 fun MotivationSection(

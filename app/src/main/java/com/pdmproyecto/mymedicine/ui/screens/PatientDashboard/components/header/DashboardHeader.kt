@@ -1,4 +1,4 @@
-package com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.components
+package com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.components.header
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
