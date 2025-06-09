@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.components.BottomNavigationBar
 import com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.components.header.DashboardHeader
 import com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.components.motivation.MotivationSection
 import com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.components.summary.SummaryCard
@@ -19,6 +20,8 @@ import com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.components.metrics
 @Composable
 fun PatientDashboardScreen(viewModel: PatientDashboardViewModel = viewModel()) {
     val username by remember { derivedStateOf { viewModel.username } }
+    var selectedItem by remember { mutableStateOf("inicio") }
+
 
     Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
         Box(modifier = Modifier.fillMaxSize()) {
@@ -59,8 +62,18 @@ fun PatientDashboardScreen(viewModel: PatientDashboardViewModel = viewModel()) {
                     PatientMetricsSection(viewModel = viewModel)
 
                     Spacer(modifier = Modifier.height(72.dp))
+
                 }
+
+                BottomNavigationBar(
+                    currentRoute = selectedItem,
+                    onItemSelected = { selectedItem = it }
+                )
+
             }
+
+
+
         }
     }
 }
