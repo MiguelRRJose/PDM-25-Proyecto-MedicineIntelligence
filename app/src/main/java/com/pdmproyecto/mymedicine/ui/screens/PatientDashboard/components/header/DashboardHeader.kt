@@ -23,8 +23,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pdmproyecto.mymedicine.R
 
+import androidx.navigation.NavHostController
+
 @Composable
-fun DashboardHeader(username: String) {
+fun DashboardHeader(username: String, navController: NavHostController) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -47,7 +49,7 @@ fun DashboardHeader(username: String) {
         }
 
         Row {
-            IconButton(onClick = { /* TODO */ }) {
+            IconButton(onClick = { navController.navigate("notifications") }) {
                 Icon(Icons.Default.Notifications, "Notificaciones", tint = Color(0xFF18515A))
             }
             IconButton(onClick = { /* TODO */ }) {
@@ -56,3 +58,4 @@ fun DashboardHeader(username: String) {
         }
     }
 }
+

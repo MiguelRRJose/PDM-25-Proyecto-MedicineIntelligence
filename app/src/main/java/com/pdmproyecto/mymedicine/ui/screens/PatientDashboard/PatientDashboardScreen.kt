@@ -10,6 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.components.BottomNavigationBar
 import com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.components.header.DashboardHeader
 import com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.components.motivation.MotivationSection
@@ -18,7 +20,8 @@ import com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.components.metrics
 
 
 @Composable
-fun PatientDashboardScreen(viewModel: PatientDashboardViewModel = viewModel()) {
+fun PatientDashboardScreen( navController: NavHostController, viewModel: PatientDashboardViewModel = viewModel()) {
+
     val username by remember { derivedStateOf { viewModel.username } }
     var selectedItem by remember { mutableStateOf("inicio") }
 
@@ -33,7 +36,7 @@ fun PatientDashboardScreen(viewModel: PatientDashboardViewModel = viewModel()) {
                         .padding(horizontal = 16.dp)
                         .padding(top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding())
                 ) {
-                    DashboardHeader(username = username)
+                    DashboardHeader(username = username, navController = navController)
 
                     MotivationSection(
                         weatherMessage = viewModel.weatherMessage,
