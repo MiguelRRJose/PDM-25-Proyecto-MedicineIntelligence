@@ -52,9 +52,16 @@ fun DashboardHeader(username: String, navController: NavHostController) {
             IconButton(onClick = { navController.navigate("notifications") }) {
                 Icon(Icons.Default.Notifications, "Notificaciones", tint = Color(0xFF18515A))
             }
-            IconButton(onClick = { /* TODO */ }) {
-                Icon(Icons.Default.Settings, "Configuración", tint = Color(0xFF18515A))
+            IconButton(onClick = {
+                navController.navigate("settings")
+            }) {
+                Icon(
+                    imageVector = Icons.Default.Settings,
+                    contentDescription = "Configuración",
+                    tint = Color(0xFF18515A)
+                )
             }
+
         }
     }
 }

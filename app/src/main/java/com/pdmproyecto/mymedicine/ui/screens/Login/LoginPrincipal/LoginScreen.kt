@@ -37,7 +37,7 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = rememb
             .padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(67.dp))
+        Spacer(modifier = Modifier.height(30.dp))
 
         Image(
             painter = painterResource(id = R.drawable.logo1),
