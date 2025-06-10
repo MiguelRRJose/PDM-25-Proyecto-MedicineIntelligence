@@ -76,6 +76,7 @@ fun SettingsScreen(
             }
         )
 
+
         SettingsOption(
             icon = Icons.Default.VpnKey,
             label = "Cambiar Contraseña",

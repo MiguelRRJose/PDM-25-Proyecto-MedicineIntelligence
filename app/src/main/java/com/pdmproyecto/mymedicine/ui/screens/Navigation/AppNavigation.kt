@@ -10,6 +10,8 @@ import com.pdmproyecto.mymedicine.ui.screens.Notification.NotificationScreen
 import com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.PatientDashboardScreen
 import com.pdmproyecto.mymedicine.screens.Settings.SettingsScreen
 import com.pdmproyecto.mymedicine.screens.Settings.SettingsViewModel
+import com.pdmproyecto.mymedicine.ui.screens.Settings.NotificationSettings.NotificationSettingsScreen
+import com.pdmproyecto.mymedicine.ui.screens.Settings.NotificationSettings.NotificationSettingsViewModel
 
 @Composable
 fun AppNavigation(navController: NavHostController) {
@@ -32,7 +34,7 @@ fun AppNavigation(navController: NavHostController) {
             SettingsScreen(
                 viewModel = settingsViewModel,
                 onBackClick = { navController.popBackStack() },
-                onNotificationClick = { navController.navigate("notifications") },
+                onNotificationClick = { navController.navigate("notification_settings") },
                 onChangePasswordClick = {
                     // Navegación a cambiar contraseña (puedes crear una pantalla luego)
                     navController.navigate("change_password")
@@ -44,5 +46,16 @@ fun AppNavigation(navController: NavHostController) {
                 }
             )
         }
+
+        composable("notification_settings") {
+            val notificationSettingsViewModel: NotificationSettingsViewModel = viewModel()
+            NotificationSettingsScreen(
+                onBackClick = { navController.popBackStack() },
+                viewModel = notificationSettingsViewModel
+            )
+        }
+
+
+
     }
 }

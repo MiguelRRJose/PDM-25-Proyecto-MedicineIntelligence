@@ -32,7 +32,7 @@ fun PatientDashboardScreen( navController: NavHostController, viewModel: Patient
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Color.White)
+                        .background(Color.White) 
                         .padding(horizontal = 16.dp)
                         .padding(top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding())
                 ) {
