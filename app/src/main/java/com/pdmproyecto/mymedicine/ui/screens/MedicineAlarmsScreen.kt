@@ -1,5 +1,6 @@
 package com.pdmproyecto.mymedicine.ui.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -30,6 +33,7 @@ import com.pdmproyecto.mymedicine.data.Medicine
 import com.pdmproyecto.mymedicine.ui.components.ConfirmationPopUp
 import com.pdmproyecto.mymedicine.ui.components.MedicineCard
 import com.pdmproyecto.mymedicine.ui.theme.DarkPalidGreen
+import com.pdmproyecto.mymedicine.R
 
 @Composable
 fun MedicineAlarmsScreen(viewModel: MedicineAlarmsViewModel = viewModel()){
@@ -49,10 +53,16 @@ fun MedicineAlarmsScreen(viewModel: MedicineAlarmsViewModel = viewModel()){
     ){
 
         Column(modifier = Modifier
+            .padding(top = 50.dp)
             .fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ){
+
+            Image(
+                painter = painterResource(id = R.drawable.logo1),
+                contentDescription = "Logo MI",
+                modifier = Modifier.size(100.dp)
+            )
 
             Text(
                 text = "My Medicine",
@@ -64,10 +74,9 @@ fun MedicineAlarmsScreen(viewModel: MedicineAlarmsViewModel = viewModel()){
 
             Column(modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.60f)
+                .fillMaxHeight(0.80f)
                 .background(color = DarkPalidGreen, shape = roundedShape)
                 .padding(10.dp)
-                .border(width = 0.dp, color = DarkPalidGreen, shape = roundedShape)
             ){
 
                 LazyColumn(modifier = Modifier
@@ -93,28 +102,20 @@ fun MedicineAlarmsScreen(viewModel: MedicineAlarmsViewModel = viewModel()){
         }
 
 
-        if (popUpVisibility.value){
-            Box(
-                modifier = Modifier
-                    .background(color = Color.Black.copy(alpha = 0.7f))
-                    .fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ){
-                ConfirmationPopUp(
-                    text = "Desea eliminar ${medicineToDelete.value.name} de la lista?",
-                    confirmAction =
-                        {
-                            viewModel.removeMedicine(medicineToDelete.value)
-                            popUpVisibility.value = false
-                        },
-                    cancelAction =
-                        {
-                            medicineToDelete.value = Medicine(-1,"","", 2f, "","","")
-                            popUpVisibility.value = false
-                        }
-                )
-            }
-        }
+        ConfirmationPopUp(
+            text = "Desea eliminar ${medicineToDelete.value.name} de la lista?",
+            isVisible = popUpVisibility.value,
+            confirmAction =
+                {
+                    viewModel.removeMedicine(medicineToDelete.value)
+                    popUpVisibility.value = false
+                },
+            cancelAction =
+                {
+                    medicineToDelete.value = Medicine(-1,"","", 2f, "","","")
+                    popUpVisibility.value = false
+                }
+        )
 
     }
 }

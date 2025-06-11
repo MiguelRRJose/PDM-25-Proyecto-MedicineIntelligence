@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -32,10 +33,12 @@ fun MedicineCard(medicine: Medicine, deleteButtonAction: () -> Unit = {}){
     val cardShape = RoundedCornerShape(20.dp)
 
     Row (modifier = Modifier
+        .shadow(elevation = 10.dp, shape = cardShape, clip = false)
         .fillMaxWidth()
         .height(65.dp)
+
         .background(color = Color.White, shape = cardShape)
-        .border(width = 0.dp, color = Color.Black, shape = cardShape)
+        .border(width = 0.dp, color = Color.Transparent, shape = cardShape)
         .padding(5.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween){
