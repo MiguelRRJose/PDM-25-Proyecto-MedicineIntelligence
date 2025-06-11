@@ -5,6 +5,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.pdmproyecto.mymedicine.screens.Settings.ChangePassword.ChangePasswordScreen
+import com.pdmproyecto.mymedicine.screens.Settings.ChangePassword.ChangePasswordViewModel
 import com.pdmproyecto.mymedicine.ui.screens.Login.LoginPrincipal.LoginScreen
 import com.pdmproyecto.mymedicine.ui.screens.Notification.NotificationScreen
 import com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.PatientDashboardScreen
@@ -54,6 +56,15 @@ fun AppNavigation(navController: NavHostController) {
                 viewModel = notificationSettingsViewModel
             )
         }
+
+        composable("change_password") {
+            val changePasswordViewModel: ChangePasswordViewModel = viewModel()
+            ChangePasswordScreen(
+                onBackClick = { navController.popBackStack() },
+                viewModel = changePasswordViewModel
+            )
+        }
+
 
 
 

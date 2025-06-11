@@ -2,6 +2,7 @@ package com.pdmproyecto.mymedicine.screens.Settings
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
@@ -11,6 +12,8 @@ import androidx.compose.material.icons.filled.VpnKey
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,8 +21,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.pdmproyecto.mymedicine.screens.Settings.LogoutConfirm.LogoutConfirmModal
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel,
@@ -28,6 +33,8 @@ fun SettingsScreen(
     onChangePasswordClick: () -> Unit,
     onLogoutClick: () -> Unit
 ) {
+    val showLogoutModal = remember { mutableStateOf(false) }
+
     val coroutineScope = rememberCoroutineScope()
 
     // Recoger eventos del ViewModel
@@ -91,11 +98,28 @@ fun SettingsScreen(
             icon = Icons.Default.Person,
             label = "Cerrar Sesión",
             onClick = {
-                coroutineScope.launch {
-                    viewModel.onLogoutClicked()
-                }
+                showLogoutModal.value = true
             }
         )
+
+        if (showLogoutModal.value) {
+            ModalBottomSheet(
+                onDismissRequest = { showLogoutModal.value = false },
+                containerColor = Color.White,
+                shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)
+            ) {
+                LogoutConfirmModal(
+                    onDismiss = { showLogoutModal.value = false },
+                    onConfirmLogout = {
+                        showLogoutModal.value = false
+                        onLogoutClick()
+                    }
+                )
+            }
+        }
+
+
+
     }
 }
 
