@@ -5,6 +5,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
@@ -13,11 +16,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.*
 import com.pdmproyecto.mymedicine.R
+import com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.components.bottombar.CurvedBottom.CurvedBottomBarBackground
 
 @Composable
 fun BottomNavigationBar(
     currentRoute: String,
-    onItemSelected: (String) -> Unit
+    onItemSelected: (String) -> Unit,
+    onCentralActionClick: () -> Unit
 ) {
     val items = listOf(
         BottomNavItem("inicio", R.drawable.homebar, "Inicio"),
@@ -26,15 +31,25 @@ fun BottomNavigationBar(
         BottomNavItem("historial", R.drawable.historybar, "Historial")
     )
 
-    Box {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(90.dp)
+    ) {
+        // Fondo curvo
+        CurvedBottomBarBackground(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(72.dp)
+                .align(Alignment.BottomCenter)
+        )
 
-
-        // Fondo de la BottomBar
+        // Ítems
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(72.dp)
-                .background(Color(0xFF18515A)),
+                .align(Alignment.BottomCenter),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -42,13 +57,30 @@ fun BottomNavigationBar(
                 BottomNavItemView(item, currentRoute, onItemSelected)
             }
 
-            Spacer(modifier = Modifier.width(64.dp))
+            Spacer(modifier = Modifier.width(64.dp)) // espacio para botón central
 
             items.drop(2).forEach { item ->
                 BottomNavItemView(item, currentRoute, onItemSelected)
             }
         }
 
+        // Botón central "+"
+        FloatingActionButton(
+            onClick = onCentralActionClick,
+            shape = CircleShape,
+            containerColor = Color(0xFF165059),
+            modifier = Modifier
+                .size(64.dp)
+                .align(Alignment.TopCenter)
+                .offset(y = (-32).dp)
+        ) {
+            Icon(
+                imageVector = Icons.Default.Add,
+                contentDescription = "Agregar",
+                tint = Color.White,
+                modifier = Modifier.size(28.dp)
+            )
+        }
     }
 }
 
@@ -58,13 +90,26 @@ fun BottomNavItemView(
     currentRoute: String,
     onItemSelected: (String) -> Unit
 ) {
-
     val isSelected = currentRoute == item.route
+
+    // Efecto visual si está seleccionado
+    val itemModifier = if (isSelected) {
+        Modifier
+            .background(
+                color = Color(0xFFB0BEC5).copy(alpha = 0.4f),
+                shape = RoundedCornerShape(12.dp)
+            )
+            .padding(horizontal = 12.dp, vertical = 6.dp)
+    } else {
+        Modifier
+    }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .clickable { onItemSelected(item.route) }
             .padding(top = 4.dp)
+            .then(itemModifier)
     ) {
         Image(
             painter = painterResource(id = item.icon),
@@ -76,6 +121,5 @@ fun BottomNavItemView(
             fontSize = 11.sp,
             color = if (isSelected) Color.White else Color(0xFFB0BEC5)
         )
-
     }
 }

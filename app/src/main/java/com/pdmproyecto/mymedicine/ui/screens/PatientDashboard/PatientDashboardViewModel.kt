@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 class PatientDashboardViewModel : ViewModel() {
 
     // Nombre del usuario
-    var username by mutableStateOf("Nestor")
+    var username by mutableStateOf("Miguel")
         private set
 
     // Clima y motivación
