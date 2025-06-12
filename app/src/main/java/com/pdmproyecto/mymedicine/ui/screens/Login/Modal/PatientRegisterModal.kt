@@ -3,8 +3,10 @@ package com.pdmproyecto.mymedicine.ui.screens.Login.Modal
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -46,6 +48,8 @@ fun PatientRegisterModal(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxWidth()
+                .verticalScroll(rememberScrollState()) // permite desplazamiento manual
+                .imePadding() // ¡ajuste automático al teclado!
                 .padding(horizontal = 24.dp, vertical = 16.dp)
         ) {
             FieldLabel("Ingrese su número de DUI")
