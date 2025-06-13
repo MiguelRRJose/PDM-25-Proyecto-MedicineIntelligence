@@ -12,6 +12,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.pdmproyecto.mydoctor.ui.navigation.AppNavigation
 import com.pdmproyecto.mydoctor.ui.theme.MyDoctorTheme
 import com.pdmproyecto.mydoctor.ui.screens.Login.LoginPrincipal.DoctorLoginScreen
 
@@ -22,20 +23,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyDoctorTheme {
                 val navController = rememberNavController()
-
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    NavHost(navController = navController, startDestination = "doctor_login") {
-                        composable("doctor_login") {
-                            DoctorLoginScreen(navController = navController)
-                        }
-
-                        // Ejemplo de futura pantalla:
-                        composable("doctor_dashboard") {
-                            Text("Bienvenido al Dashboard del Doctor") // reemplazar por DoctorDashboardScreen(...)
-                        }
-                    }
-                }
+                AppNavigation(navController)
             }
         }
     }
 }
+
