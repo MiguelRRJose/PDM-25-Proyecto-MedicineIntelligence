@@ -1,4 +1,3 @@
-// WaterIntakeScreen.kt
 package com.carlosrubio_00000822.myapplication.ui.screen
 
 import androidx.compose.foundation.Canvas
@@ -6,7 +5,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,46 +23,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.carlosrubio_00000822.myapplication.R
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WaterIntakeScreen(
     drank: Int = 4,
     goal: Int = 8,
     percentage: Float = 0.77f, // 0.77 = 77%
     onDrinkClick: () -> Unit = {},
-    onBackPressed: () -> Unit = {},
-    modifier: Modifier = Modifier            // <-- Agregamos el parámetro modifier
+    onViewSteps:  () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Scaffold(
-        modifier = modifier       // <-- Aplicamos el modifier al Scaffold
-            .fillMaxSize(),
-        topBar = {
-            TopAppBar(
-                title = { /* vacío, solo ícono de volver */ },
-                navigationIcon = {
-                    IconButton(onClick = { onBackPressed() }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_home),
-                            contentDescription = "Volver",
-                            tint = Color(0xFF115C5C),
-                            modifier = Modifier.size(24.dp)
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = Color.Transparent,
-                    navigationIconContentColor = Color(0xFF115C5C)
-                ),
-                modifier = Modifier
-                    .height(56.dp)
-            )
-        },
+        modifier = modifier.fillMaxSize(),
+        // Sin topBar; no usamos TopAppBar ni TopAppBarDefaults
         content = { innerPadding ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(color = Color(0xFFE6ECEC))
-                    .padding(innerPadding),    // <-- padding para que no tape la TopAppBar
+                    .padding(innerPadding),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(24.dp, alignment = Alignment.Top)
             ) {
@@ -128,14 +108,14 @@ fun SemiCircleProgress(
     } else 0f
 
     Box(
-        modifier = Modifier
-            .size(size),
+        modifier = Modifier.size(size),
         contentAlignment = Alignment.Center
     ) {
         Canvas(modifier = Modifier.fillMaxSize()) {
             val diameter = size.toPx()
             val topLeft = Offset(0f, 0f)
 
+            // Semicírculo de fondo
             drawArc(
                 color = circleColor,
                 startAngle = 180f,
@@ -146,6 +126,7 @@ fun SemiCircleProgress(
                 style = Stroke(width = strokeWidth.toPx(), cap = StrokeCap.Round)
             )
 
+            // Semicírculo de progreso
             drawArc(
                 color = progressColor,
                 startAngle = 180f,
@@ -157,6 +138,7 @@ fun SemiCircleProgress(
             )
         }
 
+        // Texto central con vasos
         Text(
             text = "$drank/$goal",
             fontSize = 24.sp,
@@ -164,6 +146,7 @@ fun SemiCircleProgress(
             color = Color(0xFF115C5C)
         )
 
+        // Icono gota debajo
         Image(
             painter = painterResource(id = dropDrawableRes),
             contentDescription = "Gota de agua",
@@ -186,14 +169,14 @@ fun FullCircleProgress(
     val sweepAngle = (percentage.coerceIn(0f, 1f)) * 360f
 
     Box(
-        modifier = Modifier
-            .size(size),
+        modifier = Modifier.size(size),
         contentAlignment = Alignment.Center
     ) {
         Canvas(modifier = Modifier.fillMaxSize()) {
             val diameter = size.toPx()
             val topLeft = Offset(0f, 0f)
 
+            // Círculo fondo completo
             drawArc(
                 color = circleColor,
                 startAngle = 270f,
@@ -204,6 +187,7 @@ fun FullCircleProgress(
                 style = Stroke(width = strokeWidth.toPx(), cap = StrokeCap.Round)
             )
 
+            // Círculo de progreso
             drawArc(
                 color = progressColor,
                 startAngle = 270f,
@@ -215,6 +199,7 @@ fun FullCircleProgress(
             )
         }
 
+        // Texto % en el centro
         val percentText = "${(percentage * 100).toInt()}%"
         Text(
             text = percentText,
@@ -224,3 +209,4 @@ fun FullCircleProgress(
         )
     }
 }
+

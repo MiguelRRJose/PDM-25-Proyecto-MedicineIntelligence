@@ -40,19 +40,26 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    implementation(libs.androidx.material.icons.extended)
+
+    // 1) **Drop** el platform(libs.androidx.compose.bom)
+    // 2) Añade explícitamente las librerías de Compose:
+    implementation("androidx.compose.ui:ui:1.8.2")
+    implementation("androidx.compose.ui:ui-graphics:1.8.2")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.8.2")
+    implementation(libs.material3)
+    implementation(libs.androidx.material3.window.size.class1)
+    implementation("androidx.compose.material:material-icons-extended:1.5.3")
+
+    // Navigation y ViewModel-Compose
+    implementation("androidx.navigation:navigation-compose:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+
+    // Coil, Retrofit, Room, etc.
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
-    implementation(libs.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.datastore.preferences)
     implementation(libs.room.runtime)
@@ -60,11 +67,11 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)
+
+    // Tests
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }
