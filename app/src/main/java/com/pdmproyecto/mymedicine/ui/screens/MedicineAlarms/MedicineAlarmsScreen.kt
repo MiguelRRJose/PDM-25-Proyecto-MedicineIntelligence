@@ -1,9 +1,7 @@
-package com.pdmproyecto.mymedicine.ui.screens
+package com.pdmproyecto.mymedicine.ui.screens.MedicineAlarms
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -34,6 +32,7 @@ import com.pdmproyecto.mymedicine.ui.components.ConfirmationPopUp
 import com.pdmproyecto.mymedicine.ui.components.MedicineCard
 import com.pdmproyecto.mymedicine.ui.theme.DarkPalidGreen
 import com.pdmproyecto.mymedicine.R
+import com.pdmproyecto.mymedicine.ui.screens.MedicineAlarms.MedicineAlarmsViewModel
 
 @Composable
 fun MedicineAlarmsScreen(viewModel: MedicineAlarmsViewModel = viewModel()){

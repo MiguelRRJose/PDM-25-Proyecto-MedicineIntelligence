@@ -33,7 +33,7 @@ import com.pdmproyecto.mymedicine.ui.theme.DarkGreen
 @Composable
 fun ConfirmationPopUp(text: String, isVisible: Boolean = false, confirmAction: () -> Unit, cancelAction: () -> Unit){
 
-
+    val animationDuration = 100
     Box(
         modifier = Modifier
             .fillMaxSize(),
@@ -42,8 +42,8 @@ fun ConfirmationPopUp(text: String, isVisible: Boolean = false, confirmAction: (
 
         AnimatedVisibility(
             visible = isVisible,
-            enter = fadeIn(animationSpec = tween(durationMillis = 100)),
-            exit = fadeOut(animationSpec = tween(durationMillis = 100))
+            enter = fadeIn(animationSpec = tween(durationMillis = animationDuration)),
+            exit = fadeOut(animationSpec = tween(durationMillis = animationDuration))
         ){
             Box(
                 modifier = Modifier
@@ -56,8 +56,8 @@ fun ConfirmationPopUp(text: String, isVisible: Boolean = false, confirmAction: (
 
         AnimatedVisibility(
             visible = isVisible,
-            enter = scaleIn(animationSpec = tween(durationMillis = 100)),
-            exit = scaleOut(animationSpec = tween(durationMillis = 100))
+            enter = scaleIn(animationSpec = tween(durationMillis = animationDuration)),
+            exit = scaleOut(animationSpec = tween(durationMillis = animationDuration))
         ) {
             Column(modifier = Modifier
                 .background(color = Color.White, shape = RoundedCornerShape(20 .dp))

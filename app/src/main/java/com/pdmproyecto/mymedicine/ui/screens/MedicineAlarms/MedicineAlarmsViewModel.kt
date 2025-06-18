@@ -1,4 +1,4 @@
-package com.pdmproyecto.mymedicine.ui.screens
+package com.pdmproyecto.mymedicine.ui.screens.MedicineAlarms
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
