@@ -1,7 +1,10 @@
 package com.pdmproyecto.mymedicine.ui.components
 
+import android.R
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.LocalTextStyle
@@ -19,7 +22,7 @@ import androidx.compose.ui.text.style.TextDecoration
 
 @Composable
 fun TextInput(
-    modifier: Modifier = Modifier,
+    modifier: Modifier,
     title: String = "",
     label: String = "",
     value: String,
