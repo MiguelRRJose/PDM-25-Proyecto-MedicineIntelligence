@@ -7,7 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
-import java.time.LocalDate
+import java.util.Calendar
 
 class MedicineFormViewModel: ViewModel() {
 
@@ -59,32 +59,49 @@ class MedicineFormViewModel: ViewModel() {
         return 0
     }
 
-    fun updateDuration(dayString: String, monthString: String, yearString: String){
-        var day = 0
-        var month = 0
-        var year = 0
+    fun updateDuration(dayString: String?, monthString: String?, yearString: String?) {
+        val day = if (dayString == null || dayString.isBlank()) 0
+        else if (dayString.isDigitsOnly()) dayString.toInt()
+        else dosisDurationString[0].toIntOrNull() ?: 0
 
-        if (dayString.isNotBlank() && dayString.isDigitsOnly()) day = dayString.toInt()
-        if (monthString.isNotBlank() && monthString.isDigitsOnly()) month = monthString.toInt()
-        if (yearString.isNotBlank() && yearString.isDigitsOnly()) year = yearString.toInt()
+        val month = if (monthString == null || monthString.isBlank()) 0
+        else if (monthString.isDigitsOnly()) monthString.toInt()
+        else dosisDurationString[1].toIntOrNull() ?: 0
+
+        val year = if (yearString == null || yearString.isBlank()) 0
+        else if (yearString.isDigitsOnly()) yearString.toInt()
+        else dosisDurationString[2].toIntOrNull() ?: 0
 
         dosisDuration = mutableListOf(day, month, year)
-        //sumDurationToDate(day.toLong(), month.toLong(), year.toLong())
+
+        dosisDurationString[0] = if (day == 0) "" else day.toString()
+        dosisDurationString[1] = if (month == 0) "" else month.toString()
+        dosisDurationString[2] = if (year == 0) "" else year.toString()
+
+        setFinishDate()
     }
 
 
-//    fun sumDurationToDate(days: Long, months: Long, years: Long){
-//
-//        val startDate = LocalDate.of(startDateSelected[2].toInt(), startDateSelected[1].toInt(), startDateSelected[0].toInt())
-//        val finishDate = startDate
-//            .plusDays(days)
-//            .plusMonths(months)
-//            .plusYears(years)
-//
-//        finishDateSelected[0] = finishDate.dayOfMonth.toString()
-//        finishDateSelected[1] = finishDate.month.toString()
-//        finishDateSelected[2] = finishDate.year.toString()
-//    }
 
+
+    fun setFinishDate(){
+        val days = dosisDuration[0]
+        val months = dosisDuration[1]
+        val years = dosisDuration[2]
+
+        val calendar: Calendar = Calendar.getInstance()
+
+        calendar.set(Calendar.DAY_OF_MONTH, startDateSelected[0].toInt())
+        calendar.set(Calendar.MONTH, startDateSelected[1].toInt()-1)
+        calendar.set(Calendar.YEAR, startDateSelected[2].toInt())
+
+        calendar.add(Calendar.DAY_OF_MONTH, days)
+        calendar.add(Calendar.MONTH, months)
+        calendar.add(Calendar.YEAR, years)
+
+        finishDateSelected[0] = calendar.get(Calendar.DAY_OF_MONTH).toString()
+        finishDateSelected[1] = (calendar.get(Calendar.MONTH) + 1).toString()
+        finishDateSelected[2] = calendar.get(Calendar.YEAR).toString()
+    }
 
 }

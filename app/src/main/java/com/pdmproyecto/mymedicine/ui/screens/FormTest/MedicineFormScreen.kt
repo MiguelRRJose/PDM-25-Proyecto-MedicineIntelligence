@@ -44,6 +44,7 @@ fun FormTestScreen(viewModel: MedicineFormViewModel = viewModel()){
         StartDateInputSection(viewModel = viewModel)
 
         StartHourSection(viewModel = viewModel)
+        FinishDateInputSection(viewModel = viewModel)
 
         DurationInputSection(viewModel = viewModel)
 
@@ -304,7 +305,9 @@ fun DurationPicker(
             enabled = enabled,
             onChange = {
                 if (it.isDigitsOnly() || it.isEmpty()){
-                    if (it.length <= 3) viewModel.dosisDurationString[0] = it
+                    if (it.length <= 3) {
+                        viewModel.updateDuration(it, "","")
+                    }
                 }
             },
             keyboardOptions = viewModel.numKeyboardConfig
@@ -317,7 +320,9 @@ fun DurationPicker(
             enabled = enabled,
             onChange = {
                 if (it.isDigitsOnly() || it.isEmpty()){
-                    if (it.length <= 2) viewModel.dosisDurationString[1] = it
+                    if (it.length <= 2) {
+                        viewModel.updateDuration("",it,"")
+                    }
                 }
             },
             keyboardOptions = viewModel.numKeyboardConfig
@@ -330,7 +335,9 @@ fun DurationPicker(
             enabled = enabled,
             onChange = {
                 if (it.isDigitsOnly() || it.isEmpty()){
-                    if (it.length <= 2) viewModel.dosisDurationString[2] = it
+                    if (it.length <= 2) {
+                        viewModel.updateDuration("","",it)
+                    }
                 }
             },
             keyboardOptions = viewModel.numKeyboardConfig
