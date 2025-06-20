@@ -203,6 +203,10 @@ fun StartDateInputSection(
         DatePickerField(
             context = LocalContext.current,
             selectedDate = viewModel.startDateSelected,
+            onDateSelected = {
+                viewModel.compareStartAndFinishDate()
+                viewModel.setFinishDate()
+            }
         )
     }
 }
@@ -224,7 +228,14 @@ fun FinishDateInputSection(
 
         DatePickerField(
             context = LocalContext.current,
+            enabled = !viewModel.undefinedDurationCheck.value,
             selectedDate = viewModel.finishDateSelected,
+            onDateSelected = {
+                viewModel.dosisDurationString[0] = ""
+                viewModel.dosisDurationString[1] = ""
+                viewModel.dosisDurationString[2] = ""
+            },
+            minDateList = viewModel.startDateSelected
         )
     }
 }
@@ -306,7 +317,7 @@ fun DurationPicker(
             onChange = {
                 if (it.isDigitsOnly() || it.isEmpty()){
                     if (it.length <= 3) {
-                        viewModel.updateDuration(it, "","")
+                        viewModel.updateDuration(it,viewModel.dosisDurationString[1],viewModel.dosisDurationString[2])
                     }
                 }
             },
@@ -321,7 +332,7 @@ fun DurationPicker(
             onChange = {
                 if (it.isDigitsOnly() || it.isEmpty()){
                     if (it.length <= 2) {
-                        viewModel.updateDuration("",it,"")
+                        viewModel.updateDuration(viewModel.dosisDurationString[0],it,viewModel.dosisDurationString[2])
                     }
                 }
             },
@@ -336,7 +347,7 @@ fun DurationPicker(
             onChange = {
                 if (it.isDigitsOnly() || it.isEmpty()){
                     if (it.length <= 2) {
-                        viewModel.updateDuration("","",it)
+                        viewModel.updateDuration(viewModel.dosisDurationString[0],viewModel.dosisDurationString[1],it)
                     }
                 }
             },

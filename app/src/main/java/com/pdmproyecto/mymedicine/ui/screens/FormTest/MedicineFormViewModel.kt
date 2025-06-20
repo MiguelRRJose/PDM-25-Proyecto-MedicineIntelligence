@@ -59,18 +59,14 @@ class MedicineFormViewModel: ViewModel() {
         return 0
     }
 
-    fun updateDuration(dayString: String?, monthString: String?, yearString: String?) {
-        val day = if (dayString == null || dayString.isBlank()) 0
-        else if (dayString.isDigitsOnly()) dayString.toInt()
-        else dosisDurationString[0].toIntOrNull() ?: 0
+    fun updateDuration(dayString: String = "", monthString: String = "", yearString: String = "") {
+        var day = 0
+        var month = 0
+        var year = 0
 
-        val month = if (monthString == null || monthString.isBlank()) 0
-        else if (monthString.isDigitsOnly()) monthString.toInt()
-        else dosisDurationString[1].toIntOrNull() ?: 0
-
-        val year = if (yearString == null || yearString.isBlank()) 0
-        else if (yearString.isDigitsOnly()) yearString.toInt()
-        else dosisDurationString[2].toIntOrNull() ?: 0
+        if (dayString.isNotBlank() && dayString.isDigitsOnly()) day = dayString.toInt()
+        if (monthString.isNotBlank() && monthString.isDigitsOnly()) month = monthString.toInt()
+        if (yearString.isNotBlank() && yearString.isDigitsOnly()) year = yearString.toInt()
 
         dosisDuration = mutableListOf(day, month, year)
 
@@ -81,27 +77,39 @@ class MedicineFormViewModel: ViewModel() {
         setFinishDate()
     }
 
-
-
-
     fun setFinishDate(){
-        val days = dosisDuration[0]
-        val months = dosisDuration[1]
-        val years = dosisDuration[2]
+
+        var days = dosisDuration[0]
+        var months = dosisDuration[1]
+        var years = dosisDuration[2]
+
 
         val calendar: Calendar = Calendar.getInstance()
+        calendar.set(startDateSelected[2].toInt(), startDateSelected[1].toInt()-1, startDateSelected[0].toInt())
 
-        calendar.set(Calendar.DAY_OF_MONTH, startDateSelected[0].toInt())
-        calendar.set(Calendar.MONTH, startDateSelected[1].toInt()-1)
-        calendar.set(Calendar.YEAR, startDateSelected[2].toInt())
-
-        calendar.add(Calendar.DAY_OF_MONTH, days)
-        calendar.add(Calendar.MONTH, months)
         calendar.add(Calendar.YEAR, years)
+        calendar.add(Calendar.MONTH, months)
+        calendar.add(Calendar.DAY_OF_MONTH, days)
 
-        finishDateSelected[0] = calendar.get(Calendar.DAY_OF_MONTH).toString()
-        finishDateSelected[1] = (calendar.get(Calendar.MONTH) + 1).toString()
-        finishDateSelected[2] = calendar.get(Calendar.YEAR).toString()
+        if (days > 0) finishDateSelected[0] = calendar.get(Calendar.DAY_OF_MONTH).toString()
+        if (months > 0) finishDateSelected[1] = (calendar.get(Calendar.MONTH) + 1).toString()
+        if (years > 0) finishDateSelected[2] = calendar.get(Calendar.YEAR).toString()
     }
+
+    fun compareStartAndFinishDate(){
+        val calendar1 = Calendar.getInstance()
+        val calendar2 = Calendar.getInstance()
+
+        calendar1.set(startDateSelected[2].toInt(), startDateSelected[1].toInt() - 1, startDateSelected[0].toInt())
+        calendar2.set(finishDateSelected[2].toInt(), finishDateSelected[1].toInt() - 1, finishDateSelected[0].toInt())
+
+        if (calendar2.timeInMillis < calendar1.timeInMillis){
+
+            finishDateSelected[0] = startDateSelected[0]
+            finishDateSelected[1] = startDateSelected[1]
+            finishDateSelected[2] = startDateSelected[2]
+        }
+    }
+
 
 }

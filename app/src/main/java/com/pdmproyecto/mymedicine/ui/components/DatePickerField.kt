@@ -22,13 +22,24 @@ import com.pdmproyecto.mymedicine.ui.theme.DarkGreen
 @Composable
 fun DatePickerField(
     context: Context,
-    selectedDate: SnapshotStateList<String> //permite pasar una lista editable como parametro
+    enabled: Boolean = true,
+    selectedDate: SnapshotStateList<String>, //permite pasar una lista editable como parametro
+    onDateSelected: () -> Unit = {},
+    minDateList: List<String>? = null,
+    maxDateList: List<String>? = null
 ){
 
     val calendar = Calendar.getInstance()
-    val year = calendar.get(Calendar.YEAR)
-    val month = calendar.get(Calendar.MONTH)
-    val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+    var year = calendar.get(Calendar.YEAR)
+    var month = calendar.get(Calendar.MONTH)
+    var day = calendar.get(Calendar.DAY_OF_MONTH)
+
+    if (selectedDate.all { it -> it.isNotBlank() }){
+        year = selectedDate[2].toInt()
+        month = selectedDate[1].toInt() - 1
+        day = selectedDate[0].toInt()
+    }
 
 
     val datePicker = DatePickerDialog(
@@ -38,18 +49,32 @@ fun DatePickerField(
             selectedDate[0] = daySelected.toString()
             selectedDate[1] = (monthSelected + 1).toString()
             selectedDate[2] = yearSelected.toString()
+            onDateSelected()
         },
         year, month, day
     )
 
+    if (minDateList?.size == 3 && minDateList.all { it -> it.isNotBlank() }){
+        val minCalendar = Calendar.getInstance()
+        minCalendar.set(minDateList[2].toInt(), minDateList[1].toInt() - 1, minDateList[0].toInt())
+        datePicker.apply { datePicker.datePicker.minDate = minCalendar.timeInMillis }
+    }
+
+    if (maxDateList?.size == 3 && maxDateList.all { it -> it.isNotBlank() }){
+        val maxCalendar = Calendar.getInstance()
+        maxCalendar.set(maxDateList[2].toInt(), maxDateList[1].toInt() - 1, maxDateList[0].toInt())
+        datePicker.apply { datePicker.datePicker.maxDate = maxCalendar.timeInMillis}
+    }
+
     //al usar parametros en remember, se recalculara al cambiar los valores de estos, SnapshotStateList es necesario para que esto funcione
-    val textDate = remember(selectedDate[0], selectedDate[1], selectedDate[2]){
-        if (selectedDate.all { it.isNotBlank() }) "${selectedDate[0]}-${selectedDate[1]}-${selectedDate[2]}"
-        else "Seleccionar Fecha"
+    val textDate = remember(selectedDate[0], selectedDate[1], selectedDate[2], enabled){
+        if (selectedDate.all { it.isNotBlank() } && enabled) "${selectedDate[0]}-${selectedDate[1]}-${selectedDate[2]}"
+        else "Sin Fecha"
     }
 
     Button(
         modifier = Modifier.fillMaxWidth(),
+        enabled = enabled,
         onClick = {datePicker.show()},
         colors = ButtonDefaults.buttonColors(
             backgroundColor = DarkGreen,
@@ -65,7 +90,7 @@ fun DatePickerField(
     LaunchedEffect(Unit) {
         if (selectedDate.all { it.isBlank() }){
             selectedDate[0] = day.toString()
-            selectedDate[1] = month.toString()
+            selectedDate[1] = (month + 1).toString() //corrección de més de 0-11 a 1-12
             selectedDate[2] = year.toString()
         }
     }
