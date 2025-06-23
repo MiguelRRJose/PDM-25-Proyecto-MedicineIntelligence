@@ -1,6 +1,5 @@
 package com.ayala.monitor_dream.Screens
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -25,11 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.ayala.monitor_dream.Navigation.Screen
 import com.ayala.monitor_dream.ViewModel.SleepViewModel
 import com.ayala.monitor_dream.utils.getCurrentFormattedTime
@@ -97,7 +94,6 @@ fun SleepScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            //Funcionaría para que se inicie el sueño
             Button(
                 onClick = {navController.navigate(Screen.SleepTracking.route)
                 },
@@ -110,7 +106,6 @@ fun SleepScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            //Detalles de sueño
             OutlinedButton(
                 onClick = onDetailsClick,
                 modifier = Modifier
@@ -120,14 +115,12 @@ fun SleepScreen(
                 Text("DETALLES")
             }
 
-            //Para volver a la pagina incial del paciente
             OutlinedButton(
                 onClick = { navController.popBackStack() },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Volver")
             }
-
 
         }
     }

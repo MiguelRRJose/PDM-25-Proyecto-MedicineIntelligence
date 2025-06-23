@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 class SleepViewModel : ViewModel() {
 
-    private val _alarmTime = MutableStateFlow("06:00 AM") // puedes actualizar cuando cambie
+    private val _alarmTime = MutableStateFlow("06:00 AM")
     val alarmTime: StateFlow<String> = _alarmTime
 
 

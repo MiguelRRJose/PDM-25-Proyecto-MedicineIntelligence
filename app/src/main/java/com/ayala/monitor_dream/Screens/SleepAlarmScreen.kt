@@ -100,9 +100,3 @@ fun SleepAlarmScreen(
         }
     }
 }
-
-@Preview
-@Composable
-fun SleepAlarmScreenPreview() {
-    SleepAlarmScreen(onSetAlarmClick = { _, _, _ -> })
-}
