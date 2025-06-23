@@ -28,7 +28,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.ayala.monitor_dream.Navigation.Screen
 import com.ayala.monitor_dream.ViewModel.SleepViewModel
 import com.ayala.monitor_dream.utils.getCurrentFormattedTime
 import kotlinx.coroutines.delay
@@ -37,6 +39,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun SleepScreen(
     viewModel: SleepViewModel,
+    navController: NavController,
     onDetailsClick: () -> Unit,
     onStartSleep: () -> Unit
 ) {
@@ -44,7 +47,6 @@ fun SleepScreen(
 
     val currentTime = remember { mutableStateOf(getCurrentFormattedTime()) }
 
-    val navController = rememberNavController()
 
     LaunchedEffect(Unit) {
         while (true) {
@@ -96,8 +98,9 @@ fun SleepScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
+            //Funcionaría para que se inicie el sueño
             Button(
-                onClick = onStartSleep,
+                onClick = {navController.navigate(Screen.SleepTracking.route)},
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 32.dp)
@@ -107,6 +110,7 @@ fun SleepScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
+            //Detalles de sueño
             OutlinedButton(
                 onClick = onDetailsClick,
                 modifier = Modifier
@@ -116,6 +120,7 @@ fun SleepScreen(
                 Text("DETALLES")
             }
 
+            //Para volver a la pagina incial del paciente
             OutlinedButton(
                 onClick = { navController.popBackStack() },
                 modifier = Modifier.fillMaxWidth()
@@ -129,16 +134,5 @@ fun SleepScreen(
 }
 
 
-
-@SuppressLint("ViewModelConstructorInComposable")
-@Preview(showBackground = true)
-@Composable
-fun SleepScreenPreview() {
-    SleepScreen(
-        viewModel = SleepViewModel(),
-        onStartSleep = {},
-        onDetailsClick = {}
-    )
-}
 
 

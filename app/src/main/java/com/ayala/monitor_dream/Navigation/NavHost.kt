@@ -10,6 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.ayala.monitor_dream.Screens.SleepAlarmScreen
 import com.ayala.monitor_dream.Screens.SleepScreen
+import com.ayala.monitor_dream.Screens.SleepTrackingScreen
 import com.ayala.monitor_dream.ViewModel.SleepViewModel
 
 @Composable
@@ -43,8 +44,14 @@ fun AppNavigator() {
             SleepScreen(
                 viewModel = sleepViewModel,
                 onStartSleep = {},
-                onDetailsClick = {}
+                navController = navController,
+                onDetailsClick = {} //Debes de ver que agregas aca
             )
         }
+
+        composable(Screen.SleepTracking.route) {
+            SleepTrackingScreen(navController = navController)
+        }
+
     }
 }

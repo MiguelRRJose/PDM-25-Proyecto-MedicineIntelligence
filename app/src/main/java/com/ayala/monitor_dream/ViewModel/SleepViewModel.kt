@@ -11,7 +11,7 @@ class SleepViewModel : ViewModel() {
     private val _alarmTime = MutableStateFlow("06:00 AM") // puedes actualizar cuando cambie
     val alarmTime: StateFlow<String> = _alarmTime
 
-    
+
     fun setAlarmTime(hour: Int, minute: Int) {
         val formatted = formatTimeAMPM(hour, minute)
         _alarmTime.value = formatted
