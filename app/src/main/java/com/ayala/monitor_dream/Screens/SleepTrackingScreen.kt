@@ -11,26 +11,38 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.ayala.monitor_dream.ViewModel.SleepViewModel
+import com.ayala.monitor_dream.utils.parseTimeToCalendar
 import kotlinx.coroutines.delay
+import java.util.Calendar
 
 @Composable
 fun SleepTrackingScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: SleepViewModel
 ) {
-    var elapsedSeconds by remember { mutableStateOf(0L) }
 
-    // Iniciar temporizador
-    LaunchedEffect(Unit) {
+    val wakeUpTime = viewModel.alarmTime.collectAsState().value
+
+    var timeLeftMillis by remember { mutableStateOf(0L) }
+
+    val wakeUpCalendar = remember(wakeUpTime) {
+        parseTimeToCalendar(wakeUpTime)
+    }
+
+    LaunchedEffect(wakeUpTime) {
         while (true) {
+            val now = Calendar.getInstance()
+            timeLeftMillis = wakeUpCalendar.timeInMillis - now.timeInMillis
             delay(1000)
-            elapsedSeconds++
         }
     }
 
-    val hours = elapsedSeconds / 3600
-    val minutes = (elapsedSeconds % 3600) / 60
-    val seconds = elapsedSeconds % 60
-    val timeFormatted = String.format("%02d:%02d:%02d", hours, minutes, seconds)
+    val totalSeconds = timeLeftMillis / 1000
+    val hours = totalSeconds / 3600
+    val minutes = (totalSeconds % 3600) / 60
+    val seconds = totalSeconds % 60
+    val countdown = String.format("%02d:%02d:%02d", hours, minutes, seconds)
 
     Box(
         modifier = Modifier
@@ -46,21 +58,30 @@ fun SleepTrackingScreen(
                 color = Color.White
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
             Text(
-                text = timeFormatted,
-                fontSize = 48.sp,
+                text = "Despertar a las: $wakeUpTime",
+                fontSize = 18.sp,
+                color = Color.White
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = "Faltan: $countdown",
+                fontSize = 32.sp,
                 color = Color.White
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(onClick = {
-                navController.popBackStack() // Regresa a pantalla anterior
+                navController.popBackStack()
             }) {
                 Text("DESPERTAR")
             }
         }
     }
 }
+

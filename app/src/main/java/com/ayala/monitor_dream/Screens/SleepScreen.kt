@@ -41,7 +41,6 @@ fun SleepScreen(
     viewModel: SleepViewModel,
     navController: NavController,
     onDetailsClick: () -> Unit,
-    onStartSleep: () -> Unit
 ) {
     val alarmTime = viewModel.alarmTime.collectAsState()
 
@@ -100,7 +99,8 @@ fun SleepScreen(
 
             //Funcionaría para que se inicie el sueño
             Button(
-                onClick = {navController.navigate(Screen.SleepTracking.route)},
+                onClick = {navController.navigate(Screen.SleepTracking.route)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 32.dp)
