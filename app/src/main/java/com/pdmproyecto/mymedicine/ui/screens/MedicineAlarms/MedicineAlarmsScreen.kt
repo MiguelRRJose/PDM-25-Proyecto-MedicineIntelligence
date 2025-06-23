@@ -27,12 +27,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.pdmproyecto.mymedicine.data.Medicine
+import com.pdmproyecto.mymedicine.data.models.Medicine
 import com.pdmproyecto.mymedicine.ui.components.ConfirmationPopUp
 import com.pdmproyecto.mymedicine.ui.components.MedicineCard
 import com.pdmproyecto.mymedicine.ui.theme.DarkPalidGreen
 import com.pdmproyecto.mymedicine.R
-import com.pdmproyecto.mymedicine.ui.screens.MedicineAlarms.MedicineAlarmsViewModel
 
 @Composable
 fun MedicineAlarmsScreen(viewModel: MedicineAlarmsViewModel = viewModel()){

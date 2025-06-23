@@ -25,7 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pdmproyecto.mymedicine.R
-import com.pdmproyecto.mymedicine.data.Medicine
+import com.pdmproyecto.mymedicine.data.models.Medicine
 
 @Composable
 fun MedicineCard(medicine: Medicine, deleteButtonAction: () -> Unit = {}){

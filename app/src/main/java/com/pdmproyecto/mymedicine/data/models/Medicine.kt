@@ -1,4 +1,4 @@
-package com.pdmproyecto.mymedicine.data
+package com.pdmproyecto.mymedicine.data.models
 
 data class Medicine(
     val id: Int,

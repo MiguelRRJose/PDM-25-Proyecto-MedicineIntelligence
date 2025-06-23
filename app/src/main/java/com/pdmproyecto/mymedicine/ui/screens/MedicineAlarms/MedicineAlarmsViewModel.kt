@@ -2,8 +2,8 @@ package com.pdmproyecto.mymedicine.ui.screens.MedicineAlarms
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
-import com.pdmproyecto.mymedicine.data.Medicine
-import com.pdmproyecto.mymedicine.data.dummyMedicines
+import com.pdmproyecto.mymedicine.data.models.Medicine
+import com.pdmproyecto.mymedicine.data.models.dummyMedicines
 
 class MedicineAlarmsViewModel: ViewModel() {
 
