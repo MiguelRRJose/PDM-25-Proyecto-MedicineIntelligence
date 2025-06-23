@@ -22,7 +22,7 @@ fun showTimePickerDialog(
             },
             hour,
             minute,
-            false // Usa formato de 12 horas; cambia a true para 24h
+            false
         )
     }
 

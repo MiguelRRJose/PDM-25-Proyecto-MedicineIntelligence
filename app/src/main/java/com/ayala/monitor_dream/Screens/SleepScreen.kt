@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.rememberNavController
 import com.ayala.monitor_dream.ViewModel.SleepViewModel
 import com.ayala.monitor_dream.utils.getCurrentFormattedTime
 import kotlinx.coroutines.delay
@@ -42,6 +43,8 @@ fun SleepScreen(
     val alarmTime = viewModel.alarmTime.collectAsState()
 
     val currentTime = remember { mutableStateOf(getCurrentFormattedTime()) }
+
+    val navController = rememberNavController()
 
     LaunchedEffect(Unit) {
         while (true) {
@@ -112,6 +115,15 @@ fun SleepScreen(
             ) {
                 Text("DETALLES")
             }
+
+            OutlinedButton(
+                onClick = { navController.popBackStack() },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Volver")
+            }
+
+
         }
     }
 }
