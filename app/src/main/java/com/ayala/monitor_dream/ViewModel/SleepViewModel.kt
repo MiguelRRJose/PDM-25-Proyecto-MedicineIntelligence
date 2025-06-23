@@ -1,23 +1,21 @@
 package com.ayala.monitor_dream.ViewModel
 
-import android.os.Build
-import androidx.annotation.RequiresApi
+
 import androidx.lifecycle.ViewModel
+import com.ayala.monitor_dream.utils.formatTimeAMPM
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import java.time.LocalTime
 
 class SleepViewModel : ViewModel() {
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private val _alarmTime = MutableStateFlow<LocalTime>(LocalTime.of(6, 0))
+    private val _alarmTime = MutableStateFlow("06:00 AM") // puedes actualizar cuando cambie
+    val alarmTime: StateFlow<String> = _alarmTime
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    val alarmTime: StateFlow<LocalTime> = _alarmTime
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun setAlarmTime(time: LocalTime) {
-        _alarmTime.value = time
+    //Sigo trabajando donde colocarlo
+    fun setAlarmTime(hour: Int, minute: Int) {
+        val formatted = formatTimeAMPM(hour, minute)
+        _alarmTime.value = formatted
     }
+
 
 }

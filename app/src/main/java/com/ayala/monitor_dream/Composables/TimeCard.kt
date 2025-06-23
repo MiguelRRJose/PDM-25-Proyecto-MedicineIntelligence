@@ -1,7 +1,5 @@
 package com.ayala.monitor_dream.Composables
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -16,17 +14,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun TimeCard(label: String, time: LocalTime, onClick: @Composable () -> Unit) {
+fun TimeCard(label: String, timeText: String, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .clickable { onClick },
+            .clickable {onClick()},
         colors = CardDefaults.cardColors(containerColor = Color(0xFF122C4C))
     ) {
         Row(
@@ -36,11 +31,10 @@ fun TimeCard(label: String, time: LocalTime, onClick: @Composable () -> Unit) {
         ) {
             Text(text = label, color = Color.White)
             Text(
-                text = time.format(DateTimeFormatter.ofPattern("hh:mm a")),
+                text = timeText,
                 color = Color.White,
                 fontWeight = FontWeight.Bold
             )
         }
     }
 }
-

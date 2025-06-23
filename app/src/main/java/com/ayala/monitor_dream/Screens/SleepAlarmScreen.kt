@@ -1,23 +1,10 @@
 package com.ayala.monitor_dream.Screens
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,21 +14,38 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ayala.monitor_dream.Composables.TimeCard
 import com.ayala.monitor_dream.Composables.showTimePickerDialog
-import java.time.LocalTime
+import com.ayala.monitor_dream.utils.formatTimeAMPM
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SleepAlarmScreen(
-    onSetAlarmClick: (LocalTime, LocalTime, Int) -> Unit
+    onSetAlarmClick: (Int, Int, Int) -> Unit
 ) {
-    var sleepTime by remember { mutableStateOf(LocalTime.of(22, 0)) }
-    var alarmTime by remember { mutableStateOf(LocalTime.of(6, 0)) }
+    var sleepHour by remember { mutableStateOf(22) }
+    var sleepMinute by remember { mutableStateOf(0) }
+
+    var alarmHour by remember { mutableStateOf(6) }
+    var alarmMinute by remember { mutableStateOf(0) }
 
     var reminderMinutes by remember { mutableStateOf("15") }
 
-    val durationMinutes = alarmTime.toSecondOfDay() / 60 - sleepTime.toSecondOfDay() / 60
-    val fixedDuration = if (durationMinutes < 0) durationMinutes + 24 * 60 else durationMinutes
-    val sleepDuration = fixedDuration / 60
+    val sleepTotalMinutes = sleepHour * 60 + sleepMinute
+    val alarmTotalMinutes = alarmHour * 60 + alarmMinute
+    val duration = if (alarmTotalMinutes - sleepTotalMinutes < 0)
+        (alarmTotalMinutes - sleepTotalMinutes + 24 * 60)
+    else
+        alarmTotalMinutes - sleepTotalMinutes
+
+    val sleepDuration = duration / 60
+
+    var showSleepPicker by remember { mutableStateOf(false) }
+
+    if (showSleepPicker) {
+        showTimePickerDialog(sleepHour, sleepMinute) { h, m ->
+            sleepHour = h
+            sleepMinute = m
+            showSleepPicker = false
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -53,14 +57,13 @@ fun SleepAlarmScreen(
         Text("Meta de sueño", color = Color.White, fontSize = 24.sp)
         Spacer(modifier = Modifier.height(16.dp))
 
-        TimeCard ("🛏️ Tiempo de dormir", sleepTime ) {
-
-            showTimePickerDialog(sleepTime) { sleepTime = it }
+        TimeCard("🛏️ Tiempo de dormir", formatTimeAMPM(sleepHour, sleepMinute)) {
+            showSleepPicker = true
         }
 
-        TimeCard("⏰ Alarma", alarmTime) {
-
-            showTimePickerDialog(alarmTime) { alarmTime = it }
+        TimeCard("⏰ Alarma", formatTimeAMPM(alarmHour, alarmMinute))
+        {
+            showSleepPicker = true
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -91,19 +94,15 @@ fun SleepAlarmScreen(
 
         Button(onClick = {
             val reminder = reminderMinutes.toIntOrNull() ?: 15
-            onSetAlarmClick(sleepTime, alarmTime, reminder)
+            onSetAlarmClick(sleepHour, sleepMinute, reminder)
         }) {
             Text("Establecer alarma")
         }
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 fun SleepAlarmScreenPreview() {
     SleepAlarmScreen(onSetAlarmClick = { _, _, _ -> })
 }
-
-
-
