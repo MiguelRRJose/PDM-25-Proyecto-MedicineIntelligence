@@ -1,20 +1,46 @@
 package com.ayala.monitor_dream.ViewModel
 
-
+import androidx.datastore.dataStore
+import androidx.datastore.preferences.core.emptyPreferences
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.ayala.monitor_dream.PruebaMain
+import com.ayala.monitor_dream.data.repository.AlarmUserPreferenceRepository
 import com.ayala.monitor_dream.utils.formatTimeAMPM
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
-class SleepViewModel : ViewModel() {
+class SleepViewModel(
+    private val alarmUserPreferenceRepository: AlarmUserPreferenceRepository
+) : ViewModel() {
 
     private val _alarmTime = MutableStateFlow("06:00 AM")
     val alarmTime: StateFlow<String> = _alarmTime
 
-
     fun setAlarmTime(hour: Int, minute: Int) {
         val formatted = formatTimeAMPM(hour, minute)
         _alarmTime.value = formatted
+        saveAlarmUser(formatted)
     }
 
+    fun saveAlarmUser(value: String) {
+        viewModelScope.launch {
+            alarmUserPreferenceRepository.saveAlarmUser(value)
+        }
+    }
+
+    val alarmUser: StateFlow<String> = alarmUserPreferenceRepository.alarmUser
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), "06:00 AM")
+
+    companion object {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val app = this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as PruebaMain
+                SleepViewModel(app.alarmUserPreferenceRepository)
+            }
+        }
+    }
 }

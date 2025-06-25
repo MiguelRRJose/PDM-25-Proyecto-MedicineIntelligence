@@ -1,4 +1,5 @@
 package com.ayala.monitor_dream.Navigation
+//Serealización de pantallas
 
 sealed class Screen(val route: String) {
     object Alarm : Screen("alarm")

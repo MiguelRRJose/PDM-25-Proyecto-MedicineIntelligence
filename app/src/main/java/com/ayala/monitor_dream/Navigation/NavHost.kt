@@ -13,7 +13,7 @@ import com.ayala.monitor_dream.ViewModel.SleepViewModel
 
 @Composable
 fun AppNavigator(navController: NavHostController) {
-    val sleepViewModel: SleepViewModel = viewModel()
+    val sleepViewModel: SleepViewModel = viewModel(factory = SleepViewModel.Factory)
 
     NavHost(navController = navController, startDestination = Screen.Alarm.route) {
 

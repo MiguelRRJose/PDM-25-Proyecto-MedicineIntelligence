@@ -3,5 +3,4 @@ package com.ayala.monitor_dream.data
 import android.content.Context
 import androidx.datastore.preferences.preferencesDataStore
 
-private val Context.dataStore by preferencesDataStore(name = "alarm_prefs")
-
+val Context.alarmUserDataStore by preferencesDataStore(name = "alarm_user")

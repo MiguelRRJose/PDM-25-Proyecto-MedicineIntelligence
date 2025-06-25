@@ -22,6 +22,8 @@ fun SleepTrackingScreen(
     viewModel: SleepViewModel
 ) {
 
+    val savedAlarmTime by viewModel.alarmUser.collectAsState()
+
     val wakeUpTime = viewModel.alarmTime.collectAsState().value
 
     var timeLeftMillis by remember { mutableStateOf(0L) }
@@ -52,6 +54,16 @@ fun SleepTrackingScreen(
         contentAlignment = Alignment.Center
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
+            //Unicamente creado para comprobar que la alarma se guarda correctamente
+            Text(
+                text = "Alarma guardada: $savedAlarmTime",
+                color = Color.White,
+                fontSize = 16.sp,
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
             Text(
                 text = "😴 Durmiendo...",
                 fontSize = 24.sp,
