@@ -27,9 +27,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.ayala.monitor_dream.Navigation.Screen
 import com.ayala.monitor_dream.ViewModel.SleepViewModel
+import com.ayala.monitor_dream.utils.formatTimeAMPM
 import com.ayala.monitor_dream.utils.getCurrentFormattedTime
+import com.ayala.monitor_dream.utils.navigateToSleepTracking
 import kotlinx.coroutines.delay
 
 
@@ -41,8 +42,7 @@ fun SleepScreen(
 ) {
     val alarmTime = viewModel.alarmTime.collectAsState()
 
-    val currentTime = remember { mutableStateOf(getCurrentFormattedTime()) }
-
+    val currentTime = remember {mutableStateOf(getCurrentFormattedTime())}
 
     LaunchedEffect(Unit) {
         while (true) {
@@ -50,7 +50,6 @@ fun SleepScreen(
             currentTime.value = getCurrentFormattedTime()
         }
     }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -87,7 +86,7 @@ fun SleepScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "⏰ ${alarmTime.value}",
+                text = "⏰ ${formatTimeAMPM(alarmTime.value)}",
                 color = Color.White,
                 fontSize = 16.sp
             )
@@ -95,7 +94,8 @@ fun SleepScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                onClick = {navController.navigate(Screen.SleepTracking.route)
+                onClick = {
+                    navigateToSleepTracking(navController, viewModel.alarmTime.value)
                 },
                 modifier = Modifier
                     .fillMaxWidth()

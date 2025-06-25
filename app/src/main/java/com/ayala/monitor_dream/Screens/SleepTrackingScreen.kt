@@ -12,21 +12,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.ayala.monitor_dream.ViewModel.SleepViewModel
-import com.ayala.monitor_dream.utils.parseTimeToCalendar
+import com.ayala.monitor_dream.model.AlarmData
+import com.ayala.monitor_dream.utils.formatTimeAMPM
 import kotlinx.coroutines.delay
+import parseTimeToCalendar
 import java.util.Calendar
 
 @Composable
 fun SleepTrackingScreen(
     navController: NavController,
-    viewModel: SleepViewModel
+    viewModel: SleepViewModel,
+    alarmData: AlarmData
 ) {
 
     val savedAlarmTime by viewModel.alarmUser.collectAsState()
+    val alarmaDate = remember(alarmData) { formatTimeAMPM(alarmData) }
 
     val wakeUpTime = viewModel.alarmTime.collectAsState().value
+    val despierta = remember(alarmData) { formatTimeAMPM(alarmData) }
 
-    var timeLeftMillis by remember { mutableStateOf(0L) }
+    var timeLeftMillis by remember { mutableLongStateOf(0L) }
 
     val wakeUpCalendar = remember(wakeUpTime) {
         parseTimeToCalendar(wakeUpTime)
@@ -57,7 +62,7 @@ fun SleepTrackingScreen(
 
             //Unicamente creado para comprobar que la alarma se guarda correctamente
             Text(
-                text = "Alarma guardada: $savedAlarmTime",
+                text = "Alarma guardada: $alarmaDate",
                 color = Color.White,
                 fontSize = 16.sp,
             )
@@ -73,7 +78,7 @@ fun SleepTrackingScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             Text(
-                text = "Despertar a las: $wakeUpTime",
+                text = "Despertar a las: $despierta",
                 fontSize = 18.sp,
                 color = Color.White
             )

@@ -1,7 +1,5 @@
 package com.ayala.monitor_dream.ViewModel
 
-import androidx.datastore.dataStore
-import androidx.datastore.preferences.core.emptyPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -9,6 +7,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.ayala.monitor_dream.PruebaMain
 import com.ayala.monitor_dream.data.repository.AlarmUserPreferenceRepository
+import com.ayala.monitor_dream.model.AlarmData
 import com.ayala.monitor_dream.utils.formatTimeAMPM
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -17,13 +16,15 @@ class SleepViewModel(
     private val alarmUserPreferenceRepository: AlarmUserPreferenceRepository
 ) : ViewModel() {
 
-    private val _alarmTime = MutableStateFlow("06:00 AM")
-    val alarmTime: StateFlow<String> = _alarmTime
+    private val _alarmTime = MutableStateFlow(AlarmData(6,0))
 
-    fun setAlarmTime(hour: Int, minute: Int) {
-        val formatted = formatTimeAMPM(hour, minute)
-        _alarmTime.value = formatted
+    val alarmTime: StateFlow<AlarmData> =_alarmTime
+
+    fun setAlarmTime(alarmData: AlarmData) {
+        _alarmTime.value = alarmData
+        val formatted = formatTimeAMPM(alarmData)
         saveAlarmUser(formatted)
+
     }
 
     fun saveAlarmUser(value: String) {
