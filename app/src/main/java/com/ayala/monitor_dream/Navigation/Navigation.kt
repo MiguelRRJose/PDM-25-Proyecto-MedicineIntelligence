@@ -1,8 +1,12 @@
 package com.ayala.monitor_dream.Navigation
+
+import kotlinx.serialization.Serializable
+
 //Serealización de pantallas
 
-sealed class Screen(val route: String) {
-    object Alarm : Screen("alarm")
-    object Sleep : Screen("sleep")
-    object SleepTracking : Screen("sleep_tracking")
-}
+@Serializable
+object AlarmP //Donde sale "Sleepy"
+@Serializable
+object SleepY //Donde colocas las horas
+@Serializable
+object SleepTrackingOG//Ya el uso del reloj

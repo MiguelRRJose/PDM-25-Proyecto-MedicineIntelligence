@@ -12,8 +12,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.ayala.monitor_dream.ViewModel.SleepViewModel
-import com.ayala.monitor_dream.model.AlarmData
-import com.ayala.monitor_dream.utils.formatTimeAMPM
 import kotlinx.coroutines.delay
 import parseTimeToCalendar
 import java.util.Calendar
@@ -22,22 +20,18 @@ import java.util.Calendar
 fun SleepTrackingScreen(
     navController: NavController,
     viewModel: SleepViewModel,
-    alarmData: AlarmData
 ) {
+    //Dato ViewModel
+    val alarmTime = viewModel.alarmTime.collectAsState().value
 
-    val savedAlarmTime by viewModel.alarmUser.collectAsState()
-    val alarmaDate = remember(alarmData) { formatTimeAMPM(alarmData) }
-
-    val wakeUpTime = viewModel.alarmTime.collectAsState().value
-    val despierta = remember(alarmData) { formatTimeAMPM(alarmData) }
 
     var timeLeftMillis by remember { mutableLongStateOf(0L) }
 
-    val wakeUpCalendar = remember(wakeUpTime) {
-        parseTimeToCalendar(wakeUpTime)
+    val wakeUpCalendar = remember(alarmTime) {
+        parseTimeToCalendar(alarmTime)
     }
 
-    LaunchedEffect(wakeUpTime) {
+    LaunchedEffect(alarmTime) {
         while (true) {
             val now = Calendar.getInstance()
             timeLeftMillis = wakeUpCalendar.timeInMillis - now.timeInMillis
@@ -45,6 +39,7 @@ fun SleepTrackingScreen(
         }
     }
 
+    //Operaciones para el tiempo
     val totalSeconds = timeLeftMillis / 1000
     val hours = totalSeconds / 3600
     val minutes = (totalSeconds % 3600) / 60
@@ -60,13 +55,6 @@ fun SleepTrackingScreen(
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
-            //Unicamente creado para comprobar que la alarma se guarda correctamente
-            Text(
-                text = "Alarma guardada: $alarmaDate",
-                color = Color.White,
-                fontSize = 16.sp,
-            )
-
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
@@ -78,7 +66,7 @@ fun SleepTrackingScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             Text(
-                text = "Despertar a las: $despierta",
+                text = "Despertar a las: $alarmTime",
                 fontSize = 18.sp,
                 color = Color.White
             )

@@ -27,10 +27,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.ayala.monitor_dream.Navigation.SleepTrackingOG
 import com.ayala.monitor_dream.ViewModel.SleepViewModel
 import com.ayala.monitor_dream.utils.formatTimeAMPM
 import com.ayala.monitor_dream.utils.getCurrentFormattedTime
-import com.ayala.monitor_dream.utils.navigateToSleepTracking
 import kotlinx.coroutines.delay
 
 
@@ -38,10 +38,12 @@ import kotlinx.coroutines.delay
 fun SleepScreen(
     viewModel: SleepViewModel,
     navController: NavController,
-    onDetailsClick: () -> Unit,
+
 ) {
+    //ViewModel
     val alarmTime = viewModel.alarmTime.collectAsState()
 
+    //Valor actual según sistema (virtual machine)
     val currentTime = remember {mutableStateOf(getCurrentFormattedTime())}
 
     LaunchedEffect(Unit) {
@@ -61,7 +63,7 @@ fun SleepScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Buenas noches",
+                text = "A DORMIR HIJO DE PUTA",
                 color = Color.White,
                 fontSize = 20.sp
             )
@@ -79,7 +81,7 @@ fun SleepScreen(
 
             Image(
                 painter = painterResource(id = R.drawable.astro_durmiendo),
-                contentDescription = "Astronauta dormido",
+                contentDescription = "Astronauta dormido :3" ,
                 modifier = Modifier.size(160.dp)
             )
 
@@ -95,7 +97,7 @@ fun SleepScreen(
 
             Button(
                 onClick = {
-                    navigateToSleepTracking(navController, viewModel.alarmTime.value)
+                    navController.navigate(SleepTrackingOG)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -105,15 +107,6 @@ fun SleepScreen(
             }
 
             Spacer(modifier = Modifier.height(12.dp))
-
-            OutlinedButton(
-                onClick = onDetailsClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 32.dp)
-            ) {
-                Text("DETALLES")
-            }
 
             OutlinedButton(
                 onClick = { navController.popBackStack() },

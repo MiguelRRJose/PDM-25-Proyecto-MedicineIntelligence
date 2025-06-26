@@ -22,25 +22,33 @@ fun SleepAlarmScreen(
     viewModel: SleepViewModel,
     onSetAlarmClick: (AlarmData, Int) -> Unit
 ) {
+
+    //Dato ViewModel
     val alarmTime by viewModel.alarmTime.collectAsState()
 
+    //Dato Dormir
     var sleepHour by remember { mutableStateOf(22) }
     var sleepMinute by remember { mutableStateOf(0) }
 
+    //Dato Alarma
     var alarmHour by remember { mutableStateOf(alarmTime.hour) }
     var alarmMinute by remember { mutableStateOf(alarmTime.minute) }
 
+    //Dato recordatorio
     var reminderMinutes by remember { mutableStateOf("15") }
 
+    //Para la ventana de tiempo
     var showSleepPicker by remember { mutableStateOf(false) }
+
+    //Determinar que ventana de tiempo se utilizará
     var editingTime by remember { mutableStateOf("sleep") } // "sleep" o "alarm"
 
-    // AHHHHHHHHHHHHHHHHHH
     LaunchedEffect(alarmTime) {
         alarmHour = alarmTime.hour
         alarmMinute = alarmTime.minute
     }
 
+    //Transformaciones de tiempo (Posible cambio para el viewModel)
     val sleepTotalMinutes = sleepHour * 60 + sleepMinute
     val alarmTotalMinutes = alarmHour * 60 + alarmMinute
 
@@ -53,9 +61,15 @@ fun SleepAlarmScreen(
 
     if (showSleepPicker) {
         // Mostrar picker con valores actuales según lo que se edite
-        val hourInit = if (editingTime == "sleep") sleepHour else alarmHour
-        val minuteInit = if (editingTime == "sleep") sleepMinute else alarmMinute
+        val hourInit =
+            if (editingTime == "sleep") sleepHour
+                else alarmHour
 
+        val minuteInit =
+            if (editingTime == "sleep") sleepMinute
+                else alarmMinute
+
+        //Ventana de tiempo
         showTimePickerDialog(hourInit, minuteInit) { h, m ->
             if (editingTime == "sleep") {
                 sleepHour = h
@@ -81,12 +95,16 @@ fun SleepAlarmScreen(
         Text("Doctor sleep alarm", color = Color.White, fontSize = 24.sp)
         Spacer(modifier = Modifier.height(16.dp))
 
-        TimeCard("🛏️ Tiempo de dormir ", formatTimeAMPM(AlarmData(sleepHour, sleepMinute))) {
+        TimeCard("🛏️ Tiempo de dormir ",
+            formatTimeAMPM(AlarmData(sleepHour, sleepMinute)))
+        {
             editingTime = "sleep"
             showSleepPicker = true
         }
 
-        TimeCard("⏰ Alarma ", formatTimeAMPM(AlarmData(alarmHour, alarmMinute))) {
+        TimeCard("⏰ Alarma ",
+            formatTimeAMPM(AlarmData(alarmHour, alarmMinute)))
+        {
             editingTime = "alarm"
             showSleepPicker = true
         }
@@ -120,7 +138,10 @@ fun SleepAlarmScreen(
         Button(onClick = {
             val reminder = reminderMinutes.toIntOrNull() ?: 15
             val alarmData = AlarmData(alarmHour, alarmMinute)
+
+            //Definición para que sea posible guardar los datos antes del onClick
             onSetAlarmClick(alarmData, reminder)
+
         }) {
             Text("Establecer alarma")
         }

@@ -8,7 +8,10 @@ import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
 fun navigateToSleepTracking(navController: NavController, alarmData: AlarmData) {
+
     val json = Json.encodeToString(alarmData)
+
     val encoded = URLEncoder.encode(json, StandardCharsets.UTF_8.toString())
+
     navController.navigate("sleep_tracking/$encoded")
 }
