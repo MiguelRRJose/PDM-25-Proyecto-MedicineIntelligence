@@ -1,8 +1,9 @@
-package com.pdmproyecto.mymedicine.data.entities
+package com.pdmproyecto.mymedicine.data.database.entities
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.pdmproyecto.mymedicine.data.models.Patient
 import java.util.Date
 
 @Entity(
@@ -13,7 +14,8 @@ import java.util.Date
             parentColumns = ["id"],
             childColumns = ["userId"]
         )
-    ])
+    ]
+)
 data class PatientEntity(
     @PrimaryKey(autoGenerate = true) val id: Int,
     val userId: Int,
@@ -23,3 +25,15 @@ data class PatientEntity(
     val weight: Float,
     val steps: Int
 )
+
+fun PatientEntity.toDomain(): Patient{
+    return Patient(
+        id = this.id,
+        userId = this.userId,
+        water = this.water,
+        sleepHours = this.sleepHours,
+        sleepAlarmHour = this.sleepAlarmHour,
+        weight = this.weight,
+        steps = this.steps
+    )
+}

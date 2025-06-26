@@ -32,13 +32,15 @@ import com.pdmproyecto.mymedicine.ui.components.ConfirmationPopUp
 import com.pdmproyecto.mymedicine.ui.components.MedicineCard
 import com.pdmproyecto.mymedicine.ui.theme.DarkPalidGreen
 import com.pdmproyecto.mymedicine.R
+import java.util.Date
 
 @Composable
 fun MedicineAlarmsScreen(viewModel: MedicineAlarmsViewModel = viewModel()){
 
     val medicineList = viewModel.medicineList
     val popUpVisibility = remember{ mutableStateOf(false)}
-    val medicineToDelete = remember{ mutableStateOf(Medicine(-1,"","", 2f, "","",""))}
+    val medicineToDelete = remember { mutableStateOf(viewModel.setMedicineToGeneric()) }
+
 
     val roundedShape = RoundedCornerShape(15.dp)
 
@@ -110,7 +112,7 @@ fun MedicineAlarmsScreen(viewModel: MedicineAlarmsViewModel = viewModel()){
                 },
             cancelAction =
                 {
-                    medicineToDelete.value = Medicine(-1,"","", 2f, "","","")
+                    medicineToDelete.value = viewModel.setMedicineToGeneric()
                     popUpVisibility.value = false
                 }
         )

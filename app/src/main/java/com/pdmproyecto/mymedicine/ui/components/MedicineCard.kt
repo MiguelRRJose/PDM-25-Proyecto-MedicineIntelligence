@@ -57,7 +57,7 @@ fun MedicineCard(medicine: Medicine, deleteButtonAction: () -> Unit = {}){
 
         ){
             Text(text = medicine.name, fontWeight = FontWeight.Bold, color = Color.Black)
-            Text(text = medicine.lastDate, color = Color.Black)
+            Text(text = medicine.finishDate.toString(), color = Color.Black)
         }
 
 
