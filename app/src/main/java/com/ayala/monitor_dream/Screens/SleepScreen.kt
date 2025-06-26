@@ -17,8 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,8 +27,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.ayala.monitor_dream.Navigation.SleepTrackingOG
 import com.ayala.monitor_dream.ViewModel.SleepViewModel
+import com.ayala.monitor_dream.utils.convertMillisToActualData
 import com.ayala.monitor_dream.utils.formatTimeAMPM
-import com.ayala.monitor_dream.utils.getCurrentFormattedTime
+import com.ayala.monitor_dream.utils.formatTimeAMPM2
 import kotlinx.coroutines.delay
 
 
@@ -42,14 +41,17 @@ fun SleepScreen(
 ) {
     //ViewModel
     val alarmTime = viewModel.alarmTime.collectAsState()
+    val alarmUser = viewModel.startTime.collectAsState().value ?: return
 
-    //Valor actual según sistema (virtual machine)
-    val currentTime = remember {mutableStateOf(getCurrentFormattedTime())}
+    val startTimeMillis: Long = System.currentTimeMillis()
+    val currentTime = convertMillisToActualData(startTimeMillis)
+    val formattedTime = formatTimeAMPM2(currentTime)
+
 
     LaunchedEffect(Unit) {
         while (true) {
             delay(1000)
-            currentTime.value = getCurrentFormattedTime()
+            startTimeMillis
         }
     }
     Box(
@@ -71,7 +73,7 @@ fun SleepScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = currentTime.value,
+                text = formattedTime,
                 color = Color.White,
                 fontSize = 48.sp,
                 fontWeight = FontWeight.Bold
@@ -86,6 +88,12 @@ fun SleepScreen(
             )
 
             Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = " ${formatTimeAMPM2(alarmUser)}",
+                color = Color.White,
+                fontSize = 16.sp
+            )
 
             Text(
                 text = "⏰ ${formatTimeAMPM(alarmTime.value)}",

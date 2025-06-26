@@ -14,7 +14,7 @@ import androidx.navigation.NavController
 import com.ayala.monitor_dream.ViewModel.SleepViewModel
 import kotlinx.coroutines.delay
 import parseTimeToCalendar
-import java.util.Calendar
+import parseTimeToCalendar2
 
 @Composable
 fun SleepTrackingScreen(
@@ -24,27 +24,59 @@ fun SleepTrackingScreen(
     //Dato ViewModel
     val alarmTime = viewModel.alarmTime.collectAsState().value
 
+    val startSleepTime = viewModel.startTime.collectAsState().value ?: return
 
-    var timeLeftMillis by remember { mutableLongStateOf(0L) }
+    val currenTimeMillis = remember {mutableStateOf(System.currentTimeMillis())}
 
-    val wakeUpCalendar = remember(alarmTime) {
-        parseTimeToCalendar(alarmTime)
-    }
+    //var sleepDurationMillis by remember { mutableLongStateOf(0L) }
 
-    LaunchedEffect(alarmTime) {
-        while (true) {
-            val now = Calendar.getInstance()
-            timeLeftMillis = wakeUpCalendar.timeInMillis - now.timeInMillis
-            delay(1000)
+    //val safeSleepDurationMillis = sleepDurationMillis.coerceAtLeast(0L)
+
+var sleepDurationMillis by remember { mutableStateOf(0L) }
+    var timeLeftMillis by remember { mutableStateOf(0L) }
+    var totalSleepMillis by remember { mutableStateOf(0L) }
+
+
+    LaunchedEffect(Unit) {
+        while(true) {
+
+            val nowMillis = System.currentTimeMillis()
+
+            val wakeUpCalendar = parseTimeToCalendar(alarmTime)
+            val sleepCalendar = parseTimeToCalendar2(startSleepTime)
+
+            val startMillis = sleepCalendar.timeInMillis
+            val endMillis = wakeUpCalendar.timeInMillis
+
+            sleepDurationMillis = (nowMillis - startMillis).coerceAtLeast(0L)
+            timeLeftMillis = (endMillis - nowMillis).coerceAtLeast(0L)
+            totalSleepMillis = (endMillis - startMillis).coerceAtLeast(0L)
+
+            delay(1000L)
         }
     }
 
+
     //Operaciones para el tiempo
-    val totalSeconds = timeLeftMillis / 1000
+    val totalSleepSeconds = totalSleepMillis / 1000
+
+    val Sleephours = totalSleepSeconds / 3600
+    val Sleepminutes = (totalSleepSeconds % 3600) / 60
+    val Sleepseconds = totalSleepSeconds % 60
+
+    val Sleepcountdown = String.format("%02d:%02d:%02d", Sleephours, Sleepminutes, Sleepseconds)
+
+    val totalSeconds = sleepDurationMillis / 1000
+
     val hours = totalSeconds / 3600
+
     val minutes = (totalSeconds % 3600) / 60
+
     val seconds = totalSeconds % 60
+
     val countdown = String.format("%02d:%02d:%02d", hours, minutes, seconds)
+
+
 
     Box(
         modifier = Modifier
@@ -66,7 +98,9 @@ fun SleepTrackingScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             Text(
-                text = "Despertar a las: $alarmTime",
+                text = "Despertar a las: ${alarmTime.hour}:${alarmTime.minute}\n" +
+                        "Hora programada:${startSleepTime.hour}:${startSleepTime.minute}",
+
                 fontSize = 18.sp,
                 color = Color.White
             )
@@ -74,10 +108,12 @@ fun SleepTrackingScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "Faltan: $countdown",
-                fontSize = 32.sp,
+                text = "Tiempo durmiendo: $countdown\n"
+                        + "Tiempo transcurrido: $Sleepcountdown",
+                fontSize = 20.sp,
                 color = Color.White
             )
+
 
             Spacer(modifier = Modifier.height(24.dp))
 

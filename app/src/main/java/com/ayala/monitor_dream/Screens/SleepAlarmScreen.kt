@@ -14,21 +14,30 @@ import androidx.compose.ui.unit.sp
 import com.ayala.monitor_dream.Composables.TimeCard
 import com.ayala.monitor_dream.Composables.showTimePickerDialog
 import com.ayala.monitor_dream.ViewModel.SleepViewModel
+import com.ayala.monitor_dream.model.ActualTime
 import com.ayala.monitor_dream.model.AlarmData
+import com.ayala.monitor_dream.utils.convertMillisToActualData
 import com.ayala.monitor_dream.utils.formatTimeAMPM
+import com.ayala.monitor_dream.utils.formatTimeAMPM2
 
 @Composable
 fun SleepAlarmScreen(
     viewModel: SleepViewModel,
-    onSetAlarmClick: (AlarmData, Int) -> Unit
+    onSetAlarmClick: (AlarmData, ActualTime,Int) -> Unit
 ) {
 
     //Dato ViewModel
     val alarmTime by viewModel.alarmTime.collectAsState()
 
+
+    //Lanzamiento del dato reloj sistema Para personalizar
+    val startTimeMillis: Long = System.currentTimeMillis()
+    var currentTime = convertMillisToActualData(startTimeMillis)
+
+
     //Dato Dormir
-    var sleepHour by remember { mutableStateOf(22) }
-    var sleepMinute by remember { mutableStateOf(0) }
+    var sleepHour by remember { mutableStateOf(currentTime.hour)}
+    var sleepMinute by remember { mutableStateOf(currentTime.minute)}
 
     //Dato Alarma
     var alarmHour by remember { mutableStateOf(alarmTime.hour) }
@@ -39,6 +48,18 @@ fun SleepAlarmScreen(
 
     //Para la ventana de tiempo
     var showSleepPicker by remember { mutableStateOf(false) }
+
+    var personalTime by remember { mutableStateOf(false)}
+
+    //Para tiempo Usuario Personal
+    //var systemTime = remember {currentTime}
+
+    //Para el tiempo sistema
+
+    val storedSleepTime by viewModel.startTime.collectAsState()
+
+    val currentSleepTime = storedSleepTime ?: currentTime
+
 
     //Determinar que ventana de tiempo se utilizará
     var editingTime by remember { mutableStateOf("sleep") } // "sleep" o "alarm"
@@ -59,6 +80,7 @@ fun SleepAlarmScreen(
 
     val sleepDuration = duration / 60
 
+
     if (showSleepPicker) {
         // Mostrar picker con valores actuales según lo que se edite
         val hourInit =
@@ -74,6 +96,14 @@ fun SleepAlarmScreen(
             if (editingTime == "sleep") {
                 sleepHour = h
                 sleepMinute = m
+
+                if(personalTime)
+                {
+                    val newCustomTime = ActualTime(h,m)
+                    viewModel.setStartTime(newCustomTime)
+                    personalTime = false
+                }
+
             } else {
                 alarmHour = h
                 alarmMinute = m
@@ -92,11 +122,33 @@ fun SleepAlarmScreen(
     ) {
         Spacer(modifier = Modifier.height(16.dp))
 
-        Text("Doctor sleep alarm", color = Color.White, fontSize = 24.sp)
+        Text("Alarma_Personal_Salud", color = Color.White, fontSize = 24.sp)
         Spacer(modifier = Modifier.height(16.dp))
 
+        Button(onClick = {
+
+            if(storedSleepTime != null)
+            {
+                personalTime = true
+                viewModel.setStartTime(currentTime)
+
+            } else
+            {
+                showSleepPicker = true
+                editingTime = "sleep"
+            }
+
+        }) {
+
+            if(storedSleepTime != null)
+            Text("Restablecer a hora del sistema\n${formatTimeAMPM2(currentTime)}")
+            else
+                Text("Personalizar tiempo de sueño\n${formatTimeAMPM2(currentSleepTime)}")
+        }
+
         TimeCard("🛏️ Tiempo de dormir ",
-            formatTimeAMPM(AlarmData(sleepHour, sleepMinute)))
+            formatTimeAMPM2(currentSleepTime),
+            )
         {
             editingTime = "sleep"
             showSleepPicker = true
@@ -140,7 +192,7 @@ fun SleepAlarmScreen(
             val alarmData = AlarmData(alarmHour, alarmMinute)
 
             //Definición para que sea posible guardar los datos antes del onClick
-            onSetAlarmClick(alarmData, reminder)
+            onSetAlarmClick(alarmData, currentSleepTime,reminder)
 
         }) {
             Text("Establecer alarma")

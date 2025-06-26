@@ -13,5 +13,4 @@ fun navigateToSleepTracking(navController: NavController, alarmData: AlarmData) 
 
     val encoded = URLEncoder.encode(json, StandardCharsets.UTF_8.toString())
 
-    navController.navigate("sleep_tracking/$encoded")
 }

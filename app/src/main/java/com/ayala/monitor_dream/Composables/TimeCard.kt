@@ -1,5 +1,6 @@
 package com.ayala.monitor_dream.Composables
 
+import android.opengl.Visibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
