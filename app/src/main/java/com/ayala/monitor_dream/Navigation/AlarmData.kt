@@ -18,8 +18,8 @@ data class TimeSleep(
     val minute: Int
 )
 @Serializable
-data class reminder(
-    val hour: Int,
+data class ReminderTime(
+    val minute: Int,
 )
 
 

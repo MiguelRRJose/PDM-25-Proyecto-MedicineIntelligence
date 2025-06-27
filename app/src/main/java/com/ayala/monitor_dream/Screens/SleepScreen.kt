@@ -1,7 +1,5 @@
 package com.ayala.monitor_dream.screens
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import com.ayala.monitor_dream.R
@@ -10,9 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,11 +16,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.ayala.monitor_dream.composables.ButtonAction
+import com.ayala.monitor_dream.composables.PersonalBackground
+import com.ayala.monitor_dream.composables.SelectedImage
+import com.ayala.monitor_dream.composables.TimeCard
 import com.ayala.monitor_dream.navigation.SleepTrackingOG
 import com.ayala.monitor_dream.viewModel.SleepViewModel
 import com.ayala.monitor_dream.utils.convertMillisToActualData
@@ -42,8 +40,6 @@ fun SleepScreen(
 ) {
     //ViewModel
     val alarmTime by viewModel.alarmTime.collectAsState()
-    val storedSleepTime by viewModel.startTime.collectAsState()
-    val sleepDuration by viewModel.duration.collectAsState()
 
     //Para mostrar un reloj en pantalla
     val startTimeMillis: Long = System.currentTimeMillis()
@@ -56,18 +52,20 @@ fun SleepScreen(
             startTimeMillis
         }
     }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF0A1F33))
-            .padding(24.dp)
     ) {
+
+        PersonalBackground(R.drawable.backgroud_1,"background")
+
         Column(
             modifier = Modifier.align(Alignment.Center),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Hora de una buena siesta amigo!",
+                text = "Buenas noches",
                 color = Color.White,
                 fontSize = 20.sp
             )
@@ -83,57 +81,18 @@ fun SleepScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Image(
-                painter = painterResource(id = R.drawable.astro_durmiendo),
-                contentDescription = "Astronauta dormido :3" ,
-                modifier = Modifier.size(160.dp)
-            )
+            SelectedImage(R.drawable.astro_durmiendo, "Astronauta dormido")
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(
-                text = " ${formatTimeAMPM2(storedSleepTime)}",
-                color = Color.White,
-                fontSize = 16.sp
-            )
+            TimeCard("Alarma: ", formatTimeAMPM(alarmTime), R.drawable.alarm_white_1){}
 
-            Text(
-                text = "⏰ ${formatTimeAMPM(alarmTime)}",
-                color = Color.White,
-                fontSize = 16.sp
-            )
+            Spacer(modifier = Modifier.height(30.dp))
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = "Tiempo de sueño: ${sleepDuration.hour} h\n" +
-                        "${sleepDuration.minute} min",
-                color = Color.White,
-                fontSize = 16.sp
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Button(
-                onClick = {
-                    navController.navigate(SleepTrackingOG)
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 32.dp)
-            ) {
-                Text("INICIAR SUEÑO")
+            ButtonAction("INICIAR SUEÑO", modifier = Modifier.fillMaxWidth().padding(horizontal = 110.dp))
+            {
+                navController.navigate(SleepTrackingOG)
             }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            OutlinedButton(
-                onClick = { navController.popBackStack() },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Volver")
-            }
-
         }
     }
 }

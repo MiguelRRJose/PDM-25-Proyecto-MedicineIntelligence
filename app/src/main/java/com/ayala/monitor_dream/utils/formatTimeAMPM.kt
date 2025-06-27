@@ -2,6 +2,7 @@ package com.ayala.monitor_dream.utils
 
 import com.ayala.monitor_dream.navigation.ActualTime
 import com.ayala.monitor_dream.navigation.AlarmData
+import com.ayala.monitor_dream.navigation.ReminderTime
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -25,6 +26,7 @@ fun formatTimeAMPM2(actualTime: ActualTime): String {
     return formatter.format(calendar.time)
 }
 
+
 fun convertMillisToActualData(millis: Long): ActualTime {
     val calendar = Calendar.getInstance().apply {
         timeInMillis = millis
@@ -35,7 +37,4 @@ fun convertMillisToActualData(millis: Long): ActualTime {
 }
 
 
-fun getCurrentFormattedTime(): String {
-    val sdf = SimpleDateFormat("hh:mm a", Locale.getDefault())
-    return sdf.format(Date())
-}
+

@@ -1,23 +1,14 @@
 package com.ayala.monitor_dream.screens
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -28,16 +19,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.ayala.monitor_dream.R
+import com.ayala.monitor_dream.composables.ButtonAction
+import com.ayala.monitor_dream.composables.PersonalBackground
+import com.ayala.monitor_dream.composables.SelectedImage
+import com.ayala.monitor_dream.composables.ShowReminderPickerDialog
 import com.ayala.monitor_dream.composables.ShowTimePickerDialog
-import com.ayala.monitor_dream.composables.TextDuration
 import com.ayala.monitor_dream.composables.TimeCard
 import com.ayala.monitor_dream.navigation.ActualTime
 import com.ayala.monitor_dream.navigation.AlarmData
+import com.ayala.monitor_dream.navigation.ReminderTime
 import com.ayala.monitor_dream.navigation.TimeSleep
 import com.ayala.monitor_dream.utils.formatTimeAMPM
 import com.ayala.monitor_dream.utils.formatTimeAMPM2
@@ -58,13 +51,12 @@ fun SleepAlarmScreen(
     val storedSleepTime by viewModel.startTime.collectAsState()
     val sleepDuration by viewModel.duration.collectAsState()
     val sleepDurationT by viewModel.sleepTimeDurationH.collectAsState()
-    //val sleepDurationM by viewModel.sleepTimeDurationM.collectAsState()
+    val reminderTime by viewModel.reminder.collectAsState()
 
-    //Dato recordatorio
-    var reminderMinutes by remember { mutableStateOf("15") }
 
     //Para la ventana de tiempo
     var showSleepPicker by remember { mutableStateOf(false) }
+    var showReminderPicker by remember { mutableStateOf(false) }
 
     //Para el tiempo personalizado
     val currentSleepTime = storedSleepTime
@@ -93,12 +85,17 @@ fun SleepAlarmScreen(
         }
     }
 
+    if (showReminderPicker)
+    {
+        ShowReminderPickerDialog (
+            minute = reminderTime.minute, onTimeSelected =  { selectedMinute ->
+                viewModel.setReminder(ReminderTime(selectedMinute))}
+        )
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
-        Image(painter = painterResource(id = com.ayala.monitor_dream.R.drawable.backgroud_1),
-            contentDescription = "Background",
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
-            )
+
+        PersonalBackground(R.drawable.backgroud_1,"background")
 
         Column(
             modifier = Modifier
@@ -106,60 +103,46 @@ fun SleepAlarmScreen(
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
             Spacer(modifier = Modifier.height(50.dp))
 
-            Text("Dr. Sueño ", color = Color.White, fontSize = 24.sp)
+            Text("Dr. Sueño ", color = Color.White, fontSize = 30.sp)
             Spacer(modifier = Modifier.height(16.dp))
+
+            SelectedImage(R.drawable.astro_durmiendo, "Astronauta dormido")
+
+            Spacer(modifier = Modifier.height(30.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(20.dp)
             )
             {
                 if (customButtonTime) {
 
-                    Button(
+                    ButtonAction(action = "Hora personalizada", modifier = Modifier.weight(1f),
                         onClick = {
                             showPersonalizedTimeCard = true
                             editingTime = "sleep"
                             showSleepPicker = true
-                            customButtonTime = false
-                        },
-                        shape = RoundedCornerShape(12.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3A5A9A)),
-                        modifier = Modifier.weight(1f)
-                    ) {
+                            customButtonTime = false})
 
-                        Text("Hora personalizada ⏲️")
-                    }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Button(
+                    ButtonAction("Hora del dispositivo", modifier = Modifier.weight(1f),
                         onClick = {
                             viewModel.setSleepTimeCurrentDeviceTime()
                             editingTime = "sleep"
-                            customButtonTime = false
-                        }, shape = RoundedCornerShape(12.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF5E8BF0)),
-                        modifier = Modifier.weight(1f)
-
-
-                    ) {
-                        Text("Hora del dispositivo 📱")
-                    }
+                            customButtonTime = false})
                 }
             }
 
+            Spacer(modifier = Modifier.height(30.dp))
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(20.dp)
             ) {
 
-                TimeCard(
-                    "⏰ Alarma: ",
-                    formatTimeAMPM(alarmTime)
-                )
+                TimeCard("Alarma: ", formatTimeAMPM(alarmTime), R.drawable.bell_white_1)
                 {
                     editingTime = "alarm"
                     showSleepPicker = true
@@ -167,10 +150,7 @@ fun SleepAlarmScreen(
 
                 if (showPersonalizedTimeCard) {
 
-                    TimeCard(
-                        "🛏️ Hora: ",
-                        formatTimeAMPM2(currentSleepTime)
-                    )
+                    TimeCard("Hora: ", formatTimeAMPM2(currentSleepTime), R.drawable.bed_white_1)
                     {
                         editingTime = "sleep"
                         showSleepPicker = true
@@ -179,19 +159,23 @@ fun SleepAlarmScreen(
 
             }
 
-            Spacer(modifier = Modifier.height(100.dp))
+            Spacer(modifier = Modifier.height(40.dp))
 
             //La unica intención es que muestre o no el valor de sleepDurationT
 
             if (showPersonalizedTimeCard) {
 
-                TextDuration(sleepDurationT.hour, sleepDurationT.minute)
+                TimeCard("Meta para dormir ",
+                    sleepDurationT.hour.toString() + " h : " + sleepDurationT.minute.toString() + " min",
+                    R.drawable.tick_mark_purple_1) {}
 
                 viewModel.setDuration(TimeSleep(sleepDurationT.hour, sleepDurationT.minute))
 
             } else {
 
-                TextDuration(sleepDurationT.hour, sleepDurationT.minute)
+                TimeCard("Meta para dormir ",
+                    sleepDurationT.hour.toString() + " h : " + sleepDurationT.minute.toString() + " min",
+                    R.drawable.tick_mark_purple_1) {}
 
                 viewModel.setDuration(TimeSleep(sleepDurationT.hour, sleepDurationT.minute))
 
@@ -199,35 +183,22 @@ fun SleepAlarmScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-
-            OutlinedTextField(
-                value = reminderMinutes,
-                onValueChange = { reminderMinutes = it },
-                label = { Text("Recordar dentro: ") },
-                trailingIcon = { Text("min") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedTextColor = Color.White,
-                    focusedBorderColor = Color.White,
-                    unfocusedTextColor = Color.White,
-                    unfocusedBorderColor = Color.White
-                )
-            )
+            TimeCard("Recordatorio: ",reminderTime.minute.toString() + " minutos", R.drawable.tick_mark_purple_1)
+            {
+                showReminderPicker = true
+            }
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Button(onClick = {
-                val sleepTimeSet =
+            ButtonAction("Establecer alarma", modifier = Modifier.fillMaxWidth(),
+                onClick = {
+                    val sleepTimeSet =
                     if (showPersonalizedTimeCard) storedSleepTime
                     else {
                         storedSleepTime
                     }
-
-                onSetAlarmClick(alarmTime, sleepTimeSet, sleepDuration)
-
-            }) {
-                Text("Establecer alarma")
-            }
+                    onSetAlarmClick(alarmTime, sleepTimeSet, sleepDuration)}
+            )
         }
 
     }

@@ -1,6 +1,5 @@
 package com.ayala.monitor_dream.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -8,9 +7,18 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.ayala.monitor_dream.R
+import com.ayala.monitor_dream.composables.PersonalBackground
+import com.ayala.monitor_dream.composables.SelectedImage
+import com.ayala.monitor_dream.composables.TimeCard
+import com.ayala.monitor_dream.navigation.AlarmP
+import com.ayala.monitor_dream.utils.convertMillisToActualData
+import com.ayala.monitor_dream.utils.formatTimeAMPM
+import com.ayala.monitor_dream.utils.formatTimeAMPM2
 import com.ayala.monitor_dream.viewModel.SleepViewModel
 import kotlinx.coroutines.delay
 import com.ayala.monitor_dream.utils.parseTimeToCalendar
@@ -78,48 +86,48 @@ var sleepDurationMillis by remember { mutableLongStateOf(0L) }
     val countdown = String.format("%02d:%02d:%02d", hours, minutes, seconds)
 
 
+    val startTimeMillis: Long = System.currentTimeMillis()
+    val currentTime = convertMillisToActualData(startTimeMillis)
+    val formattedTime = formatTimeAMPM2(currentTime)
+
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF0A1F33))
-            .padding(24.dp),
-        contentAlignment = Alignment.Center
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
-            Spacer(modifier = Modifier.height(16.dp))
+        PersonalBackground(R.drawable.backgroud_1,"background")
 
-            Text(
-                text = "😴 Durmiendo...",
-                fontSize = 24.sp,
-                color = Color.White
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
+        Column(modifier = Modifier.align(Alignment.Center),
+            horizontalAlignment = Alignment.CenterHorizontally) {
 
             Text(
-                text = "Despertar a las: ${alarmTime.hour}:${alarmTime.minute}\n" +
-                        "Hora programada:${startSleepTime.hour}:${startSleepTime.minute}",
-
-                fontSize = 18.sp,
-                color = Color.White
+                text = "Buenas noches",
+                color = Color.White,
+                fontSize = 20.sp
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "Tiempo durmiendo: $countdown\n"
-                        + "Tiempo transcurrido: $Sleepcountdown",
-                fontSize = 20.sp,
-                color = Color.White
+                text = formattedTime,
+                color = Color.White,
+                fontSize = 48.sp,
+                fontWeight = FontWeight.Bold
             )
 
+            Spacer(modifier = Modifier.height(16.dp))
+
+            SelectedImage(R.drawable.astro_durmiendo, "Astronauta dormido")
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            TimeCard("Alarma: ", formatTimeAMPM(alarmTime), R.drawable.alarm_white_1){}
 
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(onClick = {
-                navController.popBackStack()
+                navController.popBackStack(AlarmP, inclusive = false)
             }) {
                 Text("DESPERTAR")
             }

@@ -9,6 +9,7 @@ import com.ayala.monitor_dream.PruebaMain
 import com.ayala.monitor_dream.data.repository.AlarmUserPreferenceRepository
 import com.ayala.monitor_dream.navigation.ActualTime
 import com.ayala.monitor_dream.navigation.AlarmData
+import com.ayala.monitor_dream.navigation.ReminderTime
 import com.ayala.monitor_dream.navigation.TimeSleep
 import com.ayala.monitor_dream.utils.CalculateDurationTime
 import com.ayala.monitor_dream.utils.formatTimeAMPM
@@ -81,12 +82,12 @@ class SleepViewModel(
 
     //Recordatorio para dormir
 
-    private val _reminder = MutableStateFlow(5)
+    private val _reminder = MutableStateFlow(ReminderTime(0))
 
-    val reminder: StateFlow<Int> = _reminder
+    val reminder: StateFlow<ReminderTime> = _reminder
 
-    fun setReminder(timeSleep: Int) {
-        _reminder.value = timeSleep
+    fun setReminder(reminderTime: ReminderTime) {
+        _reminder.value = reminderTime
     }
 
     //Calculadora Tiempo
