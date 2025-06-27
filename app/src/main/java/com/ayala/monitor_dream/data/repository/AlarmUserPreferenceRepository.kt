@@ -2,7 +2,7 @@ package com.ayala.monitor_dream.data.repository
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
-import com.ayala.monitor_dream.model.ActualTime
+import com.ayala.monitor_dream.navigation.ActualTime
 import kotlinx.coroutines.flow.*
 import kotlinx.serialization.json.Json
 import java.io.IOException
@@ -17,22 +17,14 @@ class AlarmUserPreferenceRepository(
         private val START_TIME_KEY = stringPreferencesKey("actual_time")
     }
 
+    //Funciones "Alarma"
 
-    suspend fun saveStartTime(actualTime: ActualTime) {
-        val json = Json.encodeToString(actualTime)
-        dataStore.edit { preferences ->
-            preferences[START_TIME_KEY] = json
-        }
-    }
-
-
-    val alarmUser: Flow<String> = dataStore.data
+    val alarmUser: Flow<String?> = dataStore.data
         .catch { exception ->
             if (exception is IOException) emit(emptyPreferences())
             else throw exception
-        }
-        .map { preferences ->
-            preferences[ALARM_USER_KEY] ?: "06:00 AM"
+        }.map { preferences ->
+            preferences[ALARM_USER_KEY]
         }
 
     suspend fun saveAlarmUser(value: String) {
@@ -40,6 +32,8 @@ class AlarmUserPreferenceRepository(
             preferences[ALARM_USER_KEY] = value
         }
     }
+
+    //Funciones "Tiempo_Sistema"
 
     val startTime: Flow<ActualTime?> = dataStore.data
         .catch { exception ->
@@ -54,6 +48,11 @@ class AlarmUserPreferenceRepository(
             }
         }
 
-
+    suspend fun saveStartTime(actualTime: ActualTime) {
+        val json = Json.encodeToString(actualTime)
+        dataStore.edit { preferences ->
+            preferences[START_TIME_KEY] = json
+        }
+    }
 
 }

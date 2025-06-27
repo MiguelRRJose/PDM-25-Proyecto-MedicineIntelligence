@@ -1,4 +1,4 @@
-package com.ayala.monitor_dream.Screens
+package com.ayala.monitor_dream.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,8 +26,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.ayala.monitor_dream.Navigation.SleepTrackingOG
-import com.ayala.monitor_dream.ViewModel.SleepViewModel
+import com.ayala.monitor_dream.navigation.SleepTrackingOG
+import com.ayala.monitor_dream.viewModel.SleepViewModel
 import com.ayala.monitor_dream.utils.convertMillisToActualData
 import com.ayala.monitor_dream.utils.formatTimeAMPM
 import com.ayala.monitor_dream.utils.formatTimeAMPM2
@@ -40,13 +41,14 @@ fun SleepScreen(
 
 ) {
     //ViewModel
-    val alarmTime = viewModel.alarmTime.collectAsState()
-    val alarmUser = viewModel.startTime.collectAsState().value ?: return
+    val alarmTime by viewModel.alarmTime.collectAsState()
+    val storedSleepTime by viewModel.startTime.collectAsState()
+    val sleepDuration by viewModel.duration.collectAsState()
 
+    //Para mostrar un reloj en pantalla
     val startTimeMillis: Long = System.currentTimeMillis()
     val currentTime = convertMillisToActualData(startTimeMillis)
     val formattedTime = formatTimeAMPM2(currentTime)
-
 
     LaunchedEffect(Unit) {
         while (true) {
@@ -65,7 +67,7 @@ fun SleepScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "A DORMIR HIJO DE PUTA",
+                text = "Hora de una buena siesta amigo!",
                 color = Color.White,
                 fontSize = 20.sp
             )
@@ -90,13 +92,22 @@ fun SleepScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = " ${formatTimeAMPM2(alarmUser)}",
+                text = " ${formatTimeAMPM2(storedSleepTime)}",
                 color = Color.White,
                 fontSize = 16.sp
             )
 
             Text(
-                text = "⏰ ${formatTimeAMPM(alarmTime.value)}",
+                text = "⏰ ${formatTimeAMPM(alarmTime)}",
+                color = Color.White,
+                fontSize = 16.sp
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = "Tiempo de sueño: ${sleepDuration.hour} h\n" +
+                        "${sleepDuration.minute} min",
                 color = Color.White,
                 fontSize = 16.sp
             )

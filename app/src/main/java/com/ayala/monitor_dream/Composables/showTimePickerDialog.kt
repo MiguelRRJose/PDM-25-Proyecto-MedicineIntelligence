@@ -1,4 +1,4 @@
-package com.ayala.monitor_dream.Composables
+package com.ayala.monitor_dream.composables
 
 import android.app.TimePickerDialog
 import androidx.compose.runtime.Composable
@@ -7,7 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 
 @Composable
-fun showTimePickerDialog(
+fun ShowTimePickerDialog(
     hour: Int,
     minute: Int,
     onTimeSelected: (Int, Int) -> Unit

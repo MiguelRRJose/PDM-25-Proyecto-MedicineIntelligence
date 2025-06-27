@@ -1,4 +1,4 @@
-package com.ayala.monitor_dream.model
+package com.ayala.monitor_dream.navigation
 
 import kotlinx.serialization.Serializable
 
@@ -11,6 +11,11 @@ data class AlarmData(
 data class ActualTime(
     val hour: Int,
     val minute: Int,
+)
+@Serializable
+data class TimeSleep(
+    val hour: Int,
+    val minute: Int
 )
 
 

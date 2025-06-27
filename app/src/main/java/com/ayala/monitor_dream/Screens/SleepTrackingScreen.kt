@@ -1,4 +1,4 @@
-package com.ayala.monitor_dream.Screens
+package com.ayala.monitor_dream.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -11,10 +11,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.ayala.monitor_dream.ViewModel.SleepViewModel
+import com.ayala.monitor_dream.viewModel.SleepViewModel
 import kotlinx.coroutines.delay
-import parseTimeToCalendar
-import parseTimeToCalendar2
+import com.ayala.monitor_dream.utils.parseTimeToCalendar
+import com.ayala.monitor_dream.utils.parseTimeToCalendar2
 
 @Composable
 fun SleepTrackingScreen(
@@ -32,18 +32,19 @@ fun SleepTrackingScreen(
 
     //val safeSleepDurationMillis = sleepDurationMillis.coerceAtLeast(0L)
 
-var sleepDurationMillis by remember { mutableStateOf(0L) }
-    var timeLeftMillis by remember { mutableStateOf(0L) }
-    var totalSleepMillis by remember { mutableStateOf(0L) }
+var sleepDurationMillis by remember { mutableLongStateOf(0L) }
+    var timeLeftMillis by remember { mutableLongStateOf(0L) }
+    var totalSleepMillis by remember { mutableLongStateOf(0L) }
+
 
 
     LaunchedEffect(Unit) {
         while(true) {
 
-            val nowMillis = System.currentTimeMillis()
-
-            val wakeUpCalendar = parseTimeToCalendar(alarmTime)
             val sleepCalendar = parseTimeToCalendar2(startSleepTime)
+            val wakeUpCalendar = parseTimeToCalendar(alarmTime)
+
+            val nowMillis = System.currentTimeMillis()
 
             val startMillis = sleepCalendar.timeInMillis
             val endMillis = wakeUpCalendar.timeInMillis

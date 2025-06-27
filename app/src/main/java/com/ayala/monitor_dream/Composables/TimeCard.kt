@@ -1,6 +1,5 @@
-package com.ayala.monitor_dream.Composables
+package com.ayala.monitor_dream.composables
 
-import android.opengl.Visibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -18,6 +17,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun TimeCard(label: String, timeText: String, onClick: () -> Unit) {
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -25,6 +25,7 @@ fun TimeCard(label: String, timeText: String, onClick: () -> Unit) {
             .clickable {onClick()},
         colors = CardDefaults.cardColors(containerColor = Color(0xFF122C4C))
     ) {
+
         Row(
             modifier = Modifier.padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,

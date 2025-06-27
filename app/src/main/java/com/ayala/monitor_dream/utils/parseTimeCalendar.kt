@@ -1,5 +1,7 @@
-import com.ayala.monitor_dream.model.ActualTime
-import com.ayala.monitor_dream.model.AlarmData
+package com.ayala.monitor_dream.utils
+
+import com.ayala.monitor_dream.navigation.ActualTime
+import com.ayala.monitor_dream.navigation.AlarmData
 import java.util.Calendar
 
 fun parseTimeToCalendar(alarmData: AlarmData): Calendar {

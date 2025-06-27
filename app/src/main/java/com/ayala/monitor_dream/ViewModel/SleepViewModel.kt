@@ -1,4 +1,4 @@
-package com.ayala.monitor_dream.ViewModel
+package com.ayala.monitor_dream.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -7,15 +7,20 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.ayala.monitor_dream.PruebaMain
 import com.ayala.monitor_dream.data.repository.AlarmUserPreferenceRepository
-import com.ayala.monitor_dream.model.ActualTime
-import com.ayala.monitor_dream.model.AlarmData
+import com.ayala.monitor_dream.navigation.ActualTime
+import com.ayala.monitor_dream.navigation.AlarmData
+import com.ayala.monitor_dream.navigation.TimeSleep
+import com.ayala.monitor_dream.utils.CalculateDurationTime
 import com.ayala.monitor_dream.utils.formatTimeAMPM
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.util.Calendar
 
 class SleepViewModel(
     private val alarmUserPreferenceRepository: AlarmUserPreferenceRepository
 ) : ViewModel() {
+
+    //Para manejor de "Alarma"
 
     private val _alarmTime = MutableStateFlow(AlarmData(5,30))
 
@@ -24,48 +29,93 @@ class SleepViewModel(
     fun setAlarmTime(alarmData: AlarmData) {
         _alarmTime.value = alarmData
         val formatted = formatTimeAMPM(alarmData)
-        saveAlarmUser(formatted)
+        upLoadAlarmUser(formatted)
     }
 
-    fun saveAlarmUser(value: String) {
+    fun upLoadAlarmUser(value: String) {
         viewModelScope.launch {
             alarmUserPreferenceRepository.saveAlarmUser(value)
         }
     }
 
-    val alarmUser: StateFlow<String> = alarmUserPreferenceRepository.alarmUser
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), "06:00 AM")
+    //Manejo de los "Tiempo_Sistema"
 
+    private fun getCurrentDeviceTime(): ActualTime
+    {
+        val calendar = Calendar.getInstance()
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
+        return ActualTime(hour, minute)
+    }
 
-    //Adicional para el manejo de tiempo dentro del sistema
+    private val _startTime = MutableStateFlow<ActualTime>(getCurrentDeviceTime())
 
+    val startTime: StateFlow<ActualTime> = _startTime
 
-    private val _startTime = MutableStateFlow<ActualTime?>(null)
+    fun setSleepTimeCurrentDeviceTime()
+    {
+        _startTime.value = getCurrentDeviceTime()
+    }
 
-    val startTime: StateFlow<ActualTime?> = _startTime
+    fun upLoadStartTime(actualTime: ActualTime) {
+        viewModelScope.launch {
+            alarmUserPreferenceRepository.saveStartTime(actualTime)
+        }
+    }
 
     fun setStartTime(actualTime: ActualTime) {
 
         _startTime.value = actualTime
-        saveStartTime(actualTime)
+        upLoadStartTime(actualTime)
     }
 
-    fun formatTime(millis: Long): String {
-        val sdf = java.text.SimpleDateFormat("hh:mm a", java.util.Locale.getDefault())
-        return sdf.format(java.util.Date(millis))
+    //Duracion de sueño
+
+    private val _duration = MutableStateFlow(TimeSleep(0,0))
+
+    val duration: StateFlow<TimeSleep> = _duration
+
+    fun setDuration(timeSleep: TimeSleep) {
+        _duration.value = timeSleep
     }
 
-    fun saveStartTime(time: ActualTime) {
-        viewModelScope.launch {
-            alarmUserPreferenceRepository.saveStartTime(time)
-        }
-    }
+    //Calculadora Tiempo
+
+    val sleepTimeDurationH : StateFlow<Int> = combine(startTime,alarmTime){ currentSleepTime, currentAlarmTime ->
+
+        CalculateDurationTime.calculateHour(
+            currentSleepTime.hour,
+            currentSleepTime.minute,
+            currentAlarmTime.hour,
+            currentAlarmTime.minute
+        )
+    }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = 0
+            )
+
+    val sleepTimeDurationM : StateFlow<Int> = combine(startTime,alarmTime){ currentSleepTime, currentAlarmTime ->
+
+        CalculateDurationTime.calculateMinute(
+            currentSleepTime.minute,
+            currentAlarmTime.minute
+        )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = 0
+    )
+
+    //Funciones de inicialización en general
 
     init {
         viewModelScope.launch {
             alarmUserPreferenceRepository.startTime
-                .collect { time ->
-                    _startTime.value = time
+                .collect { initialTimeFromRepository ->
+                    if (initialTimeFromRepository != null){
+                    _startTime.value  = initialTimeFromRepository
+                    }
                 }
         }
     }

@@ -1,4 +1,4 @@
-package com.ayala.monitor_dream.Navigation
+package com.ayala.monitor_dream.navigation
 
 import kotlinx.serialization.Serializable
 

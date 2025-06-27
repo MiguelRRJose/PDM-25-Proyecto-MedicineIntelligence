@@ -1,47 +1,62 @@
-package com.ayala.monitor_dream.Screens
+package com.ayala.monitor_dream.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ayala.monitor_dream.Composables.TimeCard
-import com.ayala.monitor_dream.Composables.showTimePickerDialog
-import com.ayala.monitor_dream.ViewModel.SleepViewModel
-import com.ayala.monitor_dream.model.ActualTime
-import com.ayala.monitor_dream.model.AlarmData
-import com.ayala.monitor_dream.utils.convertMillisToActualData
+import com.ayala.monitor_dream.composables.ShowTimePickerDialog
+import com.ayala.monitor_dream.composables.TimeCard
+import com.ayala.monitor_dream.navigation.ActualTime
+import com.ayala.monitor_dream.navigation.AlarmData
+import com.ayala.monitor_dream.navigation.TimeSleep
 import com.ayala.monitor_dream.utils.formatTimeAMPM
 import com.ayala.monitor_dream.utils.formatTimeAMPM2
+import com.ayala.monitor_dream.viewModel.SleepViewModel
+
 
 @Composable
 fun SleepAlarmScreen(
     viewModel: SleepViewModel,
-    onSetAlarmClick: (AlarmData, ActualTime,Int) -> Unit
+    onSetAlarmClick: (AlarmData, ActualTime, TimeSleep) -> Unit
 ) {
 
-    //Dato ViewModel
+    var showPersonalizedTimeCard by remember { mutableStateOf(false) }
+
+    //Datos ViewModel
     val alarmTime by viewModel.alarmTime.collectAsState()
-
-
-    //Lanzamiento del dato reloj sistema Para personalizar
-    val startTimeMillis: Long = System.currentTimeMillis()
-    var currentTime = convertMillisToActualData(startTimeMillis)
-
+    val storedSleepTime by viewModel.startTime.collectAsState()
+    val sleepDuration by viewModel.duration.collectAsState()
+    val sleepDurationH by viewModel.sleepTimeDurationH.collectAsState()
+    val sleepDurationM by viewModel.sleepTimeDurationM.collectAsState()
 
     //Dato Dormir
-    var sleepHour by remember { mutableStateOf(currentTime.hour)}
-    var sleepMinute by remember { mutableStateOf(currentTime.minute)}
+    var sleepHour by remember { mutableIntStateOf(storedSleepTime.hour)}
+    var sleepMinute by remember { mutableIntStateOf(storedSleepTime.minute) }
 
     //Dato Alarma
-    var alarmHour by remember { mutableStateOf(alarmTime.hour) }
-    var alarmMinute by remember { mutableStateOf(alarmTime.minute) }
+    var alarmHour by remember { mutableIntStateOf(alarmTime.hour) }
+    var alarmMinute by remember { mutableIntStateOf(alarmTime.minute) }
 
     //Dato recordatorio
     var reminderMinutes by remember { mutableStateOf("15") }
@@ -49,17 +64,8 @@ fun SleepAlarmScreen(
     //Para la ventana de tiempo
     var showSleepPicker by remember { mutableStateOf(false) }
 
-    var personalTime by remember { mutableStateOf(false)}
-
-    //Para tiempo Usuario Personal
-    //var systemTime = remember {currentTime}
-
-    //Para el tiempo sistema
-
-    val storedSleepTime by viewModel.startTime.collectAsState()
-
-    val currentSleepTime = storedSleepTime ?: currentTime
-
+    //Para el tiempo personalizado
+    val currentSleepTime = storedSleepTime
 
     //Determinar que ventana de tiempo se utilizará
     var editingTime by remember { mutableStateOf("sleep") } // "sleep" o "alarm"
@@ -69,45 +75,23 @@ fun SleepAlarmScreen(
         alarmMinute = alarmTime.minute
     }
 
-    //Transformaciones de tiempo (Posible cambio para el viewModel)
-    val sleepTotalMinutes = sleepHour * 60 + sleepMinute
-    val alarmTotalMinutes = alarmHour * 60 + alarmMinute
-
-    val duration = if (alarmTotalMinutes - sleepTotalMinutes < 0)
-        (alarmTotalMinutes - sleepTotalMinutes + 24 * 60)
-    else
-        alarmTotalMinutes - sleepTotalMinutes
-
-    val sleepDuration = duration / 60
-
 
     if (showSleepPicker) {
-        // Mostrar picker con valores actuales según lo que se edite
-        val hourInit =
-            if (editingTime == "sleep") sleepHour
-                else alarmHour
+        val hourInit = if (editingTime == "sleep") sleepHour
+        else alarmHour
 
-        val minuteInit =
-            if (editingTime == "sleep") sleepMinute
-                else alarmMinute
+        val minuteInit = if (editingTime == "sleep") sleepMinute
+        else alarmMinute
 
-        //Ventana de tiempo
-        showTimePickerDialog(hourInit, minuteInit) { h, m ->
-            if (editingTime == "sleep") {
-                sleepHour = h
-                sleepMinute = m
+        ShowTimePickerDialog(hourInit, minuteInit) { h, m ->
+            if (editingTime == "sleep")
+            {
+                viewModel.upLoadStartTime(ActualTime(h,m))
+                showSleepPicker = false
+            }
 
-                if(personalTime)
-                {
-                    val newCustomTime = ActualTime(h,m)
-                    viewModel.setStartTime(newCustomTime)
-                    personalTime = false
-                }
-
-            } else {
-                alarmHour = h
-                alarmMinute = m
-                viewModel.setAlarmTime(AlarmData(h, m))  // Guarda la alarma en ViewModel
+            else {
+                viewModel.setAlarmTime(AlarmData(h, m))
             }
             showSleepPicker = false
         }
@@ -120,42 +104,34 @@ fun SleepAlarmScreen(
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
-        Text("Alarma_Personal_Salud", color = Color.White, fontSize = 24.sp)
+        Text("LA ALARMA ", color = Color.White, fontSize = 24.sp)
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(onClick = {
-
-            if(storedSleepTime != null)
-            {
-                personalTime = true
-                viewModel.setStartTime(currentTime)
-
-            } else
-            {
-                showSleepPicker = true
-                editingTime = "sleep"
-            }
-
-        }) {
-
-            if(storedSleepTime != null)
-            Text("Restablecer a hora del sistema\n${formatTimeAMPM2(currentTime)}")
-            else
-                Text("Personalizar tiempo de sueño\n${formatTimeAMPM2(currentSleepTime)}")
-        }
-
-        TimeCard("🛏️ Tiempo de dormir ",
-            formatTimeAMPM2(currentSleepTime),
-            )
-        {
+            viewModel.setSleepTimeCurrentDeviceTime()
+            showPersonalizedTimeCard = true
             editingTime = "sleep"
             showSleepPicker = true
+
+        }){Text("Personalizar hora de sueño")}
+
+        if(showPersonalizedTimeCard) {
+
+            TimeCard(
+                "🛏️ Hora personalizada: ",
+                formatTimeAMPM2(currentSleepTime)
+            )
+            {
+                editingTime = "sleep"
+                showSleepPicker = true
+            }
+
         }
 
-        TimeCard("⏰ Alarma ",
-            formatTimeAMPM(AlarmData(alarmHour, alarmMinute)))
+        TimeCard("⏰ Alarma: ",
+            formatTimeAMPM(alarmTime))
         {
             editingTime = "alarm"
             showSleepPicker = true
@@ -163,18 +139,25 @@ fun SleepAlarmScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Text(
-            text = "🕒 Meta para dormir: ${sleepDuration} h",
-            color = Color.White,
-            fontSize = 18.sp
-        )
+        if(showPersonalizedTimeCard) {
+            Text(
+                text = "🕒 Duración del descanso eterno: $sleepDurationH h" +
+                        "\n$sleepDurationM min",
+                color = Color.White,
+                fontSize = 18.sp
+            )
 
-        Spacer(modifier = Modifier.height(16.dp))
+            viewModel.setDuration(TimeSleep(sleepDurationH,sleepDurationM))
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+        }
+        else {viewModel.setDuration(TimeSleep(sleepDurationH,sleepDurationM))}
 
         OutlinedTextField(
             value = reminderMinutes,
             onValueChange = { reminderMinutes = it },
-            label = { Text("Recordar dentro:") },
+            label = { Text("Recordar dentro: ") },
             trailingIcon = { Text("min") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             colors = OutlinedTextFieldDefaults.colors(
@@ -188,14 +171,16 @@ fun SleepAlarmScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(onClick = {
-            val reminder = reminderMinutes.toIntOrNull() ?: 15
-            val alarmData = AlarmData(alarmHour, alarmMinute)
+            val sleepTimeSet =
+                if (showPersonalizedTimeCard) storedSleepTime
+                else { storedSleepTime }
 
-            //Definición para que sea posible guardar los datos antes del onClick
-            onSetAlarmClick(alarmData, currentSleepTime,reminder)
+            onSetAlarmClick(alarmTime, sleepTimeSet, sleepDuration)
 
         }) {
             Text("Establecer alarma")
         }
     }
 }
+
+

@@ -1,7 +1,7 @@
 package com.ayala.monitor_dream.utils
 
-import com.ayala.monitor_dream.model.ActualTime
-import com.ayala.monitor_dream.model.AlarmData
+import com.ayala.monitor_dream.navigation.ActualTime
+import com.ayala.monitor_dream.navigation.AlarmData
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date

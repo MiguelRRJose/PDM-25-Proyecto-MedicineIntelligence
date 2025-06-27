@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.compose.rememberNavController
-import com.ayala.monitor_dream.Navigation.AppNavigator
+import com.ayala.monitor_dream.navigation.AppNavigator
 
 
 class MainActivity : ComponentActivity() {

@@ -1,7 +1,7 @@
 package com.ayala.monitor_dream.utils
 
 import androidx.navigation.NavController
-import com.ayala.monitor_dream.model.AlarmData
+import com.ayala.monitor_dream.navigation.AlarmData
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.net.URLEncoder
