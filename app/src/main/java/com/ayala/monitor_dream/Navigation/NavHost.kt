@@ -20,14 +20,7 @@ fun AppNavigator(navController: NavHostController) {
         composable<AlarmP> {
             SleepAlarmScreen(
                 viewModel = sleepViewModel,
-                onSetAlarmClick = { alarmData, actualTime,sleepDuration ->
-
-                    sleepViewModel.setAlarmTime(alarmData)
-                    sleepViewModel.setStartTime(actualTime)
-                    sleepViewModel.setDuration(sleepDuration)
-
-                    navController.navigate(SleepY)
-                }
+                navController = navController,
             )
         }
 

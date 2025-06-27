@@ -16,6 +16,7 @@ import com.ayala.monitor_dream.composables.PersonalBackground
 import com.ayala.monitor_dream.composables.SelectedImage
 import com.ayala.monitor_dream.composables.TimeCard
 import com.ayala.monitor_dream.navigation.AlarmP
+import com.ayala.monitor_dream.navigation.SleepY
 import com.ayala.monitor_dream.utils.convertMillisToActualData
 import com.ayala.monitor_dream.utils.formatTimeAMPM
 import com.ayala.monitor_dream.utils.formatTimeAMPM2
@@ -127,7 +128,7 @@ var sleepDurationMillis by remember { mutableLongStateOf(0L) }
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(onClick = {
-                navController.popBackStack(AlarmP, inclusive = false)
+                navController.popBackStack()
             }) {
                 Text("DESPERTAR")
             }

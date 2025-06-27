@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.ayala.monitor_dream.R
 import com.ayala.monitor_dream.composables.ButtonAction
 import com.ayala.monitor_dream.composables.PersonalBackground
@@ -31,6 +32,7 @@ import com.ayala.monitor_dream.composables.TimeCard
 import com.ayala.monitor_dream.navigation.ActualTime
 import com.ayala.monitor_dream.navigation.AlarmData
 import com.ayala.monitor_dream.navigation.ReminderTime
+import com.ayala.monitor_dream.navigation.SleepY
 import com.ayala.monitor_dream.navigation.TimeSleep
 import com.ayala.monitor_dream.utils.formatTimeAMPM
 import com.ayala.monitor_dream.utils.formatTimeAMPM2
@@ -40,7 +42,7 @@ import com.ayala.monitor_dream.viewModel.SleepViewModel
 @Composable
 fun SleepAlarmScreen(
     viewModel: SleepViewModel,
-    onSetAlarmClick: (AlarmData, ActualTime, TimeSleep) -> Unit
+    navController : NavController,
 ) {
 
     var showPersonalizedTimeCard by remember { mutableStateOf(false) }
@@ -197,7 +199,16 @@ fun SleepAlarmScreen(
                     else {
                         storedSleepTime
                     }
-                    onSetAlarmClick(alarmTime, sleepTimeSet, sleepDuration)}
+
+                    viewModel.setAlarmTime(alarmTime)
+                    viewModel.setStartTime(sleepTimeSet)
+                    viewModel.setDuration(sleepDuration)
+
+                    //Actualizar el reloj de SleepY para usos posteriores
+                    viewModel.setSleepTimeCurrentDeviceTime()
+
+                    navController.navigate(SleepY)
+                }
             )
         }
 

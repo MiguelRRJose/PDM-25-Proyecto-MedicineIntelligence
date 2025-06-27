@@ -12,7 +12,6 @@ import com.ayala.monitor_dream.navigation.AlarmData
 import com.ayala.monitor_dream.navigation.ReminderTime
 import com.ayala.monitor_dream.navigation.TimeSleep
 import com.ayala.monitor_dream.utils.CalculateDurationTime
-import com.ayala.monitor_dream.utils.formatTimeAMPM
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -29,13 +28,12 @@ class SleepViewModel(
 
     fun setAlarmTime(alarmData: AlarmData) {
         _alarmTime.value = alarmData
-        val formatted = formatTimeAMPM(alarmData)
-        upLoadAlarmUser(formatted)
+        upLoadAlarmUser(alarmData)
     }
 
-    fun upLoadAlarmUser(value: String) {
+    fun upLoadAlarmUser(alarmData: AlarmData) {
         viewModelScope.launch {
-            alarmUserPreferenceRepository.saveAlarmUser(value)
+            alarmUserPreferenceRepository.saveAlarmUser(alarmData)
         }
     }
 
@@ -49,13 +47,19 @@ class SleepViewModel(
         return ActualTime(hour, minute)
     }
 
+    fun setSleepTimeCurrentDeviceTime()
+    {
+        _startTime.value = getCurrentDeviceTime()
+    }
+
     private val _startTime = MutableStateFlow<ActualTime>(getCurrentDeviceTime())
 
     val startTime: StateFlow<ActualTime> = _startTime
 
-    fun setSleepTimeCurrentDeviceTime()
-    {
-        _startTime.value = getCurrentDeviceTime()
+    fun setStartTime(actualTime: ActualTime) {
+
+        _startTime.value = actualTime
+        upLoadStartTime(actualTime)
     }
 
     fun upLoadStartTime(actualTime: ActualTime) {
@@ -64,11 +68,6 @@ class SleepViewModel(
         }
     }
 
-    fun setStartTime(actualTime: ActualTime) {
-
-        _startTime.value = actualTime
-        upLoadStartTime(actualTime)
-    }
 
     //Duracion de sueño
 
@@ -113,18 +112,6 @@ class SleepViewModel(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = TimeSleep(0,0)
             )
-
-    val sleepTimeDurationM : StateFlow<Int> = combine(startTime,alarmTime){ currentSleepTime, currentAlarmTime ->
-
-        CalculateDurationTime.calculateMinute(
-            currentSleepTime.minute,
-            currentAlarmTime.minute
-        )
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = 0
-    )
 
     //Funciones de inicialización en general
 

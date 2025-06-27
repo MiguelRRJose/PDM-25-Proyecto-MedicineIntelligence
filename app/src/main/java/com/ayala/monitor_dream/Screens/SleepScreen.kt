@@ -5,14 +5,15 @@ import androidx.compose.foundation.layout.Column
 import com.ayala.monitor_dream.R
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,13 +21,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.ayala.monitor_dream.composables.ButtonAction
+import com.ayala.monitor_dream.composables.ButtonSleepScreen
 import com.ayala.monitor_dream.composables.PersonalBackground
 import com.ayala.monitor_dream.composables.SelectedImage
 import com.ayala.monitor_dream.composables.TimeCard
+import com.ayala.monitor_dream.navigation.AlarmP
 import com.ayala.monitor_dream.navigation.SleepTrackingOG
 import com.ayala.monitor_dream.viewModel.SleepViewModel
-import com.ayala.monitor_dream.utils.convertMillisToActualData
 import com.ayala.monitor_dream.utils.formatTimeAMPM
 import com.ayala.monitor_dream.utils.formatTimeAMPM2
 import kotlinx.coroutines.delay
@@ -38,18 +39,21 @@ fun SleepScreen(
     navController: NavController,
 
 ) {
+
+    var showElements by remember { mutableStateOf(false) }
+
     //ViewModel
     val alarmTime by viewModel.alarmTime.collectAsState()
 
-    //Para mostrar un reloj en pantalla
-    val startTimeMillis: Long = System.currentTimeMillis()
-    val currentTime = convertMillisToActualData(startTimeMillis)
-    val formattedTime = formatTimeAMPM2(currentTime)
+    val startTime by viewModel.startTime.collectAsState()
+
+    //Para mostrar el reloj en pantalla
+    val formattedTime = formatTimeAMPM2(startTime)
 
     LaunchedEffect(Unit) {
         while (true) {
             delay(1000)
-            startTimeMillis
+            viewModel.setSleepTimeCurrentDeviceTime()
         }
     }
 
@@ -89,13 +93,24 @@ fun SleepScreen(
 
             Spacer(modifier = Modifier.height(30.dp))
 
-            ButtonAction("INICIAR SUEÑO", modifier = Modifier.fillMaxWidth().padding(horizontal = 110.dp))
+
+            if (!showElements) {
+
+                ButtonSleepScreen("INICIAR SUEÑO")
+                { showElements = true}
+                ButtonSleepScreen("DETALLES")
+                {navController.navigate(SleepTrackingOG)}
+
+            } else
             {
-                navController.navigate(SleepTrackingOG)
+                ButtonSleepScreen("DESPERTAR")
+                {navController.popBackStack(AlarmP, inclusive = false)}
             }
+
         }
     }
 }
+
 
 
 

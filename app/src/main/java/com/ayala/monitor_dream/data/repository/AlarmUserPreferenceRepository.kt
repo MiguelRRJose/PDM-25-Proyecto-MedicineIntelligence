@@ -3,6 +3,7 @@ package com.ayala.monitor_dream.data.repository
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import com.ayala.monitor_dream.navigation.ActualTime
+import com.ayala.monitor_dream.navigation.AlarmData
 import kotlinx.coroutines.flow.*
 import kotlinx.serialization.json.Json
 import java.io.IOException
@@ -27,9 +28,10 @@ class AlarmUserPreferenceRepository(
             preferences[ALARM_USER_KEY]
         }
 
-    suspend fun saveAlarmUser(value: String) {
+    suspend fun saveAlarmUser(alarmData: AlarmData) {
+        val json = Json.encodeToString(alarmData)
         dataStore.edit { preferences ->
-            preferences[ALARM_USER_KEY] = value
+            preferences[ALARM_USER_KEY] = json
         }
     }
 
