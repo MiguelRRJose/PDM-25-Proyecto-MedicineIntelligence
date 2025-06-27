@@ -22,7 +22,7 @@ object CalculateDurationTime
 
         return if (alarmTotalMinutes - sleepTotalMinutes < 0)
         {
-            (alarmTotalMinutes - sleepTotalMinutes + 24 * 60)
+            (alarmTotalMinutes - sleepTotalMinutes + 60)
         }
         else
         {

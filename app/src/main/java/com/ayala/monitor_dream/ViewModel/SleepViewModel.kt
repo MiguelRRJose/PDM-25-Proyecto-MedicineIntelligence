@@ -79,20 +79,38 @@ class SleepViewModel(
         _duration.value = timeSleep
     }
 
+    //Recordatorio para dormir
+
+    private val _reminder = MutableStateFlow(5)
+
+    val reminder: StateFlow<Int> = _reminder
+
+    fun setReminder(timeSleep: Int) {
+        _reminder.value = timeSleep
+    }
+
     //Calculadora Tiempo
 
-    val sleepTimeDurationH : StateFlow<Int> = combine(startTime,alarmTime){ currentSleepTime, currentAlarmTime ->
+    val sleepTimeDurationH : StateFlow<TimeSleep> = combine(startTime,alarmTime){ currentSleepTime, currentAlarmTime ->
 
-        CalculateDurationTime.calculateHour(
+       val sleepDurationH = CalculateDurationTime.calculateHour(
             currentSleepTime.hour,
             currentSleepTime.minute,
             currentAlarmTime.hour,
             currentAlarmTime.minute
         )
+
+       val sleepDurationM = CalculateDurationTime.calculateMinute (
+            currentSleepTime.minute,
+            currentAlarmTime.minute
+        )
+
+        TimeSleep(sleepDurationH,sleepDurationM)
+
     }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = 0
+            initialValue = TimeSleep(0,0)
             )
 
     val sleepTimeDurationM : StateFlow<Int> = combine(startTime,alarmTime){ currentSleepTime, currentAlarmTime ->
