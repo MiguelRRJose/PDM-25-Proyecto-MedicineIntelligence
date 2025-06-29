@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -35,9 +36,9 @@ import com.pdmproyecto.mymedicine.R
 import java.util.Date
 
 @Composable
-fun MedicineAlarmsScreen(viewModel: MedicineAlarmsViewModel = viewModel()){
+fun MedicineAlarmsScreen(viewModel: MedicineAlarmsViewModel = viewModel(factory = MedicineAlarmsViewModel.Factory)){
 
-    val medicineList = viewModel.medicineList
+    val medicineList = viewModel.medicineList.collectAsState(initial = emptyList())
     val popUpVisibility = remember{ mutableStateOf(false)}
     val medicineToDelete = remember { mutableStateOf(viewModel.setMedicineToGeneric()) }
 
@@ -83,7 +84,7 @@ fun MedicineAlarmsScreen(viewModel: MedicineAlarmsViewModel = viewModel()){
                     .fillMaxSize()
                 ){
 
-                    items(medicineList) {
+                    items(medicineList.value) {
                         medicine ->
                         MedicineCard(
                             medicine = medicine,

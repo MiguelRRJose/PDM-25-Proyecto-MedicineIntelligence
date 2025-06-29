@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MymedicineTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    MedicineFormScreen()
+                    MedicineAlarmsScreen()
                 }
             }
         }
