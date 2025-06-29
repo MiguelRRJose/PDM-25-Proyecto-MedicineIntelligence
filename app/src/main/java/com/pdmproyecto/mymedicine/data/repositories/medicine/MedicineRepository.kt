@@ -1,7 +1,6 @@
 package com.pdmproyecto.mymedicine.data.repositories.medicine
 
 import com.pdmproyecto.mymedicine.data.database.daos.MedicineDao
-import com.pdmproyecto.mymedicine.data.database.entities.MedicineEntity
 import com.pdmproyecto.mymedicine.data.database.entities.toDomain
 import com.pdmproyecto.mymedicine.data.models.Medicine
 import com.pdmproyecto.mymedicine.data.models.toDatabase
@@ -9,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class MedicineRepository(private val dao: MedicineDao): MedicineRepositoryInterface {
-    override suspend fun getAllMedicines(): Flow<List<Medicine>> {
+    override fun getAllMedicines(): Flow<List<Medicine>> {
         return dao.getAllMedicines().map {
             list -> list.map {
                 medicineEntity -> medicineEntity.toDomain()
@@ -21,7 +20,7 @@ class MedicineRepository(private val dao: MedicineDao): MedicineRepositoryInterf
         return dao.getMedicineFromId(medicineId)?.toDomain()
     }
 
-    override suspend fun getMedicinesFromPatientId(patientId: Int): Flow<List<Medicine>> {
+    override fun getMedicinesFromPatientId(patientId: Int): Flow<List<Medicine>> {
         return dao.getMedicinesFromPatientId(patientId).map {
             list -> list.map {
                 medicineEntity -> medicineEntity.toDomain()

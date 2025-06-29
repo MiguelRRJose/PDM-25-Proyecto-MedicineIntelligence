@@ -3,9 +3,9 @@ package com.pdmproyecto.mymedicine.ui.components
 import android.app.TimePickerDialog
 import android.content.Context
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -46,7 +46,7 @@ fun TimePickerField(
         modifier = Modifier.fillMaxWidth(),
         onClick = { timePicker.show() },
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = DarkGreen,
+            containerColor = DarkGreen,
             contentColor = Color.White
         )
     ) {

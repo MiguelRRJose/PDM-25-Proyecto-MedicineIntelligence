@@ -7,9 +7,9 @@ interface MedicDateRepositoryInterface {
 
     suspend fun getMedicDateFromId(medicDateId: Int): MedicDate?
 
-    suspend fun getMedicDatesFromDoctorId(doctorId: Int): Flow<List<MedicDate>>
+    fun getMedicDatesFromDoctorId(doctorId: Int): Flow<List<MedicDate>>
 
-    suspend fun getMedicDatesFromPatientId(patientId: Int): Flow<List<MedicDate>>
+    fun getMedicDatesFromPatientId(patientId: Int): Flow<List<MedicDate>>
 
     suspend fun addMedicDate(medicDate: MedicDate)
 

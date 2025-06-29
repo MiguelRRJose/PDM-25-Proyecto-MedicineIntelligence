@@ -22,7 +22,7 @@ data class MedicineEntity(
     val patientId: Int,
     val name: String,
     val startDate: Date,
-    val finishDate: Date,
+    val finishDate: Date?,
     val timeLap: Int,
     val timeLapUnit: String,
     val amount: Float,

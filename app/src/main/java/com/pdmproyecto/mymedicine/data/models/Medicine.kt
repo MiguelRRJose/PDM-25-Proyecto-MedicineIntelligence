@@ -9,7 +9,7 @@ data class Medicine(
     val unit: String,
     val amount: Float,
     val startDate: java.util.Date,
-    val finishDate: java.util.Date,
+    val finishDate: java.util.Date?,
     val timeLap: Int,
     val timeLapUnit: String
 )

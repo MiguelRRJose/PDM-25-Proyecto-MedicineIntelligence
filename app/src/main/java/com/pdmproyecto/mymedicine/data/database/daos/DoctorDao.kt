@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 interface DoctorDao {
 
     @Query("SELECT * FROM Doctor")
-    suspend fun getAllDoctors(): Flow<List<DoctorEntity>>
+    fun getAllDoctors(): Flow<List<DoctorEntity>>
 
     @Query("SELECT * FROM Doctor WHERE id = :doctorId")
     suspend fun getDoctorFromId(doctorId: Int): DoctorEntity?

@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class DoctorRepository(private val dao: DoctorDao): DoctorRepositoryInterface{
-    override suspend fun getAllDoctors(): Flow<List<Doctor>> {
+    override fun getAllDoctors(): Flow<List<Doctor>> {
         return dao.getAllDoctors().map {
                 list -> list.map {
                 doctorEntity -> doctorEntity.toDomain()

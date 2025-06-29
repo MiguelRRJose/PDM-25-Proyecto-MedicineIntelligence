@@ -12,7 +12,7 @@ class MedicDateRepository(private val dao: MedicDateDao): MedicDateRepositoryInt
         return dao.getMedicDatesFromId(medicDateId)?.toDomain()
     }
 
-    override suspend fun getMedicDatesFromDoctorId(doctorId: Int): Flow<List<MedicDate>> {
+    override fun getMedicDatesFromDoctorId(doctorId: Int): Flow<List<MedicDate>> {
         return dao.getMedicDatesFromDoctorId(doctorId).map {
             list -> list.map {
                 medicDateEntity -> medicDateEntity.toDomain()
@@ -20,7 +20,7 @@ class MedicDateRepository(private val dao: MedicDateDao): MedicDateRepositoryInt
         }
     }
 
-    override suspend fun getMedicDatesFromPatientId(patientId: Int): Flow<List<MedicDate>> {
+    override fun getMedicDatesFromPatientId(patientId: Int): Flow<List<MedicDate>> {
         return dao.getMedicDatesFromPatientId(patientId).map {
                 list -> list.map {
                 medicDateEntity -> medicDateEntity.toDomain()

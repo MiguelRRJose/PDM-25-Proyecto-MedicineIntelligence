@@ -14,12 +14,12 @@ import androidx.compose.ui.Modifier
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DropdownSelector(
+fun ExposedDropdownMenu(
     modifier: Modifier = Modifier.fillMaxWidth(),
     items: List<String>,
     selectedItem: String,
-    onItemSelection: (String) -> Unit,
-    ){
+    onItemSelection: (String) -> Unit
+){
 
     val expanded = remember { mutableStateOf(false) }
 
@@ -27,7 +27,7 @@ fun DropdownSelector(
         modifier = modifier,
         expanded = expanded.value,
         onExpandedChange = { expanded.value = !expanded.value },
-    ){
+    ) {
 
         OutlinedTextField(
             modifier = Modifier.menuAnchor().fillMaxWidth(),
@@ -37,11 +37,13 @@ fun DropdownSelector(
             trailingIcon = {ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded.value)}
         )
 
+
         ExposedDropdownMenu(
             expanded = expanded.value,
             onDismissRequest = {expanded.value = false}
         ) {
-            items.forEach { item ->
+            items.forEach {
+                item ->
                 DropdownMenuItem(
                     text = { Text(text = item.toString()) },
                     onClick = {
@@ -51,8 +53,5 @@ fun DropdownSelector(
                 )
             }
         }
-
-
     }
-
 }

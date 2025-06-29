@@ -7,7 +7,7 @@ data class User(
     val name: String,
     val email: String,
     val phoneNumber: String,
-    val DUI: String,
+    val dui: String,
     val age: Int,
     val password: String
 )
@@ -18,7 +18,7 @@ fun User.toDatabase(): UserEntity{
         name = this.name,
         email = this.email,
         phoneNumber = this.phoneNumber,
-        DUI = this.DUI,
+        dui = this.dui,
         age = this.age,
         password = this.password
     )

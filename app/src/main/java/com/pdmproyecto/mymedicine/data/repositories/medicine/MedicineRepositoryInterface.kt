@@ -5,11 +5,11 @@ import kotlinx.coroutines.flow.Flow
 
 interface MedicineRepositoryInterface {
 
-    suspend fun getAllMedicines(): Flow<List<Medicine>>
+    fun getAllMedicines(): Flow<List<Medicine>>
 
     suspend fun getMedicineFromId(medicineId: Int): Medicine?
 
-    suspend fun getMedicinesFromPatientId(patientId: Int): Flow<List<Medicine>>
+    fun getMedicinesFromPatientId(patientId: Int): Flow<List<Medicine>>
 
     suspend fun addMedicine(medicine: Medicine)
 

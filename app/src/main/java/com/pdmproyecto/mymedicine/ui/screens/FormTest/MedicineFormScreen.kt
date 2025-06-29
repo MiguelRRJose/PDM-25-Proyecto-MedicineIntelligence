@@ -22,31 +22,32 @@ import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pdmproyecto.mymedicine.ui.components.DatePickerField
-import com.pdmproyecto.mymedicine.ui.components.DropdownSelector
+import com.pdmproyecto.mymedicine.ui.components.ExposedDropdownMenu
 import com.pdmproyecto.mymedicine.ui.components.TextInput
 import com.pdmproyecto.mymedicine.ui.components.TimePickerField
 import com.pdmproyecto.mymedicine.ui.theme.DarkGreen
 
 @Composable
-fun FormTestScreen(viewModel: MedicineFormViewModel = viewModel()){
+fun MedicineFormScreen(viewModel: MedicineFormViewModel = viewModel(factory = MedicineFormViewModel.Factory)){
 
-    Column (modifier = Modifier
-        .fillMaxSize()
-        .padding(10.dp),
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
-    ){
+    ) {
 
-        DosisInputSection(viewModel = viewModel)
+        DosisInputSection(viewModel)
 
-        TimeLapseInputSection(viewModel = viewModel)
+        TimeLapseInputSection(viewModel)
 
-        StartDateInputSection(viewModel = viewModel)
+        StartDateInputSection(viewModel)
+        FinishDateInputSection(viewModel)
 
-        StartHourSection(viewModel = viewModel)
-        FinishDateInputSection(viewModel = viewModel)
+        StartHourSection(viewModel)
 
-        DurationInputSection(viewModel = viewModel)
+        DurationInputSection(viewModel)
 
 
         Row (
@@ -70,27 +71,25 @@ fun FormTestScreen(viewModel: MedicineFormViewModel = viewModel()){
                     contentColor = Color.White
                 ),
                 onClick = {
-                    viewModel.debugShowMedicInfo()
+
+                    viewModel.onConfirmClick()
                 }
             ) {
                 Text("CONFIRMAR")
             }
         }
-
-
     }
 }
-
-
 
 
 @Composable
 fun DosisInputSection(
     viewModel: MedicineFormViewModel
 ){
-    Column (
+    Column(
         modifier = Modifier.padding(vertical = 5.dp),
-        horizontalAlignment = Alignment.CenterHorizontally) {
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
 
         TextInput(
             modifier = Modifier.fillMaxWidth(),
@@ -110,10 +109,9 @@ fun DosisInputSection(
 
             TextInput(
                 modifier = Modifier.weight(1f),
-                label = "cantidad",
+                label = "Cantidad",
                 value = viewModel.dosisAmount.value,
                 onChange = {
-                    //Solo se permiten 6 digitos (sin contar el .)
 
                     if (it.matches(Regex("^\\d*\\.\\d*$"))){
                         if (it.length <= 7){
@@ -125,11 +123,12 @@ fun DosisInputSection(
                             viewModel.dosisAmount.value = it
                         }
                     }
+
                 },
                 keyboardOptions = viewModel.numKeyboardConfig
             )
 
-            DropdownSelector(
+            ExposedDropdownMenu(
                 modifier = Modifier.weight(1f),
                 items = viewModel.dosisUnitList,
                 selectedItem = viewModel.dosisUnitSelected.value,
@@ -148,9 +147,10 @@ fun DosisInputSection(
 fun TimeLapseInputSection(
     viewModel: MedicineFormViewModel
 ){
-    Column (
+    Column(
         modifier = Modifier.padding(vertical = 5.dp),
-        horizontalAlignment = Alignment.CenterHorizontally) {
+        horizontalAlignment = Alignment.CenterHorizontally
+    ){
         Text(text = "Lapso entre cada dosis", fontWeight = FontWeight.Bold)
 
         Row(
@@ -172,7 +172,7 @@ fun TimeLapseInputSection(
                 keyboardOptions = viewModel.numKeyboardConfig
             )
 
-            DropdownSelector(
+            ExposedDropdownMenu(
                 modifier = Modifier.weight(1f),
                 items = viewModel.timeLapUnitList,
                 selectedItem = viewModel.timeLapUnitSelected.value,
@@ -180,6 +180,7 @@ fun TimeLapseInputSection(
                     viewModel.timeLapUnitSelected.value = it
                 }
             )
+
         }
     }
 }
@@ -211,6 +212,7 @@ fun StartDateInputSection(
     }
 }
 
+
 @Composable
 fun FinishDateInputSection(
     viewModel: MedicineFormViewModel
@@ -230,15 +232,22 @@ fun FinishDateInputSection(
             context = LocalContext.current,
             enabled = !viewModel.undefinedDurationCheck.value,
             selectedDate = viewModel.finishDateSelected,
-            onDateSelected = {
-                viewModel.dosisDurationString[0] = ""
-                viewModel.dosisDurationString[1] = ""
-                viewModel.dosisDurationString[2] = ""
-            },
+            onDateSelected =
+                {
+                    viewModel.dosisDurationString[0] = ""
+                    viewModel.dosisDurationString[1] = ""
+                    viewModel.dosisDurationString[2] = ""
+                    viewModel.dosisDuration[0] = 0
+                    viewModel.dosisDuration[1] = 0
+                    viewModel.dosisDuration[2] = 0
+
+                },
             minDateList = viewModel.startDateSelected
         )
     }
 }
+
+
 
 @Composable
 fun StartHourSection(
@@ -287,6 +296,7 @@ fun DurationInputSection(
 
     }
 }
+
 
 
 @Composable

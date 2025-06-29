@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface PatientRepositoryInterface {
 
-    suspend fun getAllPatients(): Flow<List<Patient>>
+    fun getAllPatients(): Flow<List<Patient>>
 
     suspend fun getPatientFromId(patientId: Int): Patient?
 

@@ -14,10 +14,10 @@ interface MedicDateDao {
     suspend fun getMedicDatesFromId(medicDateId: Int): MedicDateEntity?
 
     @Query("SELECT * FROM MedicDate WHERE doctorId = :doctorId")
-    suspend fun getMedicDatesFromDoctorId(doctorId: Int): Flow<List<MedicDateEntity>>
+    fun getMedicDatesFromDoctorId(doctorId: Int): Flow<List<MedicDateEntity>>
 
     @Query("SELECT * FROM MedicDate WHERE patientId = :patientId")
-    suspend fun getMedicDatesFromPatientId(patientId: Int): Flow<List<MedicDateEntity>>
+    fun getMedicDatesFromPatientId(patientId: Int): Flow<List<MedicDateEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addMedicDate(medicDate: MedicDateEntity)

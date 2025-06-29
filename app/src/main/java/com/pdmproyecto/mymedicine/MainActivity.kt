@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import com.pdmproyecto.mymedicine.ui.screens.FormTest.FormTestScreen
+import com.pdmproyecto.mymedicine.ui.screens.FormTest.MedicineFormScreen
 import com.pdmproyecto.mymedicine.ui.screens.MedicineAlarms.MedicineAlarmsScreen
 import com.pdmproyecto.mymedicine.ui.theme.MymedicineTheme
 
@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MymedicineTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    FormTestScreen()
+                    MedicineFormScreen()
                 }
             }
         }

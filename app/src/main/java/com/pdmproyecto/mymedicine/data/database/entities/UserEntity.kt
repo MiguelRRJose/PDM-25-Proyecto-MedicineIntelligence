@@ -1,7 +1,6 @@
 package com.pdmproyecto.mymedicine.data.database.entities
 
 import androidx.room.Entity
-import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.pdmproyecto.mymedicine.data.models.User
 
@@ -13,7 +12,7 @@ data class UserEntity(
     val name: String,
     val email: String,
     val phoneNumber: String,
-    val DUI: String,
+    val dui: String,
     val age: Int,
     val password: String
 )
@@ -24,7 +23,7 @@ fun UserEntity.toDomain(): User{
         name = this.name,
         email = this.email,
         phoneNumber = this.phoneNumber,
-        DUI = this.DUI,
+        dui = this.dui,
         age = this.age,
         password = this.password
     )

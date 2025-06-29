@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class UserRepository(private val dao: UserDao): UserRepositoryInterface{
-    override suspend fun getAllUsers(): Flow<List<User>> {
+    override fun getAllUsers(): Flow<List<User>> {
         return dao.getAllUsers().map {
             list -> list.map {
                 userEntity -> userEntity.toDomain()

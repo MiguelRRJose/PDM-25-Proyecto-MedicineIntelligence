@@ -11,13 +11,13 @@ import kotlinx.coroutines.flow.Flow
 interface MedicineDao {
 
     @Query("SELECT * FROM Medicine")
-    suspend fun getAllMedicines(): Flow<List<MedicineEntity>>
+    fun getAllMedicines(): Flow<List<MedicineEntity>>
 
     @Query("SELECT * FROM Medicine WHERE id = :medicineId")
     suspend fun getMedicineFromId(medicineId: Int): MedicineEntity?
 
     @Query("SELECT * FROM Medicine WHERE patientId = :patientId")
-    suspend fun getMedicinesFromPatientId(patientId: Int): Flow<List<MedicineEntity>>
+    fun getMedicinesFromPatientId(patientId: Int): Flow<List<MedicineEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addMedicine(medicine: MedicineEntity)
