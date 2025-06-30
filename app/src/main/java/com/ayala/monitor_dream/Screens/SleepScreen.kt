@@ -126,7 +126,7 @@ fun SleepScreen(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     ButtonSleepScreen("DETALLES")
-                    {navController.navigate(SleepY)}
+                    {navController.navigate(SleepSummary)}
 
                 } else
                 {

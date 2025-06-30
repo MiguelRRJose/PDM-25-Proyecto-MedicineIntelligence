@@ -3,11 +3,8 @@ package com.ayala.monitor_dream.utils
 import com.ayala.monitor_dream.navigation.ActualTime
 import com.ayala.monitor_dream.navigation.AlarmData
 import com.ayala.monitor_dream.navigation.DeviceTime
-import com.ayala.monitor_dream.navigation.ReminderTime
-import com.ayala.monitor_dream.navigation.TimeSleep
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 
 fun formatTimeAMPM(alarmData: AlarmData): String {
@@ -35,16 +32,6 @@ fun formatTimeAMPM3(deviceTime: DeviceTime): String {
     }
     val formatter = SimpleDateFormat("hh:mm a", Locale.getDefault())
     return formatter.format(calendar.time)
-}
-
-
-fun convertMillisToActualData(millis: Long): DeviceTime {
-    val calendar = Calendar.getInstance().apply {
-        timeInMillis = millis
-    }
-    val hour = calendar.get(Calendar.HOUR_OF_DAY)
-    val minute = calendar.get(Calendar.MINUTE)
-    return DeviceTime(hour, minute)
 }
 
 
