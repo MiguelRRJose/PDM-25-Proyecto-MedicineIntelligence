@@ -6,6 +6,8 @@ import com.ayala.monitor_dream.R
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,8 +27,9 @@ import com.ayala.monitor_dream.composables.ButtonSleepScreen
 import com.ayala.monitor_dream.composables.PersonalBackground
 import com.ayala.monitor_dream.composables.SelectedImage
 import com.ayala.monitor_dream.composables.TimeCard
+import com.ayala.monitor_dream.composables.TimeSleepCountdownBar
 import com.ayala.monitor_dream.navigation.AlarmP
-import com.ayala.monitor_dream.navigation.SleepTrackingOG
+import com.ayala.monitor_dream.navigation.SleepSummary
 import com.ayala.monitor_dream.utils.OperationValuesTime
 import com.ayala.monitor_dream.viewModel.SleepViewModel
 import com.ayala.monitor_dream.utils.formatTimeAMPM
@@ -42,6 +45,7 @@ fun SleepScreen(
 ) {
 
     var showElements by remember { mutableStateOf(false) }
+    var showPersonalizedTime by remember { mutableStateOf(false) }
     //var showPersonalizedTimeCard by remember {mutableStateOf(false)}
 
     //ViewModel
@@ -62,9 +66,9 @@ fun SleepScreen(
 
             viewModel.setDeviceTime()
 
-            OperationValuesTime.CalculateTime(sleepTime)
+            //OperationValuesTime.CalculateTime(sleepTime)
 
-            OperationValuesTime.CalculateTime2(sleepTime)
+            //OperationValuesTime.CalculateTime2(sleepTime)
 
             delay(1000)
         }
@@ -106,17 +110,31 @@ fun SleepScreen(
 
             //Spacer(modifier = Modifier.height(16.dp))
 
+            if (showPersonalizedTime){
+
+                Text("Tiempo de sueño profundo restante: ",
+                    color = Color.White,
+                    style = MaterialTheme.typography.titleMedium
+                )
+                TimeSleepCountdownBar(
+                    initialTime = sleepTime,
+                    modifier = Modifier.padding(horizontal = 32.dp,vertical = 8.dp))
+            } else {
+                TimeCard("Tiempo de sueño profundo: ", "${sleepTime.hour} h: ${sleepTime.minute} min", R.drawable.alarm_white_1){}
+            }
+
             TimeCard("Alarma: ", formatTimeAMPM(alarmTime), R.drawable.alarm_white_1){}
 
             Spacer(modifier = Modifier.height(30.dp))
 
-
             if (!showElements) {
 
                 ButtonSleepScreen("INICIAR SUEÑO")
-                { showElements = true}
+                { showElements = true
+                    showPersonalizedTime = true
+                }
                 ButtonSleepScreen("DETALLES")
-                {navController.navigate(SleepTrackingOG)}
+                {navController.navigate(SleepSummary)}
 
             } else
             {

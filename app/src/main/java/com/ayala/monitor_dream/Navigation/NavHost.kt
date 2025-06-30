@@ -31,7 +31,7 @@ fun AppNavigator(navController: NavHostController) {
             )
         }
 
-        composable <SleepTrackingOG>
+        composable <SleepSummary>
         {
             SleepTrackingScreen(
                 navController = navController,
