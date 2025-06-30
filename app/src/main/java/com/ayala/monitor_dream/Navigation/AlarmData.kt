@@ -22,6 +22,12 @@ data class TimeSleep(
     val hour: Int,
     val minute: Int
 )
+{
+    fun toTotalSeconds(): Int {
+        return hour * 3600 + minute * 60
+    }
+
+}
 
 @Serializable
 //Tiempo interno del sistema

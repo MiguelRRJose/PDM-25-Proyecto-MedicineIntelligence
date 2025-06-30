@@ -1,13 +1,12 @@
 package com.ayala.monitor_dream.screens
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import com.ayala.monitor_dream.R
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,12 +23,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.ayala.monitor_dream.composables.ButtonSleepScreen
+import com.ayala.monitor_dream.composables.CircularTimeSleepCountdown
 import com.ayala.monitor_dream.composables.PersonalBackground
 import com.ayala.monitor_dream.composables.SelectedImage
 import com.ayala.monitor_dream.composables.TimeCard
-import com.ayala.monitor_dream.composables.TimeSleepCountdownBar
 import com.ayala.monitor_dream.navigation.AlarmP
 import com.ayala.monitor_dream.navigation.SleepSummary
+import com.ayala.monitor_dream.navigation.SleepY
 import com.ayala.monitor_dream.viewModel.SleepViewModel
 import com.ayala.monitor_dream.utils.formatTimeAMPM
 import com.ayala.monitor_dream.utils.formatTimeAMPM3
@@ -75,7 +75,9 @@ fun SleepScreen(
 
         Column(
             modifier = Modifier.align(Alignment.Center),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+
         ) {
             Text(
                 text = "Feliz descanso!",
@@ -94,43 +96,48 @@ fun SleepScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            SelectedImage(R.drawable.astro_durmiendo, "Astronauta dormido")
-
-            Spacer(modifier = Modifier.height(16.dp))
-
             if (showPersonalizedTime){
 
-                Text("Tiempo de sueño profundo restante: ",
-                    color = Color.White,
-                    style = MaterialTheme.typography.titleMedium
-                )
-                TimeSleepCountdownBar(
-                    initialTime = sleepTime,
-                    modifier = Modifier.padding(horizontal = 32.dp,vertical = 8.dp))
+                CircularTimeSleepCountdown(initialTime = sleepTime, indicatorSize = 150.dp, strokeWidth = 10.dp)
+
+                Spacer(modifier = Modifier.height(16.dp))
+
             } else {
-                TimeCard("Tiempo de sueño profundo: ", "${sleepTime.hour} h: ${sleepTime.minute} min", R.drawable.alarm_white_1){}
+
+                SelectedImage(R.drawable.astro_durmiendo, "Astronauta dormido")
+
+                Spacer(modifier = Modifier.height(16.dp))
             }
 
             TimeCard("Alarma: ", formatTimeAMPM(alarmTime), R.drawable.alarm_white_1){}
 
             Spacer(modifier = Modifier.height(30.dp))
 
-            if (!showElements) {
-
-                ButtonSleepScreen("INICIAR SUEÑO")
-                { showElements = true
-                    showPersonalizedTime = true
-                }
-                ButtonSleepScreen("DETALLES")
-                {navController.navigate(SleepSummary)}
-
-            } else
+            Column()
             {
-                ButtonSleepScreen("DESPERTAR")
-                {navController.popBackStack(AlarmP, inclusive = false)}
+
+                if (!showElements) {
+
+                    ButtonSleepScreen("INICIAR SUEÑO")
+                    { showElements = true
+                        showPersonalizedTime = true
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    ButtonSleepScreen("DETALLES")
+                    {navController.navigate(SleepY)}
+
+                } else
+                {
+                    ButtonSleepScreen("DESPERTAR")
+                    {navController.popBackStack(AlarmP, inclusive = false)}
+                }
+
             }
 
         }
+
     }
 }
 
