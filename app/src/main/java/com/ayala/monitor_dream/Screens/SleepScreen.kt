@@ -30,7 +30,6 @@ import com.ayala.monitor_dream.composables.TimeCard
 import com.ayala.monitor_dream.composables.TimeSleepCountdownBar
 import com.ayala.monitor_dream.navigation.AlarmP
 import com.ayala.monitor_dream.navigation.SleepSummary
-import com.ayala.monitor_dream.utils.OperationValuesTime
 import com.ayala.monitor_dream.viewModel.SleepViewModel
 import com.ayala.monitor_dream.utils.formatTimeAMPM
 import com.ayala.monitor_dream.utils.formatTimeAMPM3
@@ -46,12 +45,9 @@ fun SleepScreen(
 
     var showElements by remember { mutableStateOf(false) }
     var showPersonalizedTime by remember { mutableStateOf(false) }
-    //var showPersonalizedTimeCard by remember {mutableStateOf(false)}
 
     //ViewModel
     val alarmTime by viewModel.alarmTime.collectAsState()
-
-    //val startTime by viewModel.startTime.collectAsState()
 
     val sleepTime by viewModel.duration.collectAsState()
 
@@ -65,10 +61,6 @@ fun SleepScreen(
         while (true) {
 
             viewModel.setDeviceTime()
-
-            //OperationValuesTime.CalculateTime(sleepTime)
-
-            //OperationValuesTime.CalculateTime2(sleepTime)
 
             delay(1000)
         }
@@ -105,10 +97,6 @@ fun SleepScreen(
             SelectedImage(R.drawable.astro_durmiendo, "Astronauta dormido")
 
             Spacer(modifier = Modifier.height(16.dp))
-
-            //TimeCard("Sueño profundo: ", "${sleepTime.hour} h: ${sleepTime.minute} min", R.drawable.alarm_white_1){}
-
-            //Spacer(modifier = Modifier.height(16.dp))
 
             if (showPersonalizedTime){
 

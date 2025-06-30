@@ -29,63 +29,12 @@ fun SleepTrackingScreen(
     //Dato ViewModel
     val alarmTime = viewModel.alarmTime.collectAsState().value
 
-    val startSleepTime = viewModel.startTime.collectAsState().value ?: return
+    val startSleepTime = viewModel.startTime.collectAsState().value
 
     val currenTimeMillis = remember {mutableStateOf(System.currentTimeMillis())}
 
-    //var sleepDurationMillis by remember { mutableLongStateOf(0L) }
 
-    //val safeSleepDurationMillis = sleepDurationMillis.coerceAtLeast(0L)
-
-var sleepDurationMillis by remember { mutableLongStateOf(0L) }
-    var timeLeftMillis by remember { mutableLongStateOf(0L) }
-    var totalSleepMillis by remember { mutableLongStateOf(0L) }
-
-
-
-    LaunchedEffect(Unit) {
-        while(true) {
-
-            val sleepCalendar = parseTimeToCalendar2(startSleepTime)
-            val wakeUpCalendar = parseTimeToCalendar(alarmTime)
-
-            val nowMillis = System.currentTimeMillis()
-
-            val startMillis = sleepCalendar.timeInMillis
-            val endMillis = wakeUpCalendar.timeInMillis
-
-            sleepDurationMillis = (nowMillis - startMillis).coerceAtLeast(0L)
-            timeLeftMillis = (endMillis - nowMillis).coerceAtLeast(0L)
-            totalSleepMillis = (endMillis - startMillis).coerceAtLeast(0L)
-
-            delay(1000L)
-        }
-    }
-
-
-    //Operaciones para el tiempo
-    val totalSleepSeconds = totalSleepMillis / 1000
-
-    val Sleephours = totalSleepSeconds / 3600
-    val Sleepminutes = (totalSleepSeconds % 3600) / 60
-    val Sleepseconds = totalSleepSeconds % 60
-
-    val Sleepcountdown = String.format("%02d:%02d:%02d", Sleephours, Sleepminutes, Sleepseconds)
-
-    val totalSeconds = sleepDurationMillis / 1000
-
-    val hours = totalSeconds / 3600
-
-    val minutes = (totalSeconds % 3600) / 60
-
-    val seconds = totalSeconds % 60
-
-    val countdown = String.format("%02d:%02d:%02d", hours, minutes, seconds)
-
-
-    val startTimeMillis: Long = System.currentTimeMillis()
-    //val currentTime = convertMillisToActualData(startTimeMillis)
-    //val formattedTime = formatTimeAMPM2(currentTime)
+    LaunchedEffect(Unit) {}
 
 
     Box(
@@ -152,7 +101,7 @@ var sleepDurationMillis by remember { mutableLongStateOf(0L) }
                     Text(text = "Puntación de sueño")
                     Text ("30/06/2025")
 
-                    TimeCard("Dulces sueños: ", countdown, R.drawable.alarm_white_1){}
+                    TimeCard("Dulces sueños: ", "countdown", R.drawable.alarm_white_1){}
 
                     //De alguna forma la grafica
 
