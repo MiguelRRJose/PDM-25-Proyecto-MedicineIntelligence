@@ -51,8 +51,7 @@ fun SleepAlarmScreen(
     //Datos ViewModel
     val alarmTime by viewModel.alarmTime.collectAsState()
     val storedSleepTime by viewModel.startTime.collectAsState()
-    val sleepDuration by viewModel.duration.collectAsState()
-    val sleepDurationT by viewModel.sleepTimeDurationH.collectAsState()
+    val sleepDuration by viewModel.sleepTimeDurationH.collectAsState()
     val reminderTime by viewModel.reminder.collectAsState()
 
 
@@ -76,7 +75,7 @@ fun SleepAlarmScreen(
         ShowTimePickerDialog(hourInit, minuteInit) { h, m ->
             if (editingTime == "sleep")
             {
-                viewModel.upLoadStartTime(ActualTime(h,m))
+                viewModel.setStartTime(ActualTime(h,m))
                 showSleepPicker = false
             }
 
@@ -158,7 +157,6 @@ fun SleepAlarmScreen(
                         showSleepPicker = true
                     }
                 }
-
             }
 
             Spacer(modifier = Modifier.height(40.dp))
@@ -168,18 +166,18 @@ fun SleepAlarmScreen(
             if (showPersonalizedTimeCard) {
 
                 TimeCard("Meta para dormir ",
-                    sleepDurationT.hour.toString() + " h : " + sleepDurationT.minute.toString() + " min",
+                    sleepDuration.hour.toString() + " h : " + sleepDuration.minute.toString() + " min",
                     R.drawable.tick_mark_purple_1) {}
 
-                viewModel.setDuration(TimeSleep(sleepDurationT.hour, sleepDurationT.minute))
+                viewModel.setDuration(TimeSleep(sleepDuration.hour, sleepDuration.minute))
 
             } else {
 
                 TimeCard("Meta para dormir ",
-                    sleepDurationT.hour.toString() + " h : " + sleepDurationT.minute.toString() + " min",
+                    sleepDuration.hour.toString() + " h : " + sleepDuration.minute.toString() + " min",
                     R.drawable.tick_mark_purple_1) {}
 
-                viewModel.setDuration(TimeSleep(sleepDurationT.hour, sleepDurationT.minute))
+                viewModel.setDuration(TimeSleep(sleepDuration.hour, sleepDuration.minute))
 
             }
 
@@ -194,18 +192,14 @@ fun SleepAlarmScreen(
 
             ButtonAction("Establecer alarma", modifier = Modifier.fillMaxWidth(),
                 onClick = {
-                    val sleepTimeSet =
-                    if (showPersonalizedTimeCard) storedSleepTime
+                    val sleepTimeSet = if (showPersonalizedTimeCard) storedSleepTime
                     else {
                         storedSleepTime
                     }
 
                     viewModel.setAlarmTime(alarmTime)
-                    viewModel.setStartTime(sleepTimeSet)
-                    viewModel.setDuration(sleepDuration)
 
-                    //Actualizar el reloj de SleepY para usos posteriores
-                    viewModel.setSleepTimeCurrentDeviceTime()
+                    viewModel.setStartTime(sleepTimeSet)
 
                     navController.navigate(SleepY)
                 }

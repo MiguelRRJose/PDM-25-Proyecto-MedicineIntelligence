@@ -27,9 +27,10 @@ import com.ayala.monitor_dream.composables.SelectedImage
 import com.ayala.monitor_dream.composables.TimeCard
 import com.ayala.monitor_dream.navigation.AlarmP
 import com.ayala.monitor_dream.navigation.SleepTrackingOG
+import com.ayala.monitor_dream.utils.OperationValuesTime
 import com.ayala.monitor_dream.viewModel.SleepViewModel
 import com.ayala.monitor_dream.utils.formatTimeAMPM
-import com.ayala.monitor_dream.utils.formatTimeAMPM2
+import com.ayala.monitor_dream.utils.formatTimeAMPM3
 import kotlinx.coroutines.delay
 
 
@@ -41,19 +42,31 @@ fun SleepScreen(
 ) {
 
     var showElements by remember { mutableStateOf(false) }
+    //var showPersonalizedTimeCard by remember {mutableStateOf(false)}
 
     //ViewModel
     val alarmTime by viewModel.alarmTime.collectAsState()
 
-    val startTime by viewModel.startTime.collectAsState()
+    //val startTime by viewModel.startTime.collectAsState()
+
+    val sleepTime by viewModel.duration.collectAsState()
+
+    val deviceTime by viewModel.deviceTimeFlow.collectAsState()
+
 
     //Para mostrar el reloj en pantalla
-    val formattedTime = formatTimeAMPM2(startTime)
+    val formattedTime = formatTimeAMPM3(deviceTime)
 
     LaunchedEffect(Unit) {
         while (true) {
+
+            viewModel.setDeviceTime()
+
+            OperationValuesTime.CalculateTime(sleepTime)
+
+            OperationValuesTime.CalculateTime2(sleepTime)
+
             delay(1000)
-            viewModel.setSleepTimeCurrentDeviceTime()
         }
     }
 
@@ -69,7 +82,7 @@ fun SleepScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Buenas noches",
+                text = "Feliz descanso!",
                 color = Color.White,
                 fontSize = 20.sp
             )
@@ -88,6 +101,10 @@ fun SleepScreen(
             SelectedImage(R.drawable.astro_durmiendo, "Astronauta dormido")
 
             Spacer(modifier = Modifier.height(16.dp))
+
+            //TimeCard("Sueño profundo: ", "${sleepTime.hour} h: ${sleepTime.minute} min", R.drawable.alarm_white_1){}
+
+            //Spacer(modifier = Modifier.height(16.dp))
 
             TimeCard("Alarma: ", formatTimeAMPM(alarmTime), R.drawable.alarm_white_1){}
 

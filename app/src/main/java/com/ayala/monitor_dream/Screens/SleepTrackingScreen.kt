@@ -15,8 +15,6 @@ import com.ayala.monitor_dream.R
 import com.ayala.monitor_dream.composables.PersonalBackground
 import com.ayala.monitor_dream.composables.SelectedImage
 import com.ayala.monitor_dream.composables.TimeCard
-import com.ayala.monitor_dream.navigation.AlarmP
-import com.ayala.monitor_dream.navigation.SleepY
 import com.ayala.monitor_dream.utils.convertMillisToActualData
 import com.ayala.monitor_dream.utils.formatTimeAMPM
 import com.ayala.monitor_dream.utils.formatTimeAMPM2
@@ -88,8 +86,8 @@ var sleepDurationMillis by remember { mutableLongStateOf(0L) }
 
 
     val startTimeMillis: Long = System.currentTimeMillis()
-    val currentTime = convertMillisToActualData(startTimeMillis)
-    val formattedTime = formatTimeAMPM2(currentTime)
+    //val currentTime = convertMillisToActualData(startTimeMillis)
+    //val formattedTime = formatTimeAMPM2(currentTime)
 
 
     Box(
@@ -111,7 +109,7 @@ var sleepDurationMillis by remember { mutableLongStateOf(0L) }
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = formattedTime,
+                text = "",
                 color = Color.White,
                 fontSize = 48.sp,
                 fontWeight = FontWeight.Bold

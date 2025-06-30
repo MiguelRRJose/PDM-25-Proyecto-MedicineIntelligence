@@ -9,6 +9,7 @@ import com.ayala.monitor_dream.PruebaMain
 import com.ayala.monitor_dream.data.repository.AlarmUserPreferenceRepository
 import com.ayala.monitor_dream.navigation.ActualTime
 import com.ayala.monitor_dream.navigation.AlarmData
+import com.ayala.monitor_dream.navigation.DeviceTime
 import com.ayala.monitor_dream.navigation.ReminderTime
 import com.ayala.monitor_dream.navigation.TimeSleep
 import com.ayala.monitor_dream.utils.CalculateDurationTime
@@ -20,22 +21,11 @@ class SleepViewModel(
     private val alarmUserPreferenceRepository: AlarmUserPreferenceRepository
 ) : ViewModel() {
 
-    //Para manejor de "Alarma"
+    //Manejo de la alarma
 
     private val _alarmTime = MutableStateFlow(AlarmData(5,30))
 
     val alarmTime: StateFlow<AlarmData> =_alarmTime
-
-    fun setAlarmTime(alarmData: AlarmData) {
-        _alarmTime.value = alarmData
-        upLoadAlarmUser(alarmData)
-    }
-
-    fun upLoadAlarmUser(alarmData: AlarmData) {
-        viewModelScope.launch {
-            alarmUserPreferenceRepository.saveAlarmUser(alarmData)
-        }
-    }
 
     //Manejo de los "Tiempo_Sistema"
 
@@ -47,26 +37,38 @@ class SleepViewModel(
         return ActualTime(hour, minute)
     }
 
-    fun setSleepTimeCurrentDeviceTime()
+    private fun getCurrentDeviceTime2(): DeviceTime
     {
-        _startTime.value = getCurrentDeviceTime()
+        val calendar = Calendar.getInstance()
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
+        return DeviceTime(hour, minute)
+    }
+
+    //Mejor ejemplo para la simplificacion del proceso sobre el dispositivo actual
+
+    private fun getCurrentDeviceTimePRUEBA(selected : Boolean)
+    {
+        val calendar = Calendar.getInstance()
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
+
+        if (selected)
+        {
+            _startTime.value = ActualTime(hour, minute)
+            setStartTime(ActualTime(hour, minute))
+        }
+        else
+        {
+            //deviceTime.value = DeviceTime(hour, minute)
+            //setDeviceTime(DeviceTime(hour, minute))
+        }
+
     }
 
     private val _startTime = MutableStateFlow<ActualTime>(getCurrentDeviceTime())
 
     val startTime: StateFlow<ActualTime> = _startTime
-
-    fun setStartTime(actualTime: ActualTime) {
-
-        _startTime.value = actualTime
-        upLoadStartTime(actualTime)
-    }
-
-    fun upLoadStartTime(actualTime: ActualTime) {
-        viewModelScope.launch {
-            alarmUserPreferenceRepository.saveStartTime(actualTime)
-        }
-    }
 
 
     //Duracion de sueño
@@ -75,9 +77,12 @@ class SleepViewModel(
 
     val duration: StateFlow<TimeSleep> = _duration
 
-    fun setDuration(timeSleep: TimeSleep) {
-        _duration.value = timeSleep
-    }
+    //Tiempo Actual Dispositivo (Problemas con las compatibilidades del sistema)
+
+    private val deviceTime = MutableStateFlow(DeviceTime(getCurrentDeviceTime2().hour,getCurrentDeviceTime2().minute))
+
+    val deviceTimeFlow: StateFlow<DeviceTime> = deviceTime
+
 
     //Recordatorio para dormir
 
@@ -85,9 +90,6 @@ class SleepViewModel(
 
     val reminder: StateFlow<ReminderTime> = _reminder
 
-    fun setReminder(reminderTime: ReminderTime) {
-        _reminder.value = reminderTime
-    }
 
     //Calculadora Tiempo
 
@@ -126,6 +128,52 @@ class SleepViewModel(
         }
     }
 
+    //Métodos de Seteo de datos
+
+    fun setAlarmTime(alarmData: AlarmData) {
+        _alarmTime.value = alarmData
+        upLoadAlarmUser(alarmData)
+    }
+
+    fun setSleepTimeCurrentDeviceTime()
+    {
+        _startTime.value = getCurrentDeviceTime()
+    }
+
+    fun setStartTime(actualTime: ActualTime) {
+
+        _startTime.value = actualTime
+        upLoadStartTime(actualTime)
+    }
+
+    fun setDuration(timeSleep: TimeSleep) {
+        _duration.value = timeSleep
+    }
+
+    fun setDeviceTime() {
+        this.deviceTime.value = getCurrentDeviceTime2()
+    }
+
+    fun setReminder(reminderTime: ReminderTime) {
+        _reminder.value = reminderTime
+    }
+
+    //Métodos de subida de datos al DataStore
+
+    fun upLoadStartTime(actualTime: ActualTime) {
+        viewModelScope.launch {
+            alarmUserPreferenceRepository.saveStartTime(actualTime)
+        }
+    }
+
+    fun upLoadAlarmUser(alarmData: AlarmData) {
+        viewModelScope.launch {
+            alarmUserPreferenceRepository.saveAlarmUser(alarmData)
+        }
+    }
+
+    //Almacenamiento con factory
+
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
@@ -134,5 +182,6 @@ class SleepViewModel(
             }
         }
     }
+
 
 }

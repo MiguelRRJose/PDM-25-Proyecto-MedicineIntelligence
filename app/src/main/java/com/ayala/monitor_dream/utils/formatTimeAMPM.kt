@@ -2,7 +2,9 @@ package com.ayala.monitor_dream.utils
 
 import com.ayala.monitor_dream.navigation.ActualTime
 import com.ayala.monitor_dream.navigation.AlarmData
+import com.ayala.monitor_dream.navigation.DeviceTime
 import com.ayala.monitor_dream.navigation.ReminderTime
+import com.ayala.monitor_dream.navigation.TimeSleep
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -26,14 +28,23 @@ fun formatTimeAMPM2(actualTime: ActualTime): String {
     return formatter.format(calendar.time)
 }
 
+fun formatTimeAMPM3(deviceTime: DeviceTime): String {
+    val calendar = Calendar.getInstance().apply {
+        set(Calendar.HOUR_OF_DAY, deviceTime.hour)
+        set(Calendar.MINUTE, deviceTime.minute)
+    }
+    val formatter = SimpleDateFormat("hh:mm a", Locale.getDefault())
+    return formatter.format(calendar.time)
+}
 
-fun convertMillisToActualData(millis: Long): ActualTime {
+
+fun convertMillisToActualData(millis: Long): DeviceTime {
     val calendar = Calendar.getInstance().apply {
         timeInMillis = millis
     }
     val hour = calendar.get(Calendar.HOUR_OF_DAY)
     val minute = calendar.get(Calendar.MINUTE)
-    return ActualTime(hour, minute)
+    return DeviceTime(hour, minute)
 }
 
 
