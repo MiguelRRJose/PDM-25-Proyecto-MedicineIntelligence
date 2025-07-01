@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,10 +18,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.ayala.monitor_dream.R
-import com.ayala.monitor_dream.composables.ButtonAction
 import com.ayala.monitor_dream.composables.ButtonSleepScreen
 import com.ayala.monitor_dream.composables.PersonalBackground
 import com.ayala.monitor_dream.composables.SelectedImage
+import com.ayala.monitor_dream.composables.TextSub
+import com.ayala.monitor_dream.composables.TextTittle
+import com.ayala.monitor_dream.utils.formatTimeAMPM
+import com.ayala.monitor_dream.utils.formatTimeAMPM2
 import com.ayala.monitor_dream.viewModel.SleepViewModel
 
 @Composable
@@ -27,6 +32,14 @@ fun SleepDetail(
     navController: NavController,
     viewModel: SleepViewModel,
 ) {
+
+    val alarmTime by viewModel.alarmTime.collectAsState()
+    val storedSleepTime by viewModel.startTime.collectAsState()
+    val sleepDuration by viewModel.sleepTimeDurationH.collectAsState()
+    val reminderTime by viewModel.reminder.collectAsState()
+    val dateDetails by viewModel.dateDetails.collectAsState()
+
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -40,13 +53,7 @@ fun SleepDetail(
             verticalArrangement = Arrangement.spacedBy(12.dp)
 
         ) {
-            Text(
-                text = "Detalles del \n" +
-                        "sueño actual" ,
-                color = Color.White ,
-                fontSize = 36.sp,
-                fontWeight = FontWeight.Bold
-            )
+            TextTittle("Detalles del \n sueño actual")
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -55,10 +62,10 @@ fun SleepDetail(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Fecha:\n"+
-                        "Hora actual:\n"+
-                        "Alarma Seleccionada\n" +
-                        "Duarción del sueño" ,
+                text = "Fecha: "+ dateDetails.dayOfMonth + "/" + dateDetails.month + "/" + dateDetails.year +
+                        "\nHora actual: "+ formatTimeAMPM2(storedSleepTime) +
+                        "\nAlarma Seleccionada: " + formatTimeAMPM(alarmTime) +
+                        "\nDuarción del sueño: ${sleepDuration.hour} h : ${sleepDuration.minute} min"  ,
                 color = Color.White ,
                 fontSize = 20.sp
             )
@@ -69,7 +76,9 @@ fun SleepDetail(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(text = "SleepY aprueba tu horario :D")
+            //Text(text = "SleepY aprueba tu horario :D")
+
+            TextSub("SleepY aprueba tu horario :D")
 
         }
 

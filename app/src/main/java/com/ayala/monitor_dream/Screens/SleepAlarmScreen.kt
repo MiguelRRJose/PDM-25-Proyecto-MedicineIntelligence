@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -18,9 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.ayala.monitor_dream.R
 import com.ayala.monitor_dream.composables.ButtonAction
@@ -28,6 +25,8 @@ import com.ayala.monitor_dream.composables.PersonalBackground
 import com.ayala.monitor_dream.composables.SelectedImage
 import com.ayala.monitor_dream.composables.ShowReminderPickerDialog
 import com.ayala.monitor_dream.composables.ShowTimePickerDialog
+import com.ayala.monitor_dream.composables.TextSubDate
+import com.ayala.monitor_dream.composables.TextTittle
 import com.ayala.monitor_dream.composables.TimeCard
 import com.ayala.monitor_dream.navigation.ActualTime
 import com.ayala.monitor_dream.navigation.AlarmData
@@ -108,15 +107,11 @@ fun SleepAlarmScreen(
 
             Spacer(modifier = Modifier.height(50.dp))
 
-            Text(
-                "Dr. Sueño ",
-                color = Color.White, fontSize = 30.sp)
+            TextTittle("Dr. Sueño")
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(
-                "Fecha actual: ${dateDetails.dayOfMonth}/${dateDetails.month}/${dateDetails.year}",
-                color = Color.White, fontSize = 16.sp)
+            TextSubDate(dateDetails.dayOfMonth, dateDetails.month, dateDetails.year)
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -171,8 +166,6 @@ fun SleepAlarmScreen(
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            //La unica intención es que muestre o no el valor de sleepDurationT
-
             if (showPersonalizedTimeCard) {
 
                 TimeCard("Meta para dormir ",
@@ -188,7 +181,6 @@ fun SleepAlarmScreen(
                     R.drawable.tick_mark_purple_1) {}
 
                 viewModel.setDuration(TimeSleep(sleepDuration.hour, sleepDuration.minute))
-
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -200,7 +192,8 @@ fun SleepAlarmScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            ButtonAction("Establecer alarma", modifier = Modifier.fillMaxWidth(),
+            ButtonAction("Establecer alarma",
+                modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     val sleepTimeSet = if (showPersonalizedTimeCard) storedSleepTime
                     else {
@@ -215,11 +208,7 @@ fun SleepAlarmScreen(
                 }
             )
         }
-
     }
-
-    //End of the line
-
 }
 
 

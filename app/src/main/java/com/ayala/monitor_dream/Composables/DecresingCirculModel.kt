@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.ayala.monitor_dream.R
 import com.ayala.monitor_dream.navigation.TimeSleep
 import kotlinx.coroutines.delay
 
@@ -91,6 +92,6 @@ fun CircularTimeSleepCountdown(
             strokeCap = StrokeCap.Round
         )
 
-        SelectedImage(com.ayala.monitor_dream.R.drawable.astro_durmiendo, "Astronauta dormido")
+        SelectedImage(R.drawable.astro_durmiendo , "Astronauta dormido")
     }
 }

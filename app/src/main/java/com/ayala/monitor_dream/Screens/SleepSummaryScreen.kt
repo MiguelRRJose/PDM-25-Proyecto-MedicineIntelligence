@@ -4,17 +4,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.ayala.monitor_dream.R
 import com.ayala.monitor_dream.composables.PersonalBackground
+import com.ayala.monitor_dream.composables.TextSub
+import com.ayala.monitor_dream.composables.TextTittle
 import com.ayala.monitor_dream.composables.TimeCard
 import com.ayala.monitor_dream.viewModel.SleepViewModel
 
@@ -49,27 +48,23 @@ fun SleepTrackingScreen(
             horizontalAlignment = Alignment.End
 
         ) {
-            Text(
-                text = "Reporte de sueño",
-                color = Color.White,
-                fontSize = 48.sp,
-                fontWeight = FontWeight.Bold
-            )
+
+            TextTittle("Reporte de sueño")
+
+            //Text(text = "Reporte de sueño", color = Color.White, fontSize = 48.sp, fontWeight = FontWeight.Bold)
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(
-                text = "Consultando las estadisticas de sueño",
-                color = Color.White,
-                fontSize = 20.sp
-            )
+            //Text( text = "Consultando las estadisticas de sueño", color = Color.White, fontSize = 20.sp )
+
+            TextSub("Consultando las estadisticas de sueño")
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(onClick = {
                 navController.popBackStack()
             }) {
-                Text("DESPERTAR")
+                TextSub("Despertar!!!")
             }
         }
 
@@ -88,15 +83,16 @@ fun SleepTrackingScreen(
 
                     Row(modifier = Modifier.fillMaxWidth()) {
 
-                        Text(text = "80")
+                        TextSub("80")
 
                         Spacer(modifier = Modifier.width(16.dp))
 
-                        Text(text = "ESTRELLITAS?")
+                        TextSub("Estrellitas")
                     }
 
-                    Text(text = "Puntación de sueño")
-                    Text ("30/06/2025")
+                    TextSub("Puntación de sueño")
+
+                    TextSub("9/9/9")
 
                     TimeCard("Dulces sueños: ", "countdown", R.drawable.alarm_white_1){}
 
@@ -104,9 +100,9 @@ fun SleepTrackingScreen(
 
                     Row () {
 
-                        Text(text = "Duracion del sueño")
+                        TextSub("Duracion del sueño")
                         Spacer(modifier = Modifier.width(16.dp))
-                        Text(text = "Buen dia!!!!")
+                        TextSub("Buen día!!!!")
 
                     }
                 }
