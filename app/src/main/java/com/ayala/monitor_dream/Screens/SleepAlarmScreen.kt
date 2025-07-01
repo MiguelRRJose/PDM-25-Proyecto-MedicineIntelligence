@@ -53,6 +53,7 @@ fun SleepAlarmScreen(
     val storedSleepTime by viewModel.startTime.collectAsState()
     val sleepDuration by viewModel.sleepTimeDurationH.collectAsState()
     val reminderTime by viewModel.reminder.collectAsState()
+    val dateDetails by viewModel.dateDetails.collectAsState()
 
 
     //Para la ventana de tiempo
@@ -107,7 +108,16 @@ fun SleepAlarmScreen(
 
             Spacer(modifier = Modifier.height(50.dp))
 
-            Text("Dr. Sueño ", color = Color.White, fontSize = 30.sp)
+            Text(
+                "Dr. Sueño ",
+                color = Color.White, fontSize = 30.sp)
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                "Fecha actual: ${dateDetails.dayOfMonth}/${dateDetails.month}/${dateDetails.year}",
+                color = Color.White, fontSize = 16.sp)
+
             Spacer(modifier = Modifier.height(16.dp))
 
             SelectedImage(R.drawable.astro_durmiendo, "Astronauta dormido")

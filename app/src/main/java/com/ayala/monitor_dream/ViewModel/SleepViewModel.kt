@@ -9,12 +9,14 @@ import com.ayala.monitor_dream.PruebaMain
 import com.ayala.monitor_dream.data.repository.AlarmUserPreferenceRepository
 import com.ayala.monitor_dream.navigation.ActualTime
 import com.ayala.monitor_dream.navigation.AlarmData
+import com.ayala.monitor_dream.navigation.DateDetails
 import com.ayala.monitor_dream.navigation.DeviceTime
 import com.ayala.monitor_dream.navigation.ReminderTime
 import com.ayala.monitor_dream.navigation.TimeSleep
 import com.ayala.monitor_dream.utils.CalculateDurationTime
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 import java.util.Calendar
 
 class SleepViewModel(
@@ -45,26 +47,15 @@ class SleepViewModel(
         return DeviceTime(hour, minute)
     }
 
-    //Mejor ejemplo para la simplificacion del proceso sobre el dispositivo actual
-
-    private fun getCurrentDeviceTimePRUEBA(selected : Boolean)
+    private fun getCurrentDateDetails(): DateDetails
     {
         val calendar = Calendar.getInstance()
-        val hour = calendar.get(Calendar.HOUR_OF_DAY)
-        val minute = calendar.get(Calendar.MINUTE)
-
-        if (selected)
-        {
-            _startTime.value = ActualTime(hour, minute)
-            setStartTime(ActualTime(hour, minute))
-        }
-        else
-        {
-            //deviceTime.value = DeviceTime(hour, minute)
-            //setDeviceTime(DeviceTime(hour, minute))
-        }
-
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH) + 1
+        val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
+        return DateDetails(year, month, dayOfMonth)
     }
+
 
     private val _startTime = MutableStateFlow<ActualTime>(getCurrentDeviceTime())
 
@@ -83,6 +74,11 @@ class SleepViewModel(
 
     val deviceTimeFlow: StateFlow<DeviceTime> = deviceTime
 
+    //Fecha actual
+
+    private val _dateDetails = MutableStateFlow(getCurrentDateDetails())
+
+    val dateDetails: StateFlow<DateDetails> = _dateDetails
 
     //Recordatorio para dormir
 
@@ -128,17 +124,24 @@ class SleepViewModel(
         }
     }
 
+    init {
+        viewModelScope.launch {
+            alarmUserPreferenceRepository.alarmUser
+                .collect { initialAlarmFromRepository ->
+                    if (initialAlarmFromRepository != null){
+                        val alarmData = Json.decodeFromString<AlarmData>(initialAlarmFromRepository)
+                        _alarmTime.value = alarmData
+                    }
+                }
+        }
+    }
 
-    //Métodos de Seteo de datos
+
+    //Métodos de Seteo de datos con "Upload"
 
     fun setAlarmTime(alarmData: AlarmData) {
         _alarmTime.value = alarmData
         upLoadAlarmUser(alarmData)
-    }
-
-    fun setSleepTimeCurrentDeviceTime()
-    {
-        _startTime.value = getCurrentDeviceTime()
     }
 
     fun setStartTime(actualTime: ActualTime) {
@@ -147,16 +150,30 @@ class SleepViewModel(
         upLoadStartTime(actualTime)
     }
 
-    fun setDuration(timeSleep: TimeSleep) {
-        _duration.value = timeSleep
+    //Conseguir datos dentro del sistema
+
+    fun setSleepTimeCurrentDeviceTime()
+    {
+        _startTime.value = getCurrentDeviceTime()
     }
 
     fun setDeviceTime() {
         this.deviceTime.value = getCurrentDeviceTime2()
     }
 
+    //Métodos de seteo de datos basicos
+
+    fun setDuration(timeSleep: TimeSleep) {
+        _duration.value = timeSleep
+    }
+
     fun setReminder(reminderTime: ReminderTime) {
         _reminder.value = reminderTime
+    }
+
+    fun setDateDetails(dateDetails: DateDetails)
+    {
+        _dateDetails.value = dateDetails
     }
 
     //Métodos de subida de datos al DataStore

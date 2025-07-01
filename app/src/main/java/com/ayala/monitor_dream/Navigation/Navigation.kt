@@ -10,3 +10,5 @@ object AlarmP //Donde sale "Sleepy"
 object SleepY //Donde colocas las horas
 @Serializable
 object SleepSummary//Ya el uso del reloj
+@Serializable
+object SleepDetail

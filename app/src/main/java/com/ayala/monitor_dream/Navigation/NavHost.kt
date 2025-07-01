@@ -5,8 +5,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.ayala.monitor_dream.navigation.SleepDetail
 
 import com.ayala.monitor_dream.screens.SleepAlarmScreen
+import com.ayala.monitor_dream.screens.SleepDetail
 import com.ayala.monitor_dream.screens.SleepScreen
 import com.ayala.monitor_dream.screens.SleepTrackingScreen
 import com.ayala.monitor_dream.viewModel.SleepViewModel
@@ -38,5 +40,11 @@ fun AppNavigator(navController: NavHostController) {
                 viewModel = sleepViewModel,
             )
         }
-
+        composable<SleepDetail>
+        {
+            SleepDetail(
+                navController = navController,
+                viewModel = sleepViewModel,
+            )
+        }
     } }

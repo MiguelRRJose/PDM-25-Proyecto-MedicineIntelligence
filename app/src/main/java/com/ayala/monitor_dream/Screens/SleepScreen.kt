@@ -28,6 +28,7 @@ import com.ayala.monitor_dream.composables.PersonalBackground
 import com.ayala.monitor_dream.composables.SelectedImage
 import com.ayala.monitor_dream.composables.TimeCard
 import com.ayala.monitor_dream.navigation.AlarmP
+import com.ayala.monitor_dream.navigation.SleepDetail
 import com.ayala.monitor_dream.navigation.SleepSummary
 import com.ayala.monitor_dream.navigation.SleepY
 import com.ayala.monitor_dream.viewModel.SleepViewModel
@@ -126,7 +127,7 @@ fun SleepScreen(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     ButtonSleepScreen("DETALLES")
-                    {navController.navigate(SleepSummary)}
+                    {navController.navigate(SleepDetail)}
 
                 } else
                 {

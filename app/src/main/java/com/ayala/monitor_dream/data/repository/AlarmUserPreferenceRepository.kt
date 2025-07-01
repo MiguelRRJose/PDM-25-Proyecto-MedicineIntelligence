@@ -24,7 +24,8 @@ class AlarmUserPreferenceRepository(
         .catch { exception ->
             if (exception is IOException) emit(emptyPreferences())
             else throw exception
-        }.map { preferences ->
+        }
+        .map { preferences ->
             preferences[ALARM_USER_KEY]
         }
 

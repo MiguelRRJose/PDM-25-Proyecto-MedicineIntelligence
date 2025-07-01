@@ -17,9 +17,6 @@ import com.ayala.monitor_dream.R
 import com.ayala.monitor_dream.composables.PersonalBackground
 import com.ayala.monitor_dream.composables.TimeCard
 import com.ayala.monitor_dream.viewModel.SleepViewModel
-import kotlinx.coroutines.delay
-import com.ayala.monitor_dream.utils.parseTimeToCalendar
-import com.ayala.monitor_dream.utils.parseTimeToCalendar2
 
 @Composable
 fun SleepTrackingScreen(

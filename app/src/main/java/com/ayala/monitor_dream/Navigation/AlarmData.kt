@@ -13,7 +13,7 @@ data class AlarmData(
 //Tiempo o del sistema o elegido por el usuario
 data class ActualTime(
     val hour: Int,
-    val minute: Int,
+    val minute: Int
 )
 
 @Serializable
@@ -21,12 +21,10 @@ data class ActualTime(
 data class TimeSleep(
     val hour: Int,
     val minute: Int
-)
-{
+) {
     fun toTotalSeconds(): Int {
         return hour * 3600 + minute * 60
     }
-
 }
 
 @Serializable
@@ -42,4 +40,10 @@ data class ReminderTime(
     val minute: Int,
 )
 
+@Serializable
+data class DateDetails(
+    val year: Int,
+    val month: Int,
+    val dayOfMonth: Int
+)
 
