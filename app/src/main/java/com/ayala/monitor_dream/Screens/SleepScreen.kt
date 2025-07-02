@@ -26,6 +26,7 @@ import com.ayala.monitor_dream.composables.TextTittle
 import com.ayala.monitor_dream.composables.TimeCard
 import com.ayala.monitor_dream.navigation.AlarmP
 import com.ayala.monitor_dream.navigation.SleepDetail
+import com.ayala.monitor_dream.navigation.SleepSummary
 import com.ayala.monitor_dream.viewModel.SleepViewModel
 import com.ayala.monitor_dream.utils.formatTimeAMPM
 import kotlinx.coroutines.delay
@@ -76,8 +77,6 @@ fun SleepScreen(
         ) {
             TextTittle("Feliz descanso!")
 
-            //Text(text = "Feliz descanso!", color = Color.White, fontSize = 20.sp)
-
             Spacer(modifier = Modifier.height(8.dp))
 
             TextTittle(formattedTime)
@@ -115,6 +114,9 @@ fun SleepScreen(
 
                     ButtonSleepScreen("DETALLES")
                     {navController.navigate(SleepDetail)}
+
+                    ButtonSleepScreen("REPORTE")
+                    {navController.navigate(SleepSummary)}
 
                 } else
                 {

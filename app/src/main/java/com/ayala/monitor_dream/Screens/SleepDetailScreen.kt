@@ -57,6 +57,7 @@ fun SleepDetail(
             Spacer(modifier = Modifier.height(8.dp))
 
             TextSummary(
+                dateDetails.nameDay,
                 dateDetails.dayOfMonth,
                 dateDetails.month,
                 dateDetails.year,

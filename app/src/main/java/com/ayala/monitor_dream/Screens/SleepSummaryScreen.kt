@@ -11,7 +11,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ayala.monitor_dream.R
+import com.ayala.monitor_dream.composables.Barras
+import com.ayala.monitor_dream.composables.BarrasScreen
 import com.ayala.monitor_dream.composables.PersonalBackground
+import com.ayala.monitor_dream.composables.TextA
+import com.ayala.monitor_dream.composables.TextB
 import com.ayala.monitor_dream.composables.TextSub
 import com.ayala.monitor_dream.composables.TextTittle
 import com.ayala.monitor_dream.composables.TimeCard
@@ -51,11 +55,7 @@ fun SleepTrackingScreen(
 
             TextTittle("Reporte de sueño")
 
-            //Text(text = "Reporte de sueño", color = Color.White, fontSize = 48.sp, fontWeight = FontWeight.Bold)
-
             Spacer(modifier = Modifier.height(16.dp))
-
-            //Text( text = "Consultando las estadisticas de sueño", color = Color.White, fontSize = 20.sp )
 
             TextSub("Consultando las estadisticas de sueño")
 
@@ -74,7 +74,7 @@ fun SleepTrackingScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(450.dp)
+                    .height(550.dp)
                     .background(Color.White, shape = RoundedCornerShape(16.dp))
                     .padding(16.dp)
             ) {
@@ -83,26 +83,28 @@ fun SleepTrackingScreen(
 
                     Row(modifier = Modifier.fillMaxWidth()) {
 
-                        TextSub("80")
+                        TextB("80")
 
                         Spacer(modifier = Modifier.width(16.dp))
 
-                        TextSub("Estrellitas")
+                        TextA("Estrellitas")
                     }
 
-                    TextSub("Puntación de sueño")
+                    TextA("Puntación de sueño")
 
                     TextSub("9/9/9")
 
+                    TextA("Alarma: ")
+
                     TimeCard("Dulces sueños: ", "countdown", R.drawable.alarm_white_1){}
 
-                    //De alguna forma la grafica
+                    BarrasScreen()
 
-                    Row () {
+                    Row (modifier = Modifier.fillMaxWidth()) {
 
-                        TextSub("Duracion del sueño")
+                        TextA("Duracion del sueño")
                         Spacer(modifier = Modifier.width(16.dp))
-                        TextSub("Buen día!!!!")
+                        TextA("Buen día!!!!")
 
                     }
                 }

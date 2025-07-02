@@ -119,7 +119,7 @@ fun SleepAlarmScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            TextSubDate(dateDetails.dayOfMonth, dateDetails.month, dateDetails.year)
+            TextSubDate(dateDetails.nameDay,dateDetails.dayOfMonth, dateDetails.month, dateDetails.year)
 
             Spacer(modifier = Modifier.height(16.dp))
 

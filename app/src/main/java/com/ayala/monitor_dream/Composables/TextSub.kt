@@ -14,11 +14,18 @@ fun TextTittle(text: String)
 }
 
 @Composable
+fun TextB(text: String)
+{
+    Text(text, color = Color.Black, fontSize = 30.sp)
+}
 
-fun TextSubDate(days: Int,month: Int, year: Int)
+@Composable
+
+fun TextSubDate(nameDay: String,days: Int,month: Int, year: Int)
 {
     Text(
-        "Fecha actual: ${days}/${month}/${year}",
+        "Fecha actual: ${days}/${month}/${year}\n" +
+                "Día de la semana: ${nameDay}",
         color = Color.White, fontSize = 16.sp)
 }
 @Composable
@@ -38,7 +45,14 @@ fun TextSub(text: String)
 }
 
 @Composable
+fun TextA(text: String)
+{
+    Text(text, color = Color.Black, fontSize = 16.sp)
+}
+
+@Composable
 fun TextSummary(
+    nameDay: String ,
     days: Int ,
     month: Int ,
     year: Int ,
@@ -47,7 +61,7 @@ fun TextSummary(
     actualHour: String ,
     alarmHour: String)
 {
-    TextSubDate(days,month,year)
+    TextSubDate(nameDay,days,month,year)
     TextSub("Hora sueño: ${actualHour}")
     TextSub("Alarma Seleccionada: ${alarmHour}")
     TextTime(hour,minute)

@@ -30,4 +30,20 @@ object CalculateDurationTime
         }
     }
 
+    fun calculateTotal(totalHours: Int, totalMinutes: Int) : Int
+    {
+        return if (totalMinutes > 30)
+        {
+            totalHours + 1
+        }
+        else
+        {
+            totalHours
+        }
+    }
+
+
+
+
+
 }

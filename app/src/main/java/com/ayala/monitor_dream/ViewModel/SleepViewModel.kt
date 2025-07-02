@@ -1,13 +1,11 @@
 package com.ayala.monitor_dream.viewModel
 
-import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.ayala.monitor_dream.PruebaMain
-import com.ayala.monitor_dream.composables.ShowTimePickerDialog
 import com.ayala.monitor_dream.data.repository.AlarmUserPreferenceRepository
 import com.ayala.monitor_dream.navigation.ActualTime
 import com.ayala.monitor_dream.navigation.AlarmData
@@ -16,10 +14,12 @@ import com.ayala.monitor_dream.navigation.DeviceTime
 import com.ayala.monitor_dream.navigation.ReminderTime
 import com.ayala.monitor_dream.navigation.TimeSleep
 import com.ayala.monitor_dream.utils.CalculateDurationTime
+import com.ayala.monitor_dream.utils.getDayNameFromCalendar
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import java.util.Calendar
+import java.util.Locale
 
 class SleepViewModel(
     private val alarmUserPreferenceRepository: AlarmUserPreferenceRepository
@@ -55,9 +55,8 @@ class SleepViewModel(
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH) + 1
         val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
-        return DateDetails(year, month, dayOfMonth)
+        return DateDetails(year, month, dayOfMonth, getDayNameFromCalendar(calendar, Locale("es", "ES")))
     }
-
 
     private val _startTime = MutableStateFlow<ActualTime>(getCurrentDeviceTime())
 

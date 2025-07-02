@@ -44,6 +44,7 @@ data class ReminderTime(
 data class DateDetails(
     val year: Int,
     val month: Int,
-    val dayOfMonth: Int
+    val dayOfMonth: Int,
+    val nameDay: String
 )
 
