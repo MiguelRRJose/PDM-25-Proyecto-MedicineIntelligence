@@ -28,7 +28,6 @@ import com.ayala.monitor_dream.navigation.AlarmP
 import com.ayala.monitor_dream.navigation.SleepDetail
 import com.ayala.monitor_dream.viewModel.SleepViewModel
 import com.ayala.monitor_dream.utils.formatTimeAMPM
-import com.ayala.monitor_dream.utils.formatTimeAMPM3
 import kotlinx.coroutines.delay
 
 
@@ -51,7 +50,7 @@ fun SleepScreen(
 
 
     //Para mostrar el reloj en pantalla
-    val formattedTime = formatTimeAMPM3(deviceTime)
+    val formattedTime = formatTimeAMPM(deviceTime.hour, deviceTime.minute)
 
     LaunchedEffect(Unit) {
         while (true) {
@@ -83,8 +82,6 @@ fun SleepScreen(
 
             TextTittle(formattedTime)
 
-            //Text(text = formattedTime, color = Color.White, fontSize = 48.sp, fontWeight = FontWeight.Bold)
-
             Spacer(modifier = Modifier.height(16.dp))
 
             if (showPersonalizedTime){
@@ -100,7 +97,7 @@ fun SleepScreen(
                 Spacer(modifier = Modifier.height(16.dp))
             }
 
-            TimeCard("Alarma: ", formatTimeAMPM(alarmTime), R.drawable.alarm_white_1){}
+            TimeCard("Alarma: ", formatTimeAMPM(alarmTime.hour, alarmTime.minute) , R.drawable.alarm_white_1){}
 
             Spacer(modifier = Modifier.height(30.dp))
 

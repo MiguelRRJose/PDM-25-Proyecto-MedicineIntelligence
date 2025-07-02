@@ -34,7 +34,6 @@ import com.ayala.monitor_dream.navigation.ReminderTime
 import com.ayala.monitor_dream.navigation.SleepY
 import com.ayala.monitor_dream.navigation.TimeSleep
 import com.ayala.monitor_dream.utils.formatTimeAMPM
-import com.ayala.monitor_dream.utils.formatTimeAMPM2
 import com.ayala.monitor_dream.viewModel.SleepViewModel
 
 
@@ -148,7 +147,9 @@ fun SleepAlarmScreen(
                 horizontalArrangement = Arrangement.spacedBy(20.dp)
             ) {
 
-                TimeCard("Alarma: ", formatTimeAMPM(alarmTime), R.drawable.bell_white_1)
+                //
+
+                TimeCard("Alarma: ", formatTimeAMPM(alarmTime.hour, alarmTime.minute) , R.drawable.bell_white_1)
                 {
                     editingTime = "alarm"
                     showSleepPicker = true
@@ -156,7 +157,7 @@ fun SleepAlarmScreen(
 
                 if (showPersonalizedTimeCard) {
 
-                    TimeCard("Hora: ", formatTimeAMPM2(currentSleepTime), R.drawable.bed_white_1)
+                    TimeCard("Hora: ", formatTimeAMPM(currentSleepTime.hour, currentSleepTime.minute), R.drawable.bed_white_1)
                     {
                         editingTime = "sleep"
                         showSleepPicker = true
@@ -203,6 +204,8 @@ fun SleepAlarmScreen(
                     viewModel.setAlarmTime(alarmTime)
 
                     viewModel.setStartTime(sleepTimeSet)
+
+                    viewModel.setDateDetails(dateDetails)
 
                     navController.navigate(SleepY)
                 }

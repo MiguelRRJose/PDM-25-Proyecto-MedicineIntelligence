@@ -8,6 +8,26 @@ import androidx.compose.ui.platform.LocalContext
 import java.util.Calendar
 
 @Composable
+fun ShowTimePickerDialog(
+    hour: Int,
+    minute: Int,
+    onTimeSelected: (Int, Int) -> Unit
+) {
+    val context = LocalContext.current
+
+    val timePickerDialog = remember {
+        TimePickerDialog(
+            context, { _, selectedHour, selectedMinute ->
+                onTimeSelected(selectedHour, selectedMinute) }, hour, minute, false
+        )
+    }
+
+    LaunchedEffect(Unit) {
+        timePickerDialog.show()
+    }
+}
+
+@Composable
 fun ShowReminderPickerDialog(
     minute: Int,
     onTimeSelected: (Int) -> Unit
@@ -27,31 +47,6 @@ fun ShowReminderPickerDialog(
             false
         )
     }
-    LaunchedEffect(Unit) {
-        timePickerDialog.show()
-    }
-}
-
-@Composable
-fun ShowTimePickerDialog(
-    hour: Int,
-    minute: Int,
-    onTimeSelected: (Int, Int) -> Unit
-) {
-    val context = LocalContext.current
-
-    val timePickerDialog = remember {
-        TimePickerDialog(
-            context,
-            { _, selectedHour, selectedMinute ->
-                onTimeSelected(selectedHour, selectedMinute)
-            },
-            hour,
-            minute,
-            false
-        )
-    }
-
     LaunchedEffect(Unit) {
         timePickerDialog.show()
     }

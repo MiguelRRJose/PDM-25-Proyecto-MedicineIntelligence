@@ -5,6 +5,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
 
+
+@Composable
+
+fun TextTittle(text: String)
+{
+    Text(text, color = Color.White, fontSize = 30.sp)
+}
+
 @Composable
 
 fun TextSubDate(days: Int,month: Int, year: Int)
@@ -22,8 +30,18 @@ fun TextSub(text: String)
 }
 
 @Composable
-
-fun TextTittle(text: String)
+fun TextSummary(
+    fecha: String,
+    horaActual: String,
+    horaAlarma: String,
+    duracion: String)
 {
-    Text(text, color = Color.White, fontSize = 30.sp)
+    Text(
+        text = "Fecha: ${fecha}" +
+                "\nHora sueño: ${horaActual}"  +
+                "\nAlarma Seleccionada: ${horaAlarma}"  +
+                "\nDuarción del sueño: ${duracion}",
+        color = Color.White ,
+        fontSize = 20.sp
+    )
 }

@@ -21,8 +21,6 @@ fun ButtonAction(action: String, modifier: Modifier = Modifier, onClick: () -> U
             contentColor = Color.White),
         modifier = modifier
     ) {
-
-        //Text(action)
         TextSub(action)
     }
 }
