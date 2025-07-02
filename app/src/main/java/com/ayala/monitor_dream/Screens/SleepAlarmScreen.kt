@@ -45,6 +45,7 @@ fun SleepAlarmScreen(
 
     var showPersonalizedTimeCard by remember { mutableStateOf(false) }
     var customButtonTime by remember { mutableStateOf(true) }
+    var showReminderTime by remember { mutableStateOf(false) }
 
     //Datos ViewModel
     val alarmTime by viewModel.alarmTime.collectAsState()
@@ -64,12 +65,20 @@ fun SleepAlarmScreen(
     //Determinar que ventana de tiempo se utilizará
     var editingTime by remember { mutableStateOf("sleep") } // "sleep" o "alarm"
 
-    if (showSleepPicker) {
-        val hourInit = if (editingTime == "sleep") storedSleepTime.hour
-        else alarmTime.hour
+    //Valores del picker
 
-        val minuteInit = if (editingTime == "sleep") storedSleepTime.minute
-        else alarmTime.minute
+    if (showSleepPicker) {
+        val hourInit =
+            if (editingTime == "sleep")
+            storedSleepTime.hour
+        else
+            alarmTime.hour
+
+        val minuteInit =
+            if (editingTime == "sleep")
+            storedSleepTime.minute
+        else
+            alarmTime.minute
 
         ShowTimePickerDialog(hourInit, minuteInit) { h, m ->
             if (editingTime == "sleep")
@@ -129,13 +138,16 @@ fun SleepAlarmScreen(
                         onClick = {
                             showPersonalizedTimeCard = true
                             editingTime = "sleep"
+
                             showSleepPicker = true
+                            showReminderTime = true
                             customButtonTime = false})
 
                     ButtonAction("Hora del dispositivo", modifier = Modifier.weight(1f),
                         onClick = {
                             viewModel.setSleepTimeCurrentDeviceTime()
                             editingTime = "sleep"
+
                             customButtonTime = false})
                 }
             }
@@ -146,9 +158,6 @@ fun SleepAlarmScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(20.dp)
             ) {
-
-                //
-
                 TimeCard("Alarma: ", formatTimeAMPM(alarmTime.hour, alarmTime.minute) , R.drawable.bell_white_1)
                 {
                     editingTime = "alarm"
@@ -167,7 +176,7 @@ fun SleepAlarmScreen(
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            if (showPersonalizedTimeCard) {
+            if (showSleepPicker) {
 
                 TimeCard("Meta para dormir ",
                     sleepDuration.hour.toString() + " h : " + sleepDuration.minute.toString() + " min",
@@ -186,9 +195,12 @@ fun SleepAlarmScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            TimeCard("Recordatorio: ",reminderTime.minute.toString() + " minutos", R.drawable.tick_mark_purple_1)
+            if (showReminderTime)
             {
-                showReminderPicker = true
+                TimeCard("Recordatorio: ",reminderTime.minute.toString() + " minutos", R.drawable.tick_mark_purple_1)
+                {
+                    showReminderPicker = true
+                }
             }
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -196,17 +208,7 @@ fun SleepAlarmScreen(
             ButtonAction("Establecer alarma",
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
-                    val sleepTimeSet = if (showPersonalizedTimeCard) storedSleepTime
-                    else {
-                        storedSleepTime
-                    }
-
-                    viewModel.setAlarmTime(alarmTime)
-
-                    viewModel.setStartTime(sleepTimeSet)
-
                     viewModel.setDateDetails(dateDetails)
-
                     navController.navigate(SleepY)
                 }
             )

@@ -48,7 +48,7 @@ fun SleepDetail(
             verticalArrangement = Arrangement.spacedBy(12.dp)
 
         ) {
-            TextTittle("Detalles del \n sueño actual")
+            TextTittle("Detalles del\nsueño actual")
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -57,11 +57,14 @@ fun SleepDetail(
             Spacer(modifier = Modifier.height(8.dp))
 
             TextSummary(
-                "${dateDetails.dayOfMonth}/${dateDetails.month}/${dateDetails.year}",
+                dateDetails.dayOfMonth,
+                dateDetails.month,
+                dateDetails.year,
+                sleepDuration.hour,
+                sleepDuration.minute,
                 formatTimeAMPM(storedSleepTime.hour,storedSleepTime.minute),
-                formatTimeAMPM(alarmTime.hour,alarmTime.minute),
-                sleepDuration.hour.toString() + " h : " + sleepDuration.minute.toString() + " min"
-                )
+                formatTimeAMPM(alarmTime.hour,alarmTime.minute)
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 

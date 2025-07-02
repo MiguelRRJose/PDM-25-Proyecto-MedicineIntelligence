@@ -21,6 +21,14 @@ fun TextSubDate(days: Int,month: Int, year: Int)
         "Fecha actual: ${days}/${month}/${year}",
         color = Color.White, fontSize = 16.sp)
 }
+@Composable
+fun TextTime(hour: Int, minute: Int)
+{
+    Text(
+        "Duración del sueño: ${hour} h: ${minute} min",
+        color = Color.White, fontSize = 16.sp
+    )
+}
 
 @Composable
 
@@ -31,17 +39,16 @@ fun TextSub(text: String)
 
 @Composable
 fun TextSummary(
-    fecha: String,
-    horaActual: String,
-    horaAlarma: String,
-    duracion: String)
+    days: Int ,
+    month: Int ,
+    year: Int ,
+    hour: Int ,
+    minute: Int ,
+    actualHour: String ,
+    alarmHour: String)
 {
-    Text(
-        text = "Fecha: ${fecha}" +
-                "\nHora sueño: ${horaActual}"  +
-                "\nAlarma Seleccionada: ${horaAlarma}"  +
-                "\nDuarción del sueño: ${duracion}",
-        color = Color.White ,
-        fontSize = 20.sp
-    )
+    TextSubDate(days,month,year)
+    TextSub("Hora sueño: ${actualHour}")
+    TextSub("Alarma Seleccionada: ${alarmHour}")
+    TextTime(hour,minute)
 }
