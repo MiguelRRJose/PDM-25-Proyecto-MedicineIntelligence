@@ -1,5 +1,7 @@
 package com.carlosrubio_00000822.myapplication.ui.screen
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -7,11 +9,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.DirectionsWalk
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Whatshot
-import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -31,6 +34,15 @@ fun StepCounterScreen(
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val rawProgress = if (goalSteps > 0) {
+        (steps.toFloat() / goalSteps).coerceIn(0f, 1f)
+    } else 0f
+
+    val progress by animateFloatAsState(
+        targetValue = rawProgress,
+        animationSpec = tween(durationMillis = 500)
+    )
+
     Scaffold(modifier = modifier.fillMaxSize()) { padding ->
         Column(
             modifier = Modifier
@@ -41,7 +53,6 @@ fun StepCounterScreen(
         ) {
             Spacer(Modifier.height(16.dp))
 
-            // Flecha de volver manual
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -59,7 +70,6 @@ fun StepCounterScreen(
 
             Spacer(Modifier.height(8.dp))
 
-            // Círculo punteado + progreso
             Box(contentAlignment = Alignment.Center) {
                 val size = 260.dp
                 Canvas(modifier = Modifier.size(size)) {
@@ -68,7 +78,6 @@ fun StepCounterScreen(
                         cap = StrokeCap.Round,
                         pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 8f), 0f)
                     )
-                    // Fondo punteado
                     drawArc(
                         color = Color(0xFFCCCCCC),
                         startAngle = -90f,
@@ -76,12 +85,10 @@ fun StepCounterScreen(
                         useCenter = false,
                         style = dashStroke
                     )
-                    // Progreso sólido
-                    val sweep = (steps.toFloat() / goalSteps).coerceIn(0f,1f) * 360f
                     drawArc(
                         color = Color(0xFF03BFC0),
                         startAngle = -90f,
-                        sweepAngle = sweep,
+                        sweepAngle = rawProgress * 360f,
                         useCenter = false,
                         style = Stroke(width = 12f, cap = StrokeCap.Round)
                     )
@@ -110,7 +117,6 @@ fun StepCounterScreen(
 
             Spacer(Modifier.height(16.dp))
 
-            // Métricas secundarias
             Row(
                 horizontalArrangement = Arrangement.spacedBy(24.dp),
                 modifier = Modifier.padding(horizontal = 32.dp)
@@ -122,7 +128,6 @@ fun StepCounterScreen(
 
             Spacer(Modifier.height(16.dp))
 
-            // Tarjeta de mensaje
             Card(
                 shape = RoundedCornerShape(12.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
@@ -141,11 +146,11 @@ fun StepCounterScreen(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text("Vier, 19 abril", color = Color.White)
-                        Text("90%", color = Color(0xFF03BFC0))
+                        Text("${(rawProgress * 100).toInt()}%", color = Color(0xFF03BFC0))
                     }
                     Text("Gran trabajo!", color = Color.White)
                     LinearProgressIndicator(
-                        progress = 0.9f,
+                        progress = progress,
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(6.dp),
@@ -157,7 +162,6 @@ fun StepCounterScreen(
 
             Spacer(Modifier.weight(1f))
 
-            // Botón de acción
             Button(
                 onClick = { /* He terminado */ },
                 modifier = Modifier
