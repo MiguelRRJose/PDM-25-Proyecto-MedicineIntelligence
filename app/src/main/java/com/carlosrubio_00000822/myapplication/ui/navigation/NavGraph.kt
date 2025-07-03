@@ -17,7 +17,7 @@ import com.carlosrubio_00000822.myapplication.ui.viewmodel.WaterIntakeViewModel
 @Composable
 fun AppNavGraph() {
     val navController = rememberNavController()
-    NavHost(navController, startDestination = Screen.History.route) {
+    NavHost(navController, startDestination = Screen.Steps.route) {
         composable(Screen.Water.route) {
             val vm: WaterIntakeViewModel = viewModel()
             WaterIntakeScreen(
@@ -31,16 +31,18 @@ fun AppNavGraph() {
 
         composable(Screen.Steps.route) {
             val vm: StepCounterViewModel = viewModel()
+            val steps by vm.steps.collectAsState()
+            val goal  by vm.goalSteps.collectAsState()
+
             StepCounterScreen(
-                steps         = vm.steps,
-                goalSteps     = vm.goalSteps,
+                steps         = steps,
+                goalSteps     = goal,
                 onBackPressed = { navController.popBackStack() }
             )
         }
 
         composable(Screen.History.route) {
             val vm: HistoryViewModel = viewModel()
-            // Convierte el StateFlow en List antes de pasarlo:
             val historyList by vm.historyList.collectAsState()
 
             HistoryScreen(

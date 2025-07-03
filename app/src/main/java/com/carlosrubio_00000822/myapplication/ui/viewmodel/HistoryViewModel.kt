@@ -8,8 +8,8 @@ data class MedicineHistory(
     val id         : Long,
     val name       : String,
     val dosage     : String,
-    val dateTime   : String,   // ya formateado: "12 abr 2025 – 08:00 AM"
-    val frequency  : String    // "Cada 6 horas"
+    val dateTime   : String,
+    val frequency  : String
 )
 
 class HistoryViewModel : ViewModel() {
