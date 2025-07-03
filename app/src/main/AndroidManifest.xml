@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+
+
     <application
         android:name =".PruebaMain"
         android:allowBackup="true"
@@ -14,6 +19,7 @@
         android:theme="@style/Theme.Monitor_Dream"
         android:background = "@drawable/backgroud_1"
         tools:targetApi="31">
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -25,6 +31,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver
+        android:name=".notify.NotificationReceiver"
+        android:exported="true" />
+
     </application>
 
 </manifest>

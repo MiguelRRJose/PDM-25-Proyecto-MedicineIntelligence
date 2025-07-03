@@ -1,5 +1,7 @@
 package com.ayala.monitor_dream.screens
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -16,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -36,12 +40,14 @@ import com.ayala.monitor_dream.navigation.ReminderTime
 import com.ayala.monitor_dream.navigation.SleepSummary
 import com.ayala.monitor_dream.navigation.SleepY
 import com.ayala.monitor_dream.navigation.TimeSleep
+import com.ayala.monitor_dream.notify.NotificationHelper.createNotificationChannel
 import com.ayala.monitor_dream.utils.CalculateDurationTime.calculateTotal
 import com.ayala.monitor_dream.utils.formatTimeAMPM
 import com.ayala.monitor_dream.viewModel.DataViewModel
 import com.ayala.monitor_dream.viewModel.SleepViewModel
 
 
+@SuppressLint("ScheduleExactAlarm")
 @Composable
 fun SleepAlarmScreen(
     viewModel: SleepViewModel,
@@ -104,7 +110,10 @@ fun SleepAlarmScreen(
     if (showReminderPicker)
     {
         ShowReminderPickerDialog (
-            minute = reminderTime.minute, onTimeSelected =  { selectedMinute ->
+            sleepH = storedSleepTime.hour,
+            sleepM = storedSleepTime.minute,
+            minute = reminderTime.minute,
+            onTimeSelected =  { selectedMinute ->
                 viewModel.setReminder(ReminderTime(selectedMinute))}
         )
     }
@@ -195,7 +204,10 @@ fun SleepAlarmScreen(
 
                 TimeCard("Meta para dormir ",
                     sleepDuration.hour.toString() + " h : " + sleepDuration.minute.toString() + " min",
-                    R.drawable.tick_mark_purple_1) {}
+                    R.drawable.tick_mark_purple_1)
+                {
+
+                }
 
                 viewModel.setDuration(TimeSleep(sleepDuration.hour, sleepDuration.minute))
             }
