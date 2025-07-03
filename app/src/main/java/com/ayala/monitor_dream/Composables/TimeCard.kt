@@ -59,13 +59,11 @@ fun TimeCard(label: String, timeText: String, id : Int ,onClick: () -> Unit) {
 }
 
 @Composable
-fun CardIcon(id: Int, text: String)
+fun CardIcon(id: Int, text: String,color: Color)
 {
     Row(modifier = Modifier.padding(vertical = 8.dp))
     {
-        TextA(text)
-
-        Spacer(modifier = Modifier.width(10.dp))
+        TextEspecialPersColr(text, color)
 
         Icon(
             painter = painterResource(id = id),

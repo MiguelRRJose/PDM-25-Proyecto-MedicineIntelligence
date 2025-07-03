@@ -4,10 +4,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -17,17 +15,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ayala.monitor_dream.R
 import com.ayala.monitor_dream.composables.ButtonAction
+import com.ayala.monitor_dream.composables.ButtonSleepScreen
 import com.ayala.monitor_dream.composables.PersonalBackground
+import com.ayala.monitor_dream.composables.PersonalSpacer
 import com.ayala.monitor_dream.composables.SelectedImage
 import com.ayala.monitor_dream.composables.ShowReminderPickerDialog
 import com.ayala.monitor_dream.composables.ShowTimePickerDialog
-import com.ayala.monitor_dream.composables.TextSubDate
-import com.ayala.monitor_dream.composables.TextTittle
+import com.ayala.monitor_dream.composables.TextSubDatePersColr
+import com.ayala.monitor_dream.composables.TextTittlePersColr
 import com.ayala.monitor_dream.composables.TimeCard
 import com.ayala.monitor_dream.navigation.ActualTime
 import com.ayala.monitor_dream.navigation.AlarmData
@@ -119,19 +120,19 @@ fun SleepAlarmScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Spacer(modifier = Modifier.height(50.dp))
+            PersonalSpacer(50)
 
-            TextTittle("Dr. Sueño")
+            TextTittlePersColr("Dr.Sueño", Color.White)
 
-            Spacer(modifier = Modifier.height(16.dp))
+            PersonalSpacer(16)
 
-            TextSubDate(dateDetails.nameDay,dateDetails.dayOfMonth, dateDetails.month, dateDetails.year)
+            TextSubDatePersColr(dateDetails.nameDay,dateDetails.dayOfMonth, dateDetails.month, dateDetails.year,Color.White)
 
-            Spacer(modifier = Modifier.height(16.dp))
+            PersonalSpacer(16)
 
             SelectedImage(R.drawable.astro_durmiendo, "Astronauta dormido")
 
-            Spacer(modifier = Modifier.height(30.dp))
+            PersonalSpacer(30)
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -140,25 +141,26 @@ fun SleepAlarmScreen(
             {
                 if (customButtonTime) {
 
-                    ButtonAction(action = "Hora personalizada", modifier = Modifier.weight(1f),
-                        onClick = {
-                            showPersonalizedTimeCard = true
-                            editingTime = "sleep"
+                    ButtonAction(action = "Hora personalizada", modifier = Modifier.weight(1f))
+                    {
+                        showPersonalizedTimeCard = true
+                        editingTime = "sleep"
 
-                            showSleepPicker = true
-                            showReminderTime = true
-                            customButtonTime = false})
+                        showSleepPicker = true
+                        showReminderTime = true
+                        customButtonTime = false
+                    }
 
-                    ButtonAction("Hora del dispositivo", modifier = Modifier.weight(1f),
-                        onClick = {
-                            viewModel.setSleepTimeCurrentDeviceTime()
-                            editingTime = "sleep"
+                    ButtonAction("Hora del dispositivo", modifier = Modifier.weight(1f))
+                    {
+                        viewModel.setSleepTimeCurrentDeviceTime()
+                        editingTime = "sleep"
 
-                            customButtonTime = false})
+                        customButtonTime = false
+                    }
                 }
             }
-
-            Spacer(modifier = Modifier.height(30.dp))
+            PersonalSpacer(30)
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -179,8 +181,7 @@ fun SleepAlarmScreen(
                     }
                 }
             }
-
-            Spacer(modifier = Modifier.height(40.dp))
+            PersonalSpacer(40)
 
             if (showSleepPicker) {
 
@@ -199,7 +200,7 @@ fun SleepAlarmScreen(
                 viewModel.setDuration(TimeSleep(sleepDuration.hour, sleepDuration.minute))
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            PersonalSpacer(16)
 
             if (showReminderTime)
             {
@@ -209,20 +210,17 @@ fun SleepAlarmScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            PersonalSpacer(24)
 
-            ButtonAction("Establecer alarma",
-                modifier = Modifier.fillMaxWidth(),
-                onClick = {
-                    viewModel.setDateDetails(dateDetails)
-                    navController.navigate(SleepY)
+            ButtonSleepScreen("Establecer Alarma",10)
+            {
+                viewModel.setDateDetails(dateDetails)
+                navController.navigate(SleepY)
 
-                    dataViewModel.insertNewData(dateDetails.nameDay, calculateTotal(sleepDuration.hour, sleepDuration.minute))
-                }
-            )
+                dataViewModel.insertNewData(dateDetails.nameDay, calculateTotal(sleepDuration.hour, sleepDuration.minute))
+            }
 
-            ButtonAction("Visualizar reporte",
-                modifier = Modifier.fillMaxWidth(),)
+            ButtonSleepScreen("Visualizar reporte de SleepY",10)
             {
                 navController.navigate(SleepSummary)
             }

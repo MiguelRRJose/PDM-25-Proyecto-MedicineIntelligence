@@ -17,7 +17,7 @@ import androidx.core.graphics.withRotation
 class VerticalLabelDrawer(
     private val labelTextSize: TextUnit = 20.sp,
     private val labelTextColor: Color = Color.Black,
-    private val labelSpacing: Dp = -16.dp
+    private val labelSpacing: Dp = (-16).dp
 ) : LabelDrawer {
 
     private val paint = Paint().asFrameworkPaint().apply {

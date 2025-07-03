@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -17,6 +16,7 @@ import com.ayala.monitor_dream.viewModel.DataViewModel
 import com.github.tehras.charts.bar.BarChart
 import com.github.tehras.charts.bar.BarChartData
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.Color
 import com.ayala.monitor_dream.utils.VerticalLabelDrawer
 
 @Composable
@@ -30,7 +30,9 @@ fun BarGraph(
         horizontalAlignment = Alignment.CenterHorizontally)
     {
         if (dataFromDb.isEmpty()) {
-            TextTittleM("No existe información!!") }
+
+            TextTittlePersColr("\nNO EXISTE INFORMACIÓN!!!!", Color.Black)
+        }
         else{
         Bars(dataPoints = dataFromDb,
             modifier = Modifier.fillMaxWidth()
@@ -60,7 +62,7 @@ fun Bars(
     }
     //Como segunda confirmación
     if (barras.isEmpty()) {
-        TextTittleM("NO HAY BARRAS PARA MOSTRAR")
+        TextTittlePersColr("NO HAY BARRAS PARA MOSTRAR", Color.Black)
         return
     }
 

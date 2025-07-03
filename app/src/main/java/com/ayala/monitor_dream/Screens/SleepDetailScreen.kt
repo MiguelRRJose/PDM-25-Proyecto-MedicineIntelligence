@@ -3,23 +3,24 @@ package com.ayala.monitor_dream.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ayala.monitor_dream.R
 import com.ayala.monitor_dream.composables.ButtonSleepScreen
 import com.ayala.monitor_dream.composables.PersonalBackground
+import com.ayala.monitor_dream.composables.PersonalSpacer
 import com.ayala.monitor_dream.composables.SelectedImage
-import com.ayala.monitor_dream.composables.TextSub
+import com.ayala.monitor_dream.composables.TextEspecialPersColr
+import com.ayala.monitor_dream.composables.TextSubPersColr
 import com.ayala.monitor_dream.composables.TextSummary
-import com.ayala.monitor_dream.composables.TextTittle
+import com.ayala.monitor_dream.composables.TextTittlePersColr
 import com.ayala.monitor_dream.utils.formatTimeAMPM
 import com.ayala.monitor_dream.viewModel.SleepViewModel
 
@@ -48,13 +49,13 @@ fun SleepDetail(
             verticalArrangement = Arrangement.spacedBy(12.dp)
 
         ) {
-            TextTittle("Detalles del\nsueño actual")
+            TextTittlePersColr("Detalles del \nsueño actual", Color.White)
 
-            Spacer(modifier = Modifier.height(8.dp))
+            PersonalSpacer(8)
 
             SelectedImage(R.drawable.astro_durmiendo , "Astronauta dormido")
 
-            Spacer(modifier = Modifier.height(8.dp))
+            PersonalSpacer(8)
 
             TextSummary(
                 dateDetails.nameDay,
@@ -67,15 +68,13 @@ fun SleepDetail(
                 formatTimeAMPM(alarmTime.hour,alarmTime.minute)
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            PersonalSpacer(16)
 
-            ButtonSleepScreen("Volver") { navController.popBackStack() }
+            ButtonSleepScreen("Volver",20) { navController.popBackStack() }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            PersonalSpacer(16)
 
-
-            TextSub("SleepY aprueba tu horario :D")
-
+            TextEspecialPersColr("SleepY aprueba tu horario :D", Color.White)
         }
 
     }

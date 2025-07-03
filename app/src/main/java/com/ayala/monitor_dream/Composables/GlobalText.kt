@@ -1,88 +1,69 @@
 package com.ayala.monitor_dream.composables
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.sp
 
-
 @Composable
-
-fun TextTittle(text: String)
+fun TextTittlePersColr(text: String, color: Color)
 {
-    Text(text, color = Color.White, fontSize = 30.sp)
-}
+    Text(text,
+        color = color,
+        fontSize = 40.sp,
+        fontFamily = FontFamily.Serif,
+        fontWeight = Bold
 
-@Composable
-fun TextTittleM(text: String)
-{
-    Text(text, color = Color.Black, fontSize = 30.sp)
-}
-
-@Composable
-fun TextB(text: String)
-{
-    Text(text, color = Color.Black, fontSize = 30.sp)
-}
-
-@Composable
-
-fun TextSubDate(nameDay: String,days: Int,month: Int, year: Int)
-{
-    Text(
-        "Fecha actual: ${days}/${month}/${year}\n" +
-                "Día de la semana: ${nameDay}",
-        color = Color.White, fontSize = 16.sp)
-}
-
-@Composable
-
-fun TextSubDateM(nameDay: String,days: Int,month: Int, year: Int)
-{
-    Text(
-        "Fecha para la sesión actual: ${days}/${month}/${year}\n" +
-                "\nHoy es  ${nameDay}"+" :D ",
-        color = Color.Black, fontSize = 16.sp)
-}
-
-@Composable
-fun TextTime(hour: Int, minute: Int)
-{
-    Text(
-        "Duración del sueño: ${hour} h: ${minute} min",
-        color = Color.White, fontSize = 16.sp
     )
 }
 
 @Composable
-fun TextTimeM(hour: Int, minute: Int)
+fun TextSubDatePersColr(nameDay: String,days: Int,month: Int, year: Int, color: Color)
 {
-    Text(
-        "Duración del \nsueño actual: ${hour} h: ${minute} min",
-        color = Color.Black, fontSize = 16.sp
+    TextSubPersEspecialColor("Fecha para la sesión actual: ${days}/${month}/${year}\n" +
+            "\nHoy es  $nameDay"+" :D ",color)
+}
+
+@Composable
+fun TextTimePersColr(hour: Int, minute: Int, color: Color)
+{
+
+    TextSubPersEspecialColor("Duración del \nsueño actual: $hour h: $minute min", color)
+}
+
+@Composable
+
+fun TextSubPersColr(text: String, color: Color)
+{
+    Text(text, color = color, fontSize = 16.sp)
+}
+
+@Composable
+fun TextSubPersEspecialColor(text: String, color: Color)
+{
+    Text(text, color = color,
+        fontSize = 16.sp,
+        fontWeight = Bold,
+        fontFamily = FontFamily.Serif
     )
 }
 
 
 @Composable
-
-fun TextSub(text: String)
+fun TextEspecialPersColr(text: String, color: Color)
 {
-    Text( text, color = Color.White, fontSize = 16.sp)
+    Text(text, color = color, fontSize = 20.sp, fontWeight = Bold)
 }
+
 
 @Composable
-fun TextA(text: String)
+fun TextAMPersColr(text: String, color: Color)
 {
-    Text(text, color = Color.Black, fontSize = 16.sp)
+    TextSubPersEspecialColor("Alarma actual: $text",color)
 }
-
-@Composable
-fun TextAM(text: String)
-{
-    Text("Alarma actual: ${text}", color = Color.Black, fontSize = 16.sp)
-}
-
 
 @Composable
 fun TextSummary(
@@ -95,8 +76,16 @@ fun TextSummary(
     actualHour: String ,
     alarmHour: String)
 {
-    TextSubDate(nameDay,days,month,year)
-    TextSub("Hora sueño: ${actualHour}")
-    TextSub("Alarma Seleccionada: ${alarmHour}")
-    TextTime(hour,minute)
+
+    Column {
+
+        TextSubDatePersColr(nameDay , days , month , year , Color.White)
+        PersonalSpacer(16)
+        TextSubPersEspecialColor("Hora seleccionada sueño: $actualHour" , Color.White)
+        PersonalSpacer(16)
+        TextAMPersColr(alarmHour , Color.White)
+        PersonalSpacer(16)
+        TextTimePersColr(hour , minute , Color.White)
+
+    }
 }

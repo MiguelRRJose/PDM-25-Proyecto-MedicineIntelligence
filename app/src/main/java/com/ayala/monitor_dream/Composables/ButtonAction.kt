@@ -21,24 +21,25 @@ fun ButtonAction(action: String, modifier: Modifier = Modifier, onClick: () -> U
             contentColor = Color.White),
         modifier = modifier
     ) {
-        TextSub(action)
+        //TextSub(action)
+        TextSubPersColr(action, Color.White)
     }
 }
 
 @Composable
 
-fun ButtonSleepScreen(action: String, onClick: () -> Unit)
+fun ButtonSleepScreen(action: String, horizontalPadd: Int ,onClick: () -> Unit)
 {
     Button(
         onClick = onClick,
         shape = RoundedCornerShape(20.dp),
         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3A5A9A),
             contentColor = Color.White),
-        modifier = Modifier.
-        fillMaxWidth().
-        padding(horizontal = 110.dp)
+        modifier = Modifier
+            .fillMaxWidth().
+        padding(horizontal = horizontalPadd.dp)
     ) {
-        TextSub(action)
+        TextSubPersColr(action, Color.White)
     }
 }
 
