@@ -50,13 +50,14 @@ class PatientDashboardViewModel : ViewModel() {
         steps = count
     }
 
-    // Temporizador de recordatorio
-    var medicineReminderTime by mutableStateOf("00:14:34")
+    // Medicina actual del paciente
+    var currentMedicineName by mutableStateOf("Paracetamol")
         private set
 
-    fun updateMedicineReminder(time: String) {
-        medicineReminderTime = time
+    fun updateCurrentMedicineName(name: String) {
+        currentMedicineName = name
     }
+
 
 
     // Peso

@@ -20,6 +20,8 @@ import androidx.compose.ui.unit.sp
 import com.pdmproyecto.mymedicine.R
 import com.pdmproyecto.mymedicine.ui.screens.Login.Modal.PatientRegisterModal
 import androidx.navigation.NavController
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -29,6 +31,9 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = rememb
     var password by remember { mutableStateOf("") }
     var rememberMe by remember { mutableStateOf(false) }
     val openModal = remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+    var isLoading by remember { mutableStateOf(false) }
+
 
 
     Column(
@@ -126,14 +131,31 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = rememb
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = { navController.navigate("dashboard") },
+            onClick = {
+                isLoading = true
+                coroutineScope.launch {
+                    delay(3000) // Simulación de carga
+                    isLoading = false
+                    navController.navigate("dashboard")
+                }
+            },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF165059)),
             modifier = Modifier
                 .width(350.dp)
-                .height(48.dp)
+                .height(48.dp),
+            enabled = !isLoading
         ) {
-            Text("Iniciar Sesión", color = Color.White)
+            if (isLoading) {
+                CircularProgressIndicator(
+                    color = Color.White,
+                    modifier = Modifier.size(24.dp),
+                    strokeWidth = 2.dp
+                )
+            } else {
+                Text("Iniciar Sesión", color = Color.White)
+            }
         }
+
 
         Spacer(modifier = Modifier.height(24.dp))
 

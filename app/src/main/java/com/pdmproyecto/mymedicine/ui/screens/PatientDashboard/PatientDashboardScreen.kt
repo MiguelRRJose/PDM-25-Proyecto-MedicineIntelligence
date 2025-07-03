@@ -6,21 +6,18 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.components.BottomNavigationBar
 import com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.components.header.DashboardHeader
 import com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.components.motivation.MotivationSection
 import com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.components.summary.SummaryCard
 import com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.components.metrics.PatientMetricsSection
-import androidx.navigation.compose.currentBackStackEntryAsState
-
-
 
 @Composable
 fun PatientDashboardScreen(
@@ -28,17 +25,25 @@ fun PatientDashboardScreen(
     viewModel: PatientDashboardViewModel = viewModel()
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    var currentRoute by rememberSaveable { mutableStateOf("dashboard") } // o la que quieras como seleccionada por defecto
+    val currentRoute = navBackStackEntry?.destination?.route ?: "dashboard"
     val username by remember { derivedStateOf { viewModel.username } }
-    var selectedItem by remember { mutableStateOf("inicio") }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
             BottomNavigationBar(
                 currentRoute = currentRoute,
-                onItemSelected = { newRoute -> currentRoute = newRoute },
-                onCentralActionClick = { /* decorativo */ }
+                onItemSelected = { newRoute ->
+                    if (newRoute != currentRoute) {
+                        navController.navigate(newRoute) {
+                            popUpTo("dashboard") { inclusive = false }
+                            launchSingleTop = true
+                        }
+                    }
+                },
+                onCentralActionClick = {
+                    navController.navigate("medicina_chat")
+                }
             )
         }
     ) { paddingValues ->
@@ -77,16 +82,23 @@ fun PatientDashboardScreen(
                     waterIntake = viewModel.waterIntake,
                     sleepHours = viewModel.sleepHours,
                     steps = viewModel.steps,
-                    medicineReminder = viewModel.medicineReminderTime
+                    medicineReminder = viewModel.currentMedicineName
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                PatientMetricsSection(viewModel = viewModel)
+
+                PatientMetricsSection(
+                    viewModel = viewModel,
+                    onStepsClick = {
+                        navController.navigate("step_counter")
+                    },
+                    onWaterClick = {
+                        navController.navigate("water_intake")
+                    },
+                    onSleepClick = { navController.navigate("sleep_monitor") }
+                )
+
                 Spacer(modifier = Modifier.height(55.dp))
             }
-
-
         }
-
     }
 }
-

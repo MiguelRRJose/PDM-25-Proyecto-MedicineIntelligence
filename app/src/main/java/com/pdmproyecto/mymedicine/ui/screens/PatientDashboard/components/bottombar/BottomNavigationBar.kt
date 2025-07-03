@@ -22,11 +22,12 @@ import com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.components.bottomb
 fun BottomNavigationBar(
     currentRoute: String,
     onItemSelected: (String) -> Unit,
+
     onCentralActionClick: () -> Unit
 ) {
     val items = listOf(
-        BottomNavItem("inicio", R.drawable.homebar, "Inicio"),
-        BottomNavItem("agua", R.drawable.aguabar, "Agua"),
+        BottomNavItem("dashboard", R.drawable.homebar, "Inicio"),
+        BottomNavItem("water_intake", R.drawable.aguabar, "Agua"),
         BottomNavItem("medicina", R.drawable.meds, "MyMedicine"),
         BottomNavItem("historial", R.drawable.historybar, "Historial")
     )
@@ -66,7 +67,7 @@ fun BottomNavigationBar(
 
         // Botón central "+"
         FloatingActionButton(
-            onClick = onCentralActionClick,
+            onClick = { onCentralActionClick() },
             shape = CircleShape,
             containerColor = Color(0xFF165059),
             modifier = Modifier
@@ -74,11 +75,10 @@ fun BottomNavigationBar(
                 .align(Alignment.TopCenter)
                 .offset(y = (-32).dp)
         ) {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = "Agregar",
-                tint = Color.White,
-                modifier = Modifier.size(28.dp)
+            Text(
+                text = "AI",
+                color = Color.White,
+                fontSize = 18.sp
             )
         }
     }
