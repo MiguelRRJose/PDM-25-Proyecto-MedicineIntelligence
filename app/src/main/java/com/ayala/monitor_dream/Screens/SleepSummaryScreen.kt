@@ -9,16 +9,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ayala.monitor_dream.R
-import com.ayala.monitor_dream.composables.Barras
-import com.ayala.monitor_dream.composables.BarrasScreen
+import com.ayala.monitor_dream.composables.BarGraph
+import com.ayala.monitor_dream.composables.ButtonAction
+import com.ayala.monitor_dream.composables.CardIcon
 import com.ayala.monitor_dream.composables.PersonalBackground
 import com.ayala.monitor_dream.composables.TextA
+import com.ayala.monitor_dream.composables.TextAM
 import com.ayala.monitor_dream.composables.TextB
 import com.ayala.monitor_dream.composables.TextSub
+import com.ayala.monitor_dream.composables.TextSubDate
+import com.ayala.monitor_dream.composables.TextSubDateM
+import com.ayala.monitor_dream.composables.TextTime
+import com.ayala.monitor_dream.composables.TextTimeM
 import com.ayala.monitor_dream.composables.TextTittle
 import com.ayala.monitor_dream.composables.TimeCard
+import com.ayala.monitor_dream.utils.formatTimeAMPM
+import com.ayala.monitor_dream.viewModel.DataViewModel
 import com.ayala.monitor_dream.viewModel.SleepViewModel
 
 @Composable
@@ -31,7 +40,13 @@ fun SleepTrackingScreen(
 
     val startSleepTime = viewModel.startTime.collectAsState().value
 
-    val currenTimeMillis = remember {mutableStateOf(System.currentTimeMillis())}
+    val sleepDuration = viewModel.sleepTimeDurationH.collectAsState().value
+
+    val dateDetails = viewModel.dateDetails.collectAsState().value
+
+    val dataViewModel: DataViewModel = viewModel()
+
+    val totalCount by dataViewModel.totalItemCount.collectAsState()
 
 
     LaunchedEffect(Unit) {}
@@ -48,7 +63,7 @@ fun SleepTrackingScreen(
             modifier = Modifier
                 .fillMaxHeight()
                 .align(Alignment.TopEnd)
-                .padding(top = 180.dp,end = 16.dp),
+                .padding(top = 90.dp,end = 16.dp),
             horizontalAlignment = Alignment.End
 
         ) {
@@ -61,10 +76,15 @@ fun SleepTrackingScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Button(onClick = {
-                navController.popBackStack()
-            }) {
-                TextSub("Despertar!!!")
+            Row {
+                ButtonAction("Volver")
+                {navController.popBackStack()}
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+                ButtonAction("Borrar datos")
+                {dataViewModel.clearAllData()}
+
             }
         }
 
@@ -74,7 +94,7 @@ fun SleepTrackingScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(550.dp)
+                    .height(640.dp)
                     .background(Color.White, shape = RoundedCornerShape(16.dp))
                     .padding(16.dp)
             ) {
@@ -83,28 +103,33 @@ fun SleepTrackingScreen(
 
                     Row(modifier = Modifier.fillMaxWidth()) {
 
-                        TextB("80")
+                        TextA("Cantidad de sesiones")
 
                         Spacer(modifier = Modifier.width(16.dp))
 
-                        TextA("Estrellitas")
+                        TextB(totalCount.toString())
                     }
 
-                    TextA("Puntación de sueño")
 
-                    TextSub("9/9/9")
+                    Spacer(modifier = Modifier.height(16.dp))
 
-                    TextA("Alarma: ")
+                    TextSubDateM(dateDetails.nameDay,dateDetails.dayOfMonth, dateDetails.month, dateDetails.year)
 
-                    TimeCard("Dulces sueños: ", "countdown", R.drawable.alarm_white_1){}
+                    Spacer(modifier = Modifier.height(16.dp))
 
-                    BarrasScreen()
+                    TextAM(formatTimeAMPM(alarmTime.hour, alarmTime.minute))
+
+                    CardIcon(R.drawable.moon_purple_2,"Dulces sueños")
+
+                    BarGraph()
+
+                    Spacer(modifier = Modifier.height(30.dp))
 
                     Row (modifier = Modifier.fillMaxWidth()) {
 
-                        TextA("Duracion del sueño")
+                        TextTimeM(sleepDuration.hour, sleepDuration.minute)
                         Spacer(modifier = Modifier.width(16.dp))
-                        TextA("Buen día!!!!")
+                        TextA("Feliz descanso!!!!")
 
                     }
                 }

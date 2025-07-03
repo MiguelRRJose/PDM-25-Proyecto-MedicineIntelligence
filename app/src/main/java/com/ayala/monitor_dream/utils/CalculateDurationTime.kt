@@ -30,20 +30,10 @@ object CalculateDurationTime
         }
     }
 
-    fun calculateTotal(totalHours: Int, totalMinutes: Int) : Int
+    fun calculateTotal(totalHours: Int, totalMinutes: Int) : Double
     {
-        return if (totalMinutes > 30)
-        {
-            totalHours + 1
-        }
-        else
-        {
-            totalHours
-        }
+        return (totalHours + totalMinutes / 60.0)
+
     }
-
-
-
-
 
 }

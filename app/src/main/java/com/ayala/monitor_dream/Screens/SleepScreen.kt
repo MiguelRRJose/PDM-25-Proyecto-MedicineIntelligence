@@ -115,9 +115,6 @@ fun SleepScreen(
                     ButtonSleepScreen("DETALLES")
                     {navController.navigate(SleepDetail)}
 
-                    ButtonSleepScreen("REPORTE")
-                    {navController.navigate(SleepSummary)}
-
                 } else
                 {
                     ButtonSleepScreen("DESPERTAR")

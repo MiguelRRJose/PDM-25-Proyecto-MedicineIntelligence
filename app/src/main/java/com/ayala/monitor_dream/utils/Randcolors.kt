@@ -2,17 +2,17 @@ package com.ayala.monitor_dream.utils
 
 import androidx.compose.ui.graphics.Color
 
-class Rcolors
+class Randcolors
 {
 
     fun colorRandom(): Color {
         var colors = mutableListOf<Color>(
 
             Color(0XFFF44336),
-            Color(0XFFE91E63),
-            Color(0XFF9C27B0),
-            Color(0XFF673AB7),
-            Color(0XFF3F51B5),
+            Color(0xFFFC8AB0) ,
+            Color(0xFFB2BA18) ,
+            Color(0xFFFF5722) ,
+            Color(0xFF97A5F1) ,
             Color(0XFF03A9F4),
             Color(0XFF009688),
             Color(0XFFCDDC39),

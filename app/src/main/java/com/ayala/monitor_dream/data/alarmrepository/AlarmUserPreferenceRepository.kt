@@ -1,4 +1,4 @@
-package com.ayala.monitor_dream.data.repository
+package com.ayala.monitor_dream.data.alarmrepository
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*

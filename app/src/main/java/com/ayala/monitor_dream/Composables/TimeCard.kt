@@ -57,3 +57,22 @@ fun TimeCard(label: String, timeText: String, id : Int ,onClick: () -> Unit) {
         }
     }
 }
+
+@Composable
+fun CardIcon(id: Int, text: String)
+{
+    Row(modifier = Modifier.padding(vertical = 8.dp))
+    {
+        TextA(text)
+
+        Spacer(modifier = Modifier.width(10.dp))
+
+        Icon(
+            painter = painterResource(id = id),
+            contentDescription = null,
+            tint = Color.Unspecified,
+            modifier = Modifier.size(20.dp)
+        )
+
+    }
+}

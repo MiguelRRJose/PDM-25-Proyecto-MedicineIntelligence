@@ -5,7 +5,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.ayala.monitor_dream.navigation.SleepDetail
 
 import com.ayala.monitor_dream.screens.SleepAlarmScreen
 import com.ayala.monitor_dream.screens.SleepDetail
@@ -16,7 +15,6 @@ import com.ayala.monitor_dream.viewModel.SleepViewModel
 @Composable
 fun AppNavigator(navController: NavHostController) {
     val sleepViewModel: SleepViewModel = viewModel(factory = SleepViewModel.Factory)
-
     NavHost(navController = navController, startDestination = AlarmP) {
 
         composable<AlarmP> {

@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.ayala.monitor_dream.PruebaMain
-import com.ayala.monitor_dream.data.repository.AlarmUserPreferenceRepository
+import com.ayala.monitor_dream.data.alarmrepository.AlarmUserPreferenceRepository
 import com.ayala.monitor_dream.navigation.ActualTime
 import com.ayala.monitor_dream.navigation.AlarmData
 import com.ayala.monitor_dream.navigation.DateDetails

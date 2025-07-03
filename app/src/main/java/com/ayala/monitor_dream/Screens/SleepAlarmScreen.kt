@@ -18,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ayala.monitor_dream.R
 import com.ayala.monitor_dream.composables.ButtonAction
@@ -31,9 +32,12 @@ import com.ayala.monitor_dream.composables.TimeCard
 import com.ayala.monitor_dream.navigation.ActualTime
 import com.ayala.monitor_dream.navigation.AlarmData
 import com.ayala.monitor_dream.navigation.ReminderTime
+import com.ayala.monitor_dream.navigation.SleepSummary
 import com.ayala.monitor_dream.navigation.SleepY
 import com.ayala.monitor_dream.navigation.TimeSleep
+import com.ayala.monitor_dream.utils.CalculateDurationTime.calculateTotal
 import com.ayala.monitor_dream.utils.formatTimeAMPM
+import com.ayala.monitor_dream.viewModel.DataViewModel
 import com.ayala.monitor_dream.viewModel.SleepViewModel
 
 
@@ -42,6 +46,8 @@ fun SleepAlarmScreen(
     viewModel: SleepViewModel,
     navController : NavController,
 ) {
+
+    val dataViewModel: DataViewModel = viewModel()
 
     var showPersonalizedTimeCard by remember { mutableStateOf(false) }
     var customButtonTime by remember { mutableStateOf(true) }
@@ -210,8 +216,16 @@ fun SleepAlarmScreen(
                 onClick = {
                     viewModel.setDateDetails(dateDetails)
                     navController.navigate(SleepY)
+
+                    dataViewModel.insertNewData(dateDetails.nameDay, calculateTotal(sleepDuration.hour, sleepDuration.minute))
                 }
             )
+
+            ButtonAction("Visualizar reporte",
+                modifier = Modifier.fillMaxWidth(),)
+            {
+                navController.navigate(SleepSummary)
+            }
         }
     }
 }

@@ -1,8 +1,8 @@
 package com.ayala.monitor_dream
 
 import android.app.Application
-import com.ayala.monitor_dream.data.alarmUserDataStore
-import com.ayala.monitor_dream.data.repository.AlarmUserPreferenceRepository
+import com.ayala.monitor_dream.data.alarmDataStore.alarmUserDataStore
+import com.ayala.monitor_dream.data.alarmrepository.AlarmUserPreferenceRepository
 
 
 class PruebaMain : Application() {
