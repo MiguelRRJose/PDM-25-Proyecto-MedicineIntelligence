@@ -41,11 +41,9 @@ fun AppNavigation(navController: NavHostController) {
         }
 
         composable("dashboard/{username}") { backStackEntry ->
-            val username = backStackEntry.arguments?.getString("username") ?: "Usuario"
+            val username = backStackEntry.arguments?.getString("username") ?: ""
             PatientDashboardScreen(username = username, navController = navController)
         }
-
-
 
         composable("notifications") {
             NotificationScreen(navController = navController)
@@ -96,26 +94,34 @@ fun AppNavigation(navController: NavHostController) {
         }
 
 
-        composable("water_intake") {
-            WaterIntakeWithBottomBar(navController)
+        composable("water_intake/{username}") { backStackEntry ->
+            val username = backStackEntry.arguments?.getString("username") ?: ""
+            WaterIntakeWithBottomBar(navController, username)
         }
 
-        composable("medicina") {
-            MedicineAlarmsScreen(navController = navController)
+
+        composable("medicina/{username}") { backStackEntry ->
+            val username = backStackEntry.arguments?.getString("username") ?: ""
+            MedicineAlarmsScreen(navController = navController, username = username)
         }
+
 
         composable("medicina_chat") {
             ChatWithAiScreen(navController = navController)
         }
 
-        composable("historial") {
+        composable("historial/{username}") { backStackEntry ->
+            val username = backStackEntry.arguments?.getString("username") ?: ""
             val historyViewModel: HistoryViewModel = viewModel()
+
             HistoryScreen(
                 items = historyViewModel.historyList.collectAsState().value,
                 onDelete = { historyViewModel.deleteItem(it) },
-                onBackPressed = { navController.popBackStack() }
+                username = username,
+                navController = navController
             )
         }
+
 
         composable("sleep_monitor") {
             val sleepViewModel: SleepViewModel = viewModel(factory = SleepViewModel.Factory)

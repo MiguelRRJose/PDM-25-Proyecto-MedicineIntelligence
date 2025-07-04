@@ -10,19 +10,19 @@ import com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.components.BottomN
 import com.pdmproyecto.mymedicine.ui.screens.WaterIntake.WaterIntakeScreen
 
 @Composable
-fun WaterIntakeWithBottomBar(navController: NavHostController) {
+fun WaterIntakeWithBottomBar(navController: NavHostController, username: String) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route ?: ""
 
     Scaffold(
         bottomBar = {
             BottomNavigationBar(
+                username = username,
                 currentRoute = currentRoute,
                 onItemSelected = { newRoute ->
                     if (newRoute != currentRoute) {
                         navController.navigate(newRoute) {
-                            popUpTo("water_intake") { inclusive = false }
-                            launchSingleTop = true
+                            popUpTo("dashboard/$username") { inclusive = false }
                         }
                     }
                 },

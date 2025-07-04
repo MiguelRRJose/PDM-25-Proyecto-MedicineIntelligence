@@ -29,6 +29,7 @@ import com.pdmproyecto.mymedicine.ui.theme.DarkPalidGreen
 
 @Composable
 fun MedicineAlarmsScreen(
+    username: String,
     navController: NavHostController,
     viewModel: MedicineAlarmsViewModel = viewModel(factory = MedicineAlarmsViewModel.Factory)
 ) {
@@ -44,17 +45,18 @@ fun MedicineAlarmsScreen(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
             BottomNavigationBar(
-                currentRoute = currentRoute,
+                username = username,
+                currentRoute = navController.currentBackStackEntry?.destination?.route ?: "",
                 onItemSelected = { newRoute ->
                     if (newRoute != currentRoute) {
                         navController.navigate(newRoute) {
-                            popUpTo("dashboard") { inclusive = false }
-                            launchSingleTop = true
+                            popUpTo("dashboard/$username") { inclusive = false }
                         }
                     }
                 },
-                onCentralActionClick = { /* decorativo */ }
+                onCentralActionClick = { /* AI */ }
             )
+
         }
     ) { paddingValues ->
         Box(

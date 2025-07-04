@@ -1,5 +1,6 @@
 package com.pdmproyecto.mymedicine.ui.screens.PatientDashboard
 
+import com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.components.cleanRoute
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -18,6 +19,7 @@ import com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.components.header.
 import com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.components.motivation.MotivationSection
 import com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.components.summary.SummaryCard
 import com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.components.metrics.PatientMetricsSection
+import com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.components.cleanRoute
 
 @Composable
 fun PatientDashboardScreen(
@@ -25,19 +27,20 @@ fun PatientDashboardScreen(
     navController: NavHostController,
     viewModel: PatientDashboardViewModel = viewModel()
 ) {
-    DashboardHeader(username = username, navController = navController)
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route ?: "dashboard"
+    val currentBaseRoute = cleanRoute(currentRoute)
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
             BottomNavigationBar(
-                currentRoute = currentRoute,
+                username = username,
+                currentRoute = currentBaseRoute,
                 onItemSelected = { newRoute ->
-                    if (newRoute != currentRoute) {
+                    if (cleanRoute(newRoute) != currentBaseRoute) {
                         navController.navigate(newRoute) {
-                            popUpTo("dashboard") { inclusive = false }
+                            popUpTo("dashboard/$username") { inclusive = false }
                             launchSingleTop = true
                         }
                     }
@@ -93,9 +96,11 @@ fun PatientDashboardScreen(
                         navController.navigate("step_counter")
                     },
                     onWaterClick = {
-                        navController.navigate("water_intake")
+                        navController.navigate("water_intake/$username")
                     },
-                    onSleepClick = { navController.navigate("sleep_monitor") }
+                    onSleepClick = {
+                        navController.navigate("sleep_monitor")
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(55.dp))

@@ -6,10 +6,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -18,26 +16,34 @@ import androidx.compose.ui.unit.*
 import com.pdmproyecto.mymedicine.R
 import com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.components.bottombar.CurvedBottom.CurvedBottomBarBackground
 
+// 🔧 Función para limpiar ruta base (sin argumentos)
+fun cleanRoute(route: String?): String {
+    return route?.substringBefore("/") ?: ""
+}
+
 @Composable
 fun BottomNavigationBar(
+    username: String,
     currentRoute: String,
     onItemSelected: (String) -> Unit,
-
     onCentralActionClick: () -> Unit
 ) {
+    // 🔁 Ítems con rutas dinámicas usando el username
     val items = listOf(
-        BottomNavItem("dashboard", R.drawable.homebar, "Inicio"),
-        BottomNavItem("water_intake", R.drawable.aguabar, "Agua"),
-        BottomNavItem("medicina", R.drawable.meds, "MyMedicine"),
-        BottomNavItem("historial", R.drawable.historybar, "Historial")
+        BottomNavItem("dashboard/$username", R.drawable.homebar, "Inicio"),
+        BottomNavItem("water_intake/$username", R.drawable.aguabar, "Agua"),
+        BottomNavItem("medicina/$username", R.drawable.meds, "MyMedicine"),
+        BottomNavItem("historial/$username", R.drawable.historybar, "Historial")
     )
+
+    // Limpieza de la ruta actual para comparaciones
+    val currentBaseRoute = cleanRoute(currentRoute)
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(90.dp)
     ) {
-        // Fondo curvo
         CurvedBottomBarBackground(
             modifier = Modifier
                 .fillMaxWidth()
@@ -45,7 +51,6 @@ fun BottomNavigationBar(
                 .align(Alignment.BottomCenter)
         )
 
-        // Ítems
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -55,17 +60,16 @@ fun BottomNavigationBar(
             verticalAlignment = Alignment.CenterVertically
         ) {
             items.take(2).forEach { item ->
-                BottomNavItemView(item, currentRoute, onItemSelected)
+                BottomNavItemView(item, currentBaseRoute, onItemSelected)
             }
 
-            Spacer(modifier = Modifier.width(64.dp)) // espacio para botón central
+            Spacer(modifier = Modifier.width(64.dp))
 
             items.drop(2).forEach { item ->
-                BottomNavItemView(item, currentRoute, onItemSelected)
+                BottomNavItemView(item, currentBaseRoute, onItemSelected)
             }
         }
 
-        // Botón central "+"
         FloatingActionButton(
             onClick = { onCentralActionClick() },
             shape = CircleShape,
@@ -87,12 +91,11 @@ fun BottomNavigationBar(
 @Composable
 fun BottomNavItemView(
     item: BottomNavItem,
-    currentRoute: String,
+    currentBaseRoute: String,
     onItemSelected: (String) -> Unit
 ) {
-    val isSelected = currentRoute == item.route
+    val isSelected = currentBaseRoute == cleanRoute(item.route)
 
-    // Efecto visual si está seleccionado
     val itemModifier = if (isSelected) {
         Modifier
             .background(
