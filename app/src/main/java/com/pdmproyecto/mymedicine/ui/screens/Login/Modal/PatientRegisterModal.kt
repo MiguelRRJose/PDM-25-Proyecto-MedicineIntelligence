@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -19,15 +20,25 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.pdmproyecto.mymedicine.data.database.AppDatabase
+import com.pdmproyecto.mymedicine.data.repositories.user.UserRepository
 import com.pdmproyecto.mymedicine.ui.screens.Login.Sucess.PatientRegisterSuccessModal
+import com.pdmproyecto.mymedicine.ui.screens.Login.Sucess.PatientRegisterSuccessViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PatientRegisterModal(
     onDismiss: () -> Unit,
-    viewModel: PatientRegisterViewModel = viewModel()
+
 ) {
+    val context = LocalContext.current
+    val db = AppDatabase.getDatabase(context)
+    val userRepository = UserRepository(db.UserDao())
+
+    val viewModel: PatientRegisterViewModel = viewModel(
+        factory = PatientRegisterViewModelFactory(userRepository)
+    )
     val dui = viewModel.dui
     val email = viewModel.email
     val age = viewModel.age
@@ -89,13 +100,20 @@ fun PatientRegisterModal(
         }
 
         if (showSuccess) {
+            val successViewModel: PatientRegisterSuccessViewModel = viewModel()
+            LaunchedEffect(Unit) {
+                successViewModel.updateUsername(username)
+            }
+
             PatientRegisterSuccessModal(
+                viewModel = successViewModel,
                 onDismiss = {
                     viewModel.dismissSuccessModal()
                     onDismiss()
                 }
             )
         }
+
     }
 }
 

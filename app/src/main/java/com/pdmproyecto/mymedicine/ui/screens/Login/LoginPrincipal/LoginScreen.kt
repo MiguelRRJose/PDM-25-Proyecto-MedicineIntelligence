@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -17,15 +18,26 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pdmproyecto.mymedicine.R
 import com.pdmproyecto.mymedicine.ui.screens.Login.Modal.PatientRegisterModal
 import androidx.navigation.NavController
+import com.pdmproyecto.mymedicine.data.database.AppDatabase
+import com.pdmproyecto.mymedicine.data.repositories.user.UserRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
 @Composable
-fun LoginScreen(navController: NavController, viewModel: LoginViewModel = remember { LoginViewModel() }) {
+fun LoginScreen(navController: NavController) {
+
+    val context = LocalContext.current
+    val db = AppDatabase.getDatabase(context)
+    val userRepository = UserRepository(db.UserDao())
+
+    val viewModel: LoginViewModel = viewModel(
+        factory = LoginViewModelFactory(userRepository)
+    )
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -132,11 +144,11 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = rememb
 
         Button(
             onClick = {
-                isLoading = true
-                coroutineScope.launch {
-                    delay(3000) // Simulación de carga
-                    isLoading = false
-                    navController.navigate("dashboard")
+                viewModel.login(email, password) { success ->
+                    if (success) {
+                        val username = viewModel.loggedInUser?.name ?: "Usuario"
+                        navController.navigate("dashboard/$username")
+                    }
                 }
             },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF165059)),

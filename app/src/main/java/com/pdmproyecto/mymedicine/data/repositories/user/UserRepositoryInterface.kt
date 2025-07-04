@@ -12,4 +12,9 @@ interface UserRepositoryInterface {
     suspend fun addUser(user: User)
 
     suspend fun removeUserFromId(userId: Int)
+
+    suspend fun getUserByEmail(email: String): User?
+
+    suspend fun getUserByDui(dui: String): User?
+
 }

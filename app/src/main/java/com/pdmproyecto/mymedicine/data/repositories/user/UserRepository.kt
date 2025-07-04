@@ -28,4 +28,13 @@ class UserRepository(private val dao: UserDao): UserRepositoryInterface{
         dao.removeUserFromId(userId)
     }
 
+    override suspend fun getUserByEmail(email: String): User? {
+        return dao.getUserByEmail(email)?.toDomain()
+    }
+
+    override suspend fun getUserByDui(dui: String): User? {
+        return dao.getUserByDui(dui)?.toDomain()
+    }
+
+
 }

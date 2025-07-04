@@ -21,12 +21,13 @@ import com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.components.metrics
 
 @Composable
 fun PatientDashboardScreen(
+    username: String,
     navController: NavHostController,
     viewModel: PatientDashboardViewModel = viewModel()
 ) {
+    DashboardHeader(username = username, navController = navController)
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route ?: "dashboard"
-    val username by remember { derivedStateOf { viewModel.username } }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),

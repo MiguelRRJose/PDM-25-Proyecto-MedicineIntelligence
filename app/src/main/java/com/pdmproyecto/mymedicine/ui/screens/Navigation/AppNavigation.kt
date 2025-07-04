@@ -40,9 +40,12 @@ fun AppNavigation(navController: NavHostController) {
             LoginScreen(navController = navController)
         }
 
-        composable("dashboard") {
-            PatientDashboardScreen(navController = navController)
+        composable("dashboard/{username}") { backStackEntry ->
+            val username = backStackEntry.arguments?.getString("username") ?: "Usuario"
+            PatientDashboardScreen(username = username, navController = navController)
         }
+
+
 
         composable("notifications") {
             NotificationScreen(navController = navController)
