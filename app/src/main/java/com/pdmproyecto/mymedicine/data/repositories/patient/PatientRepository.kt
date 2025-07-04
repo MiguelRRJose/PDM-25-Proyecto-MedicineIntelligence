@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.map
 class PatientRepository(private val dao: PatientDao): PatientRepositoryInterface {
     override fun getAllPatients(): Flow<List<Patient>> {
         return dao.getAllPatients().map {
-            list -> list.map {
+                list -> list.map {
                 patientEntity -> patientEntity.toDomain()
         }
         }

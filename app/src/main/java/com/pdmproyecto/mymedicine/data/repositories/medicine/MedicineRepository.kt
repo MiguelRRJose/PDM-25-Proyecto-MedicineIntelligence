@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.map
 class MedicineRepository(private val dao: MedicineDao): MedicineRepositoryInterface {
     override fun getAllMedicines(): Flow<List<Medicine>> {
         return dao.getAllMedicines().map {
-            list -> list.map {
+                list -> list.map {
                 medicineEntity -> medicineEntity.toDomain()
         }
         }
@@ -22,7 +22,7 @@ class MedicineRepository(private val dao: MedicineDao): MedicineRepositoryInterf
 
     override fun getMedicinesFromPatientId(patientId: Int): Flow<List<Medicine>> {
         return dao.getMedicinesFromPatientId(patientId).map {
-            list -> list.map {
+                list -> list.map {
                 medicineEntity -> medicineEntity.toDomain()
         }
         }

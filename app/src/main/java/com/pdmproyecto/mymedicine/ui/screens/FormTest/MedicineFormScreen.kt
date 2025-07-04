@@ -1,5 +1,6 @@
 package com.pdmproyecto.mymedicine.ui.screens.FormTest
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,6 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.pdmproyecto.mymedicine.ui.components.DatePickerField
 import com.pdmproyecto.mymedicine.ui.components.ExposedDropdownMenu
 import com.pdmproyecto.mymedicine.ui.components.TextInput
@@ -29,8 +31,21 @@ import com.pdmproyecto.mymedicine.ui.theme.DarkGreen
 
 @Composable
 fun MedicineFormScreen(
+    navController: NavHostController,
     viewModel: MedicineFormViewModel = viewModel(factory = MedicineFormViewModel.Factory)
 ) {
+
+    val context = LocalContext.current
+    val toastMessage = viewModel.toastMessage.value
+
+    LaunchedEffect(toastMessage) {
+        toastMessage?.let { message ->
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+            // Limpiar para que no se muestre repetido
+            viewModel.toastMessage.value = null
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -52,7 +67,9 @@ fun MedicineFormScreen(
                     containerColor = Color.Red,
                     contentColor = Color.White
                 ),
-                onClick = {}
+                onClick = {
+                    navController.popBackStack()
+                }
             ) {
                 Text("CANCELAR")
             }
@@ -64,7 +81,8 @@ fun MedicineFormScreen(
                     contentColor = Color.White
                 ),
                 onClick = {
-                    viewModel.onConfirmClick()
+                    viewModel.checkAndRequestExactAlarmPermission(context)
+                    viewModel.onConfirmClick({navController.popBackStack()})
                 }
             ) {
                 Text("CONFIRMAR")

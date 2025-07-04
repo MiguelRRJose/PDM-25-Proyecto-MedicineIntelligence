@@ -8,6 +8,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import android.content.Context
+import androidx.compose.runtime.LaunchedEffect
 import com.pdmproyecto.mymedicine.ViewModel.SleepViewModel
 import com.pdmproyecto.mymedicine.data.repositories.medicine.MedicineRepository
 import com.pdmproyecto.mymedicine.screens.Settings.ChangePassword.ChangePasswordScreen
@@ -27,6 +29,7 @@ import com.pdmproyecto.mymedicine.ui.screens.Settings.NotificationSettings.Notif
 import com.pdmproyecto.mymedicine.ui.screens.StepCounter.StepCounterScreen
 import com.pdmproyecto.mymedicine.ui.screens.WaterIntake.navigation.WaterIntakeWithBottomBar
 import com.pdmproyecto.mymedicine.ui.screens.MyIA.ChatWithAiScreen
+import com.pdmproyecto.mymedicine.ui.screens.Navigation.AppViewModel
 import com.pdmproyecto.mymedicine.ui.screens.Sleep.SleepAlarmScreen
 import com.pdmproyecto.mymedicine.ui.screens.Sleep.SleepDetail
 import com.pdmproyecto.mymedicine.ui.screens.Sleep.SleepScreen
@@ -35,6 +38,13 @@ import com.pdmproyecto.mymedicine.ui.screens.StepCounter.StepCounterViewModel
 
 @Composable
 fun AppNavigation(navController: NavHostController) {
+
+    val context = LocalContext.current
+    val appViewModel: AppViewModel = viewModel(factory = AppViewModel.Factory)
+
+    LaunchedEffect(Unit) {
+        appViewModel.startAlarm(context)
+    }
 
     NavHost(navController = navController, startDestination = "login") {
 
@@ -163,7 +173,7 @@ fun AppNavigation(navController: NavHostController) {
             val viewModel: MedicineFormViewModel = viewModel(factory = MedicineFormViewModel.Factory)
             viewModel.setPatientId(patientId)
 
-            MedicineFormScreen(viewModel = viewModel)
+            MedicineFormScreen( navController, viewModel = viewModel)
         }
 
 

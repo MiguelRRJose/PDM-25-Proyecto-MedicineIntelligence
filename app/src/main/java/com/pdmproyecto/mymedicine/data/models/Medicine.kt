@@ -1,6 +1,7 @@
 package com.pdmproyecto.mymedicine.data.models
 
 import com.pdmproyecto.mymedicine.data.database.entities.MedicineEntity
+import java.io.Serializable
 
 data class Medicine(
     val id: Int,
@@ -12,7 +13,7 @@ data class Medicine(
     val finishDate: java.util.Date?,
     val timeLap: Int,
     val timeLapUnit: String
-)
+): Serializable
 
 fun Medicine.toDatabase(): MedicineEntity{
     return MedicineEntity(
@@ -26,4 +27,14 @@ fun Medicine.toDatabase(): MedicineEntity{
         timeLap = this.timeLap,
         timeLapUnit = this.timeLapUnit
     )
+}
+
+fun Medicine.getIntervalMillis():Long {
+    var millis: Long = 0L
+    if (timeLapUnit.equals("minutos")) millis = timeLap * 60000L
+    if (timeLapUnit.equals("horas")) millis = timeLap * 60 * 60000L
+    if (timeLapUnit.equals("dias"))  millis = timeLap * 24 * 60 * 60000L
+    if (timeLapUnit.equals("semanas")) millis = timeLap * 7 * 24 * 60 * 60000L
+
+    return millis
 }

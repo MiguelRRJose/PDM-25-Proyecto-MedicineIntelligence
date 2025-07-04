@@ -91,7 +91,8 @@ fun LoginScreen(navController: NavController) {
                 modifier = Modifier
                     .width(350.dp)
                     .height(64.dp),
-                shape = RoundedCornerShape(20.dp)
+                shape = RoundedCornerShape(20.dp),
+                textStyle = LocalTextStyle.current.copy(color = Color.Black),
             )
         }
 
@@ -118,7 +119,8 @@ fun LoginScreen(navController: NavController) {
                 modifier = Modifier
                     .width(350.dp)
                     .height(64.dp),
-                shape = RoundedCornerShape(20.dp)
+                shape = RoundedCornerShape(20.dp),
+                textStyle = LocalTextStyle.current.copy(color = Color.Black),
             )
         }
 

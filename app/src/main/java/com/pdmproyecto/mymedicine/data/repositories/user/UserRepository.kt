@@ -1,5 +1,6 @@
 package com.pdmproyecto.mymedicine.data.repositories.user
 
+
 import com.pdmproyecto.mymedicine.data.database.daos.UserDao
 import com.pdmproyecto.mymedicine.data.database.entities.toDomain
 import com.pdmproyecto.mymedicine.data.models.User
@@ -10,7 +11,7 @@ import kotlinx.coroutines.flow.map
 class UserRepository(private val dao: UserDao): UserRepositoryInterface{
     override fun getAllUsers(): Flow<List<User>> {
         return dao.getAllUsers().map {
-            list -> list.map {
+                list -> list.map {
                 userEntity -> userEntity.toDomain()
         }
         }

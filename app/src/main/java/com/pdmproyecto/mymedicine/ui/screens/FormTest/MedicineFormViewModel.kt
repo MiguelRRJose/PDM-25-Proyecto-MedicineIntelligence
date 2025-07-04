@@ -1,5 +1,11 @@
 package com.pdmproyecto.mymedicine.ui.screens.FormTest
 
+import android.app.AlarmManager
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
+import android.provider.Settings
 import android.util.Log
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.mutableStateListOf
@@ -24,6 +30,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Calendar
 import java.util.Date
+import androidx.core.net.toUri
 
 class MedicineFormViewModel(
     private val medicineRepository: MedicineRepositoryInterface,
@@ -43,6 +50,9 @@ class MedicineFormViewModel(
             }
         }
     }
+
+    var toastMessage = mutableStateOf<String?>(null)
+
 
     // ✅ patientId dinámico
     private var currentPatientId: Int = 1
@@ -88,10 +98,52 @@ class MedicineFormViewModel(
         steps = 0
     )
 
-    fun onConfirmClick() {
+
+    fun checkAndRequestExactAlarmPermission(context: Context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val hasPermission = alarmManager.canScheduleExactAlarms()
+
+            if (!hasPermission) {
+                val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
+                    data = "package:${context.packageName}".toUri()
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+                context.startActivity(intent)
+            }
+        }
+    }
+
+
+
+    fun validateFields(): Boolean {
+        if (medicineName.value.isBlank()) {
+            toastMessage.value = "Por favor, ingresa el nombre del medicamento"
+            return false
+        }
+        if (dosisAmount.value.isBlank()) {
+            toastMessage.value = "Por favor, ingresa la dosis"
+            return false
+        }
+        if (dosisUnitSelected.value == dosisUnitList[0]) {
+            toastMessage.value = "Por favor, selecciona la unidad de dosis"
+            return false
+        }
+        if (timeLapDuration.value.isBlank()) {
+            toastMessage.value = "Por favor, ingresa la duración del lapso"
+            return false
+        }
+
+        toastMessage.value = null
+        return true
+    }
+
+    fun onConfirmClick(onSuccess: () -> Unit) {
+        if (!validateFields()) return
+
         viewModelScope.launch {
             insertDummyUser()
-            addMedicine()
+            addMedicine(onSuccess)
         }
     }
 
@@ -110,42 +162,53 @@ class MedicineFormViewModel(
             "DURACIÓN CREADA",
             "Fecha Inicial: ${startDateSelected[0]}-${startDateSelected[1]}-${startDateSelected[2]} por ${dosisDurationString[0]} días, ${dosisDurationString[1]} meses, ${dosisDurationString[2]} años"
         )
+        Log.d(
+            "FECHA FINAL",
+            "${finishDateSelected[0]}-${finishDateSelected[1]}-${finishDateSelected[2]}"
+        )
     }
 
-    fun addMedicine() {
-        val startCalendar = Calendar.getInstance().apply {
-            set(
-                startDateSelected[2].toInt(),
-                startDateSelected[1].toInt() - 1,
-                startDateSelected[0].toInt(),
-                startHourSelected[0].toInt(),
-                startHourSelected[1].toInt()
-            )
-        }
-
-        val finishCalendar = if (!undefinedDurationCheck.value) {
-            Calendar.getInstance().apply {
+    fun addMedicine(onSuccess: ()-> Unit) {
+        try {
+            val startCalendar = Calendar.getInstance().apply {
                 set(
-                    finishDateSelected[2].toInt(),
-                    finishDateSelected[1].toInt() - 1,
-                    finishDateSelected[0].toInt()
+                    startDateSelected[2].toInt(),
+                    startDateSelected[1].toInt() - 1,
+                    startDateSelected[0].toInt(),
+                    startHourSelected[0].toInt(),
+                    startHourSelected[1].toInt()
                 )
             }
-        } else null
 
-        viewModelScope.launch {
-            val newMedicine = Medicine(
-                id = 0,
-                patientId = currentPatientId,
-                name = medicineName.value,
-                unit = dosisUnitSelected.value,
-                amount = dosisAmount.value.toFloat(),
-                startDate = startCalendar.time,
-                finishDate = finishCalendar?.time,
-                timeLap = timeLapDuration.value.toInt(),
-                timeLapUnit = timeLapUnitSelected.value
-            )
-            medicineRepository.addMedicine(newMedicine)
+            val finishCalendar = if (!undefinedDurationCheck.value) {
+                Calendar.getInstance().apply {
+                    set(
+                        finishDateSelected[2].toInt(),
+                        finishDateSelected[1].toInt() - 1,
+                        finishDateSelected[0].toInt()
+                    )
+                }
+            } else null
+
+            viewModelScope.launch {
+                val newMedicine = Medicine(
+                    id = 0,
+                    patientId = currentPatientId,
+                    name = medicineName.value,
+                    unit = dosisUnitSelected.value,
+                    amount = dosisAmount.value.toFloat(),
+                    startDate = startCalendar.time,
+                    finishDate = finishCalendar?.time,
+                    timeLap = timeLapDuration.value.toInt(),
+                    timeLapUnit = timeLapUnitSelected.value
+                )
+                debugShowMedicInfo()
+                medicineRepository.addMedicine(newMedicine)
+                onSuccess()
+        }
+
+        } catch (e: Exception){
+            toastMessage.value = "No se pudo guardar la medicina por algún error :("
         }
     }
 

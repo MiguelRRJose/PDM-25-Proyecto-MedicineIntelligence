@@ -1,5 +1,6 @@
 package com.pdmproyecto.mymedicine.data.repositories.medicDate
 
+
 import com.pdmproyecto.mymedicine.data.database.daos.MedicDateDao
 import com.pdmproyecto.mymedicine.data.database.entities.toDomain
 import com.pdmproyecto.mymedicine.data.models.MedicDate
@@ -14,7 +15,7 @@ class MedicDateRepository(private val dao: MedicDateDao): MedicDateRepositoryInt
 
     override fun getMedicDatesFromDoctorId(doctorId: Int): Flow<List<MedicDate>> {
         return dao.getMedicDatesFromDoctorId(doctorId).map {
-            list -> list.map {
+                list -> list.map {
                 medicDateEntity -> medicDateEntity.toDomain()
         }
         }

@@ -1,5 +1,4 @@
 package com.pdmproyecto.mymedicine
-
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build

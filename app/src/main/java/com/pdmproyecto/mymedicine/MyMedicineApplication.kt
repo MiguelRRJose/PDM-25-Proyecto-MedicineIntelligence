@@ -1,6 +1,9 @@
 package com.pdmproyecto.mymedicine
 
+
 import android.app.Application
+import android.util.Log
+import android.util.Log.println
 import com.pdmproyecto.mymedicine.data.AppProvider
 import com.pdmproyecto.mymedicine.data.alarmDataStore.alarmUserDataStore
 import com.pdmproyecto.mymedicine.data.alarmrepository.AlarmUserPreferenceRepository
@@ -26,9 +29,9 @@ class MyMedicineApplication : Application() {
             val doctorRepository = appProvider.provideDoctorRepository()
             val medicineRepository = appProvider.provideMedicineRepository()
             val medicDateRepository = appProvider.provideMedicDateRepository()
-            println("✅ Repositorios inicializados correctamente")
+            println(Log.ASSERT, "application", "Repositorios inicializados correctamente")
         } catch (e: Exception) {
-            println("❌ Error al inicializar AppProvider: ${e.message}")
+            println(Log.ASSERT, "application","Error al inicializar AppProvider: ${e.message}")
             e.printStackTrace()
         }
 

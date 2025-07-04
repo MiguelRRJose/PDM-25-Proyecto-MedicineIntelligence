@@ -43,7 +43,7 @@ fun TextInput(
             enabled = enabled,
             singleLine = true,
             keyboardOptions = keyboardOptions,
-            textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center)
+            textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center, color = Color.Black),
         )
 
         if (title.isNotBlank()){

@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -70,7 +71,9 @@ fun ConfirmationPopUp(text: String, isVisible: Boolean = false, confirmAction: (
                 Text(
                     modifier = Modifier.weight(0.6f),
                     text = text,
-                    textAlign = TextAlign.Center)
+                    textAlign = TextAlign.Center,
+                    style = LocalTextStyle.current.copy(textAlign = TextAlign.Center, color = Color.Black),
+                    )
 
                 Row (
                     modifier = Modifier

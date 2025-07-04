@@ -2,7 +2,6 @@ package com.pdmproyecto.mymedicine.data
 
 import android.content.Context
 import com.pdmproyecto.mymedicine.data.database.AppDatabase
-import com.pdmproyecto.mymedicine.data.models.Medicine
 import com.pdmproyecto.mymedicine.data.repositories.doctor.DoctorRepository
 import com.pdmproyecto.mymedicine.data.repositories.doctor.DoctorRepositoryInterface
 import com.pdmproyecto.mymedicine.data.repositories.medicDate.MedicDateRepository
