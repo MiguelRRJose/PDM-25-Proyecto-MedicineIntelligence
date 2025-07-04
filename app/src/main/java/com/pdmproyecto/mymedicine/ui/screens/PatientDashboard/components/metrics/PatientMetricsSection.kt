@@ -39,7 +39,7 @@ fun PatientMetricsSection(
                 subText = "Calidad: ${viewModel.sleepQuality}",
                 modifier = Modifier
                     .weight(1f)
-                    .clickable { onSleepClick() } // 👈 navegación al tocar la tarjeta
+                    .clickable { onSleepClick() }
             )
         }
 

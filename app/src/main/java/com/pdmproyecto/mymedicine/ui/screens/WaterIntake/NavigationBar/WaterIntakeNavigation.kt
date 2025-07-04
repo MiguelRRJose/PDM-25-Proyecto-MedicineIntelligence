@@ -4,15 +4,19 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.components.BottomNavigationBar
 import com.pdmproyecto.mymedicine.ui.screens.WaterIntake.WaterIntakeScreen
+import com.pdmproyecto.mymedicine.ui.screens.WaterIntake.WaterIntakeViewModel
 
 @Composable
 fun WaterIntakeWithBottomBar(navController: NavHostController, username: String) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route ?: ""
+
+    val viewModel: WaterIntakeViewModel = viewModel()
 
     Scaffold(
         bottomBar = {
@@ -31,14 +35,8 @@ fun WaterIntakeWithBottomBar(navController: NavHostController, username: String)
         }
     ) { padding ->
         WaterIntakeScreen(
-            drank = 4,
-            goal = 8,
-            percentage = 0.5f,
-            onDrinkClick = { /* sumar agua */ },
-            onBackPressed = { navController.popBackStack() },
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
+            viewModel = viewModel,
+            onBackPressed = { navController.popBackStack() }
         )
     }
 }

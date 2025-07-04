@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -74,8 +75,8 @@ fun MotivationCard(
                     .background(Color(0xFF18515A))
             ) {
                 Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = "Buscar",
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Añadir medicina",
                     tint = Color.White
                 )
             }

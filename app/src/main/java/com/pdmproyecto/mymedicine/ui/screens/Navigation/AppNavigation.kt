@@ -17,6 +17,8 @@ import com.pdmproyecto.mymedicine.ui.screens.Notification.NotificationScreen
 import com.pdmproyecto.mymedicine.ui.screens.PatientDashboard.PatientDashboardScreen
 import com.pdmproyecto.mymedicine.screens.Settings.SettingsScreen
 import com.pdmproyecto.mymedicine.screens.Settings.SettingsViewModel
+import com.pdmproyecto.mymedicine.ui.screens.FormTest.MedicineFormScreen
+import com.pdmproyecto.mymedicine.ui.screens.FormTest.MedicineFormViewModel
 import com.pdmproyecto.mymedicine.ui.screens.History.HistoryScreen
 import com.pdmproyecto.mymedicine.ui.screens.History.HistoryViewModel
 import com.pdmproyecto.mymedicine.ui.screens.MedicineAlarms.MedicineAlarmsScreen
@@ -153,6 +155,15 @@ fun AppNavigation(navController: NavHostController) {
                 navController = navController,
                 viewModel = sleepViewModel
             )
+        }
+
+        composable("add_medicine/{patientId}") { backStackEntry ->
+            val patientId = backStackEntry.arguments?.getString("patientId")?.toIntOrNull() ?: return@composable
+
+            val viewModel: MedicineFormViewModel = viewModel(factory = MedicineFormViewModel.Factory)
+            viewModel.setPatientId(patientId)
+
+            MedicineFormScreen(viewModel = viewModel)
         }
 
 

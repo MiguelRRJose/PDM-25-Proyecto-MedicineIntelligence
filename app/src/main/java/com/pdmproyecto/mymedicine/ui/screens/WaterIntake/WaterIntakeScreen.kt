@@ -14,6 +14,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -25,19 +26,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pdmproyecto.mymedicine.R
 
 @Composable
 fun WaterIntakeScreen(
-    drank: Int = 4,
-    goal: Int = 8,
-    percentage: Float = 0.77f, // 0.77 = 77%
-    onDrinkClick: () -> Unit = {},
-    modifier: Modifier = Modifier,
+    viewModel: WaterIntakeViewModel = viewModel(),
     onBackPressed: () -> Unit
 ) {
+    val drank = viewModel.drank.collectAsState().value
+    val percentage = viewModel.percentage.collectAsState().value
+    val cycles = viewModel.cyclesCompleted.collectAsState().value
+
     Scaffold(
-        modifier = modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         content = { innerPadding ->
             Box(
                 modifier = Modifier
@@ -81,7 +83,7 @@ fun WaterIntakeScreen(
 
                     SemiCircleProgress(
                         drank = drank,
-                        goal = goal,
+                        goal = 8,
                         size = 200.dp,
                         strokeWidth = 20.dp,
                         circleColor = Color(0xFFBEBEBE),
@@ -92,7 +94,7 @@ fun WaterIntakeScreen(
                     Spacer(modifier = Modifier.height(24.dp))
 
                     Button(
-                        onClick = onDrinkClick,
+                        onClick = { viewModel.onDrink() },
                         shape = CircleShape,
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF03BFC0)),
                         modifier = Modifier
@@ -117,12 +119,22 @@ fun WaterIntakeScreen(
                         progressColor = Color(0xFF03BFC0)
                     )
 
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text(
+                        text = "Ciclos completados: $cycles",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF115C5C)
+                    )
+
                     Spacer(modifier = Modifier.weight(1f))
                 }
             }
         }
     )
 }
+
 
 @Composable
 fun SemiCircleProgress(

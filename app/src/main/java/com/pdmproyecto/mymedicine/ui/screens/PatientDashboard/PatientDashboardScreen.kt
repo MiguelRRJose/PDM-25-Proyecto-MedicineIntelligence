@@ -69,7 +69,9 @@ fun PatientDashboardScreen(
                 MotivationSection(
                     weatherMessage = viewModel.weatherMessage,
                     motivationalMessage = viewModel.motivationalMessage,
-                    onSearchClick = { /* TODO */ }
+                    onSearchClick = {
+                        navController.navigate("add_medicine/1")
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
